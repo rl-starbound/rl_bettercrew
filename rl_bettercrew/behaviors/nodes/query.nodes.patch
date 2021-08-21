@@ -1,0 +1,10 @@
+[
+  { "op" : "replace",
+    "path" : "/findLoungable/properties/orientation/value",
+    "value" : "sit"
+  },
+  { "op" : "replace",
+    "path" : "/findLoungable/script",
+    "value" : "/scripts/actions/rl_bettercrew.lua"
+  }
+]

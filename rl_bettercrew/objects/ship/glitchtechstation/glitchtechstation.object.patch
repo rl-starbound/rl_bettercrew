@@ -1,0 +1,10 @@
+[
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/rl_crewanchormanager.lua"
+  },
+  { "op" : "add",
+    "path" : "/keepAlive",
+    "value" : true
+  }
+]

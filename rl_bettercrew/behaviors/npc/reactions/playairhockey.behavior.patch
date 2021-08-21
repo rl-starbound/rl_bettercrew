@@ -1,0 +1,216 @@
+[
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/1/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/1/name",
+    "value" : "entityPosition"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/2/children/0/children/1/children/0/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/2/children/0/children/1/children/0/name",
+    "value" : "offsetPosition"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/2/children/0/children/1/children/1/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/2/children/0/children/1/children/1/name",
+    "value" : "timer"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/2/children/1/children/1/children/0/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/2/children/1/children/1/children/0/name",
+    "value" : "offsetPosition"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/2/children/1/children/1/children/1/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/2/children/1/children/1/children/1/name",
+    "value" : "timer"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/5/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/5/name",
+    "value" : "setPosition"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/8/children/0/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/8/children/0/name",
+    "value" : "task"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/8/children/0/parameters/taskId/value",
+    "value" : "winner"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/8/children/1/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/8/children/1/name",
+    "value" : "task"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/8/children/1/parameters/taskId/value",
+    "value" : "loser"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/0/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/0/name",
+    "value" : "timer"
+  },
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/actions/math.lua"
+  },
+  { "op" : "add",
+    "path" : "/root/children/1/children/0/children/1/children/1/output/x",
+    "value" : "reactTargetPosX"
+  },
+  { "op" : "add",
+    "path" : "/root/children/1/children/0/children/1/children/2/children/0/children/1/children/1",
+    "value" : {
+      "title": "",
+      "type": "action",
+      "name": "add",
+      "parameters": {
+        "addend": {"value": -1.5},
+        "number": {"key": "reactTargetPosX"}
+      },
+      "output": {
+        "result": "standPosX"
+      }
+    }
+  },
+  { "op" : "add",
+    "path" : "/root/children/1/children/0/children/1/children/2/children/1/children/1/children/1",
+    "value" : {
+      "title": "",
+      "type": "action",
+      "name": "add",
+      "parameters": {
+        "addend": {"value": 3},
+        "number": {"key": "reactTargetPosX"}
+      },
+      "output": {
+        "result": "standPosX"
+      }
+    }
+  },
+  { "op" : "add",
+    "path" : "/root/children/1/children/0/children/1/children/5/parameters/x",
+    "value" : {"key": "standPosX"}
+  },
+  { "op" : "replace",
+    "path" : "/root/children/1/children/0/children/1/children/8/children/0",
+    "value" : {
+      "title": "parallel",
+      "type": "composite",
+      "name": "parallel",
+      "parameters": {
+        "fail": {"value": 1},
+        "success": {"value": -1}
+      },
+      "children": [
+        {
+          "title": "task",
+          "type": "action",
+          "name": "task",
+          "parameters": {
+            "groupId": {"value": "playairhockey"},
+            "maxMembers": {"value": 1},
+            "minMembers": {"value": 1},
+            "taskId": {"value": "winner"}
+          }
+        },
+        {
+          "title": "sequence",
+          "type": "composite",
+          "name": "sequence",
+          "parameters": {},
+          "children": [
+            {
+              "title": "reaction-jumpforjoy",
+              "type": "module",
+              "name": "reaction-jumpforjoy",
+              "parameters": {}
+            }
+          ]
+        }
+      ]
+    }
+  },
+  { "op" : "replace",
+    "path" : "/root/children/1/children/0/children/1/children/8/children/1",
+    "value" : {
+      "title": "parallel",
+      "type": "composite",
+      "name": "parallel",
+      "parameters": {
+        "fail": {"value": 1},
+        "success": {"value": -1}
+      },
+      "children": [
+        {
+          "title": "task",
+          "type": "action",
+          "name": "task",
+          "parameters": {
+            "groupId": {"value": "playairhockey"},
+            "maxMembers": {"value": 1},
+            "minMembers": {"value": 1},
+            "taskId": {"value": "loser"}
+          }
+        },
+        {
+          "title": "sequence",
+          "type": "composite",
+          "name": "sequence",
+          "parameters": {},
+          "children": [
+            {
+              "title": "emote",
+              "type": "action",
+              "name": "emote",
+              "parameters": {
+                "emote": {"value": "annoyed"}
+              }
+            },
+            {
+              "title": "timer",
+              "type": "action",
+              "name": "timer",
+              "parameters": {
+                "time": {"value": 2}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  { "op" : "replace",
+    "path" : "/root/children/1/children/1/children/0/parameters/time/value",
+    "value" : 30
+  }
+]

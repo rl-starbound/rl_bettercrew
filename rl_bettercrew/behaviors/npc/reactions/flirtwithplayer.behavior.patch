@@ -1,0 +1,91 @@
+[
+  { "op" : "test",
+    "path" : "/root/children/4/children/1/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/4/children/1/name",
+    "value" : "moveToPosition"
+  },
+  { "op" : "add",
+    "path" : "/parameters/pathingTimeLimit",
+    "value" : 10
+  },
+  { "op" : "replace",
+    "path" : "/root/children/4/children/1",
+    "value" : {
+      "title": "parallel",
+      "type": "composite",
+      "name": "parallel",
+      "parameters": {
+        "fail": {"value": 1},
+        "success": {"value": 1}
+      },
+      "children": [
+        {
+          "title": "moveToPosition",
+          "type": "action",
+          "name": "moveToPosition",
+          "parameters": {
+            "avoidLiquid": {"value": true},
+            "groundPosition": {"value": true},
+            "maxGround": {"value": 5},
+            "minGround": {"value": -5},
+            "position": {"key": "standPos"},
+            "run": {"value": false}
+          },
+          "output": {
+            "pathfinding": "isPathfinding"
+          }
+        },
+        {
+          "title": "failer",
+          "type": "decorator",
+          "name": "failer",
+          "parameters": {},
+          "child": {
+            "title": "dynamic",
+            "type": "composite",
+            "name": "dynamic",
+            "parameters": {},
+            "children": [
+              {
+                "title": "parallel",
+                "type": "composite",
+                "name": "parallel",
+                "parameters": {
+                  "fail": {"value": 1},
+                  "success": {"value": -1}
+                },
+                "children": [
+                  {
+                    "title": "hasFlag",
+                    "type": "action",
+                    "name": "hasFlag",
+                    "parameters": {
+                      "name": {"key": "isPathfinding"}
+                    }
+                  },
+                  {
+                    "title": "timer",
+                    "type": "action",
+                    "name": "timer",
+                    "parameters": {
+                      "time": {"value": "<pathingTimeLimit>"}
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "runner",
+                "type": "action",
+                "name": "runner",
+                "parameters": {}
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

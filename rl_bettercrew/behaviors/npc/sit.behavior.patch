@@ -1,0 +1,220 @@
+[
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/actions/crew.lua"
+  },
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/actions/rl_bettercrew.lua"
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/name",
+    "value" : "findLoungable"
+  },
+  { "op" : "test",
+    "path" : "/root/children/3/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/3/name",
+    "value" : "entityPosition"
+  },
+  { "op" : "test",
+    "path" : "/root/children/4/children/1/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/4/children/1/name",
+    "value" : "moveToPosition"
+  },
+  { "op" : "add",
+    "path" : "/parameters/pathingTimeLimit",
+    "value" : 10
+  },
+  { "op" : "replace",
+    "path" : "/root/children/0",
+    "value" : {
+      "title": "selector",
+      "type": "composite",
+      "name": "selector",
+      "parameters": {},
+      "children": [
+        {
+          "title": "sequence",
+          "type": "composite",
+          "name": "sequence",
+          "parameters": {},
+          "children": [
+            {
+              "title": "hasRecruiter",
+              "type": "action",
+              "name": "hasRecruiter",
+              "parameters": {}
+            },
+            {
+              "title": "inverter",
+              "type": "decorator",
+              "name": "inverter",
+              "parameters": {},
+              "child": {
+                "title": "isFollowingRecruiter",
+                "type": "action",
+                "name": "isFollowingRecruiter",
+                "parameters": {}
+              }
+            },
+            {
+              "title": "Is ship world?",
+              "type": "action",
+              "name": "worldProperty",
+              "parameters": {
+                "property": {"value": "ship.level"}
+              }
+            },
+            {
+              "title": "",
+              "type": "action",
+              "name": "findLoungable",
+              "parameters": {
+                "orderBy": {"value": "random"},
+                "orientation": {"value": "sit"},
+                "position": {"key": "spawn"},
+                "range": {"value": 200},
+                "unoccupied": {"value": true}
+              },
+              "output": {
+                "list": "loungables"
+              }
+            }
+          ]
+        },
+        {
+          "title": "",
+          "type": "action",
+          "name": "findLoungable",
+          "parameters": {
+            "orderBy": {"value": "nearest"},
+            "orientation": {"value": "sit"},
+            "position": {"key": "spawn"},
+            "range": {"value": 80},
+            "unoccupied": {"value": true}
+          },
+          "output": {
+            "list": "loungables"
+          }
+        }
+      ]
+    }
+  },
+  { "op" : "replace",
+    "path" : "/root/children/3",
+    "value" : {
+      "title": null,
+      "type": "composite",
+      "name": "sequence",
+      "parameters": {},
+      "children": [
+        {
+          "title": null,
+          "type": "action",
+          "name": "entityPosition",
+          "parameters": {
+            "entity": {"key": "chair"}
+          },
+          "output": {
+            "position": "chair"
+          }
+        },
+        {
+          "title": null,
+          "type": "action",
+          "name": "offsetPosition",
+          "parameters": {
+            "position": {"key": "chair"},
+            "offset": {"value": [0, 0.5]}
+          },
+          "output": {
+            "position": "chair"
+          }
+        }
+      ]
+    }
+  },
+  { "op" : "replace",
+    "path" : "/root/children/4/children/1",
+    "value" : {
+      "title": "parallel",
+      "type": "composite",
+      "name": "parallel",
+      "parameters": {
+        "fail": {"value": 1},
+        "success": {"value": 1}
+      },
+      "children": [
+        {
+          "title": "",
+          "type": "action",
+          "name": "moveToPosition",
+          "parameters": {
+            "groundPosition": {"value": true},
+            "position": {"key": "chair"}
+          },
+          "output": {
+            "pathfinding": "isPathfinding"
+          }
+        },
+        {
+          "title": "failer",
+          "type": "decorator",
+          "name": "failer",
+          "parameters": {},
+          "child": {
+            "title": "dynamic",
+            "type": "composite",
+            "name": "dynamic",
+            "parameters": {},
+            "children": [
+              {
+                "title": "parallel",
+                "type": "composite",
+                "name": "parallel",
+                "parameters": {
+                  "fail": {"value": 1},
+                  "success": {"value": -1}
+                },
+                "children": [
+                  {
+                    "title": "hasFlag",
+                    "type": "action",
+                    "name": "hasFlag",
+                    "parameters": {
+                      "name": {"key": "isPathfinding"}
+                    }
+                  },
+                  {
+                    "title": "timer",
+                    "type": "action",
+                    "name": "timer",
+                    "parameters": {
+                      "time": {"value": "<pathingTimeLimit>"}
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "runner",
+                "type": "action",
+                "name": "runner",
+                "parameters": {}
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,115 @@
+[
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/3/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/3/name",
+    "value" : "interactObject"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/4/children/1/type",
+    "value" : "decorator"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/0/children/1/children/4/children/1/name",
+    "value" : "repeater"
+  },
+  { "op" : "replace",
+    "path" : "/root/children/1/children/0/children/1/children/3",
+    "value" : {
+      "title": "",
+      "type": "action",
+      "name": "success",
+      "parameters": {}
+    }
+  },
+  { "op" : "replace",
+    "path" : "/root/children/1/children/0/children/1/children/4/children/1",
+    "value" : {
+      "title": "parallel",
+      "type": "composite",
+      "name": "parallel",
+      "parameters": {
+        "fail": {"value": 1},
+        "success": {"value": 1}
+      },
+      "children": [
+        {
+          "title": "repeater",
+          "type": "decorator",
+          "name": "repeater",
+          "parameters": {
+            "maxLoops": {"value": 5},
+            "untilSuccess": {"value": false}
+          },
+          "child": {
+            "title": "sequence",
+            "type": "composite",
+            "name": "sequence",
+            "parameters": {},
+            "children": [
+              {
+                "title": "interactObject",
+                "type": "action",
+                "name": "interactObject",
+                "parameters": {
+                  "entity": {"key": "reactTarget"}
+                }
+              },
+              {
+                "title": "timer",
+                "type": "action",
+                "name": "timer",
+                "parameters": {
+                  "time": {"value": 5.6}
+                }
+              }
+            ]
+          }
+        },
+        {
+          "title": "repeater",
+          "type": "decorator",
+          "name": "repeater",
+          "parameters": {
+            "maxLoops": {"value": 14},
+            "untilSuccess": {"value": false}
+          },
+          "child": {
+            "title": "sequence",
+            "type": "composite",
+            "name": "sequence",
+            "parameters": {},
+            "children": [
+              {
+                "title": "emote",
+                "type": "action",
+                "name": "emote",
+                "parameters": {
+                  "emote": {"value": "blabbering"}
+                }
+              },
+              {
+                "title": "dance",
+                "type": "action",
+                "name": "dance",
+                "parameters": {
+                  "dance": {"value": "typing"}
+                }
+              },
+              {
+                "title": "timer",
+                "type": "action",
+                "name": "timer",
+                "parameters": {
+                  "time": {"value": 2}
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

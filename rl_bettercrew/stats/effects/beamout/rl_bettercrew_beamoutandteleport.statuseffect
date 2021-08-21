@@ -1,0 +1,18 @@
+{
+  "name" : "rl_bettercrew_beamoutandteleport",
+  "effectConfig" : {
+    "speciesTags" : {
+      "penguin" : "penguin"
+    },
+    "teleport": true,
+    "triggerTime" : 0.75
+  },
+  "defaultDuration" : 1.0,
+
+  "scripts" : [
+    "beamout.lua",
+    "rl_bettercrew_beamoutandteleport.lua"
+  ],
+
+  "animationConfig" : "beamout.animation"
+}

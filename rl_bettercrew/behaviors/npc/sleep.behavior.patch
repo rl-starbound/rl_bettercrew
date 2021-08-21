@@ -1,0 +1,238 @@
+[
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/actions/crew.lua"
+  },
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/actions/rl_bettercrew.lua"
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/name",
+    "value" : "findLoungable"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/1/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/1/name",
+    "value" : "groundPosition"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/2/children/0/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/2/children/0/name",
+    "value" : "moveToPosition"
+  },
+  { "op" : "add",
+    "path" : "/parameters/pathingTimeLimit",
+    "value" : 10
+  },
+  { "op" : "replace",
+    "path" : "/root/children/0",
+    "value" : {
+      "title": "sequence",
+      "type": "composite",
+      "name": "sequence",
+      "parameters": {},
+      "children": [
+        {
+          "title": "inverter",
+          "type": "decorator",
+          "name": "inverter",
+          "parameters": {},
+          "child": {
+            "title": "sequence",
+            "type": "composite",
+            "name": "sequence",
+            "parameters": {},
+            "children": [
+              {
+                "title": "hasRecruiter",
+                "type": "action",
+                "name": "hasRecruiter",
+                "parameters": {}
+              },
+              {
+                "title": "isFollowingRecruiter",
+                "type": "action",
+                "name": "isFollowingRecruiter",
+                "parameters": {}
+              }
+            ]
+          }
+        },
+        {
+          "title": "selector",
+          "type": "composite",
+          "name": "selector",
+          "parameters": {},
+          "children": [
+            {
+              "title": "sequence",
+              "type": "composite",
+              "name": "sequence",
+              "parameters": {},
+              "children": [
+                {
+                  "title": "hasRecruiter",
+                  "type": "action",
+                  "name": "hasRecruiter",
+                  "parameters": {}
+                },
+                {
+                  "title": "Is ship world?",
+                  "type": "action",
+                  "name": "worldProperty",
+                  "parameters": {
+                    "property": {"value": "ship.level"}
+                  }
+                },
+                {
+                  "title": null,
+                  "type": "action",
+                  "name": "findLoungable",
+                  "parameters": {
+                    "orderBy": {"value": "random"},
+                    "orientation": {"value": "lay"},
+                    "position": {"key": "spawn"},
+                    "range": {"value": 200}
+                  },
+                  "output": {
+                    "entity": "bed"
+                  }
+                }
+              ]
+            },
+            {
+              "title": null,
+              "type": "action",
+              "name": "findLoungable",
+              "parameters": {
+                "orientation": {"value": "lay"},
+                "position": {"key": "spawn"},
+                "range": {"value": 50}
+              },
+              "output": {
+                "entity": "bed"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  { "op" : "replace",
+    "path" : "/root/children/1/children/1/children/1",
+    "value" : {
+      "title": null,
+      "type": "composite",
+      "name": "sequence",
+      "parameters": {},
+      "children": [
+        {
+          "title": null,
+          "type": "action",
+          "name": "offsetPosition",
+          "parameters": {
+            "position": {"key": "bed"},
+            "offset": {"value": [0, 0.5]}
+          },
+          "output": {
+            "position": "bed"
+          }
+        },
+        {
+          "title": null,
+          "type": "action",
+          "name": "groundPosition",
+          "parameters": {
+            "position": {"key": "bed"}
+          },
+          "output": {
+            "position": "bed"
+          }
+        }
+      ]
+    }
+  },
+  { "op" : "replace",
+    "path" : "/root/children/1/children/1/children/2/children/0",
+    "value" : {
+      "title": "parallel",
+      "type": "composite",
+      "name": "parallel",
+      "parameters": {
+        "fail": {"value": 1},
+        "success": {"value": 1}
+      },
+      "children": [
+        {
+          "title": null,
+          "type": "action",
+          "name": "moveToPosition",
+          "parameters": {
+            "position": {"key": "bed"}
+          },
+          "output": {
+            "pathfinding": "isPathfinding"
+          }
+        },
+        {
+          "title": "failer",
+          "type": "decorator",
+          "name": "failer",
+          "parameters": {},
+          "child": {
+            "title": "dynamic",
+            "type": "composite",
+            "name": "dynamic",
+            "parameters": {},
+            "children": [
+              {
+                "title": "parallel",
+                "type": "composite",
+                "name": "parallel",
+                "parameters": {
+                  "fail": {"value": 1},
+                  "success": {"value": -1}
+                },
+                "children": [
+                  {
+                    "title": "hasFlag",
+                    "type": "action",
+                    "name": "hasFlag",
+                    "parameters": {
+                      "name": {"key": "isPathfinding"}
+                    }
+                  },
+                  {
+                    "title": "timer",
+                    "type": "action",
+                    "name": "timer",
+                    "parameters": {
+                      "time": {"value": "<pathingTimeLimit>"}
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "runner",
+                "type": "action",
+                "name": "runner",
+                "parameters": {}
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

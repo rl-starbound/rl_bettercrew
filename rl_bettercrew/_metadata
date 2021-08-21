@@ -1,0 +1,7 @@
+{
+  "author" : "rl.starbound",
+  "description" : "Better Crew improves the crew member AI behaviors. With vanilla behaviors, the crew tend to clump around the ship's teleporter because that is their \"home\" location. This mod dynamically and randomly sets crewmember \"home\" locations to objects on the ship that are related to each crew member's assignment, resulting in a crew that move about a well-designed ship more naturally.",
+  "friendlyName" : "Better Crew",
+  "name" : "rl_bettercrew",
+  "version" : "1.0.0"
+}
