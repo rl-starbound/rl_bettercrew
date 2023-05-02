@@ -40,7 +40,7 @@ end
 function playBehaviorReaction(args, board, nodeId, dt)
   -- In the vanilla implementation, this function ignored personality of
   -- NPCs when passing parameters to behavior trees. This caused, among
-  -- other problems, nocturnal NPCs to be unable to sleep at all.
+  -- other problems, nocturnal NPCs to be unable to sleep.
 
   local reaction = root.assetJson("/npcs/default_reactions.config:behaviorReactions")[args.reaction]
 
@@ -85,8 +85,12 @@ end
 -- param direction
 -- param run
 function rl_bettercrew_moveUnidirectionally(args, board, node)
-  -- In the vanilla function `move`, the args are updated on each tick.
-  -- In this variant, we read the args only on the initial call.
+  -- In the vanilla function `move`, the args (specifically `direction`)
+  -- are updated on each tick. In some invocations, this caused NPCs to
+  -- become stuck moving back and forth rapidly if the `move` command
+  -- was invoked when the NPC was directly above or below their "home"
+  -- location. In this variant, we read the args only on the initial
+  -- function call.
 
   if args.direction == nil then return false end
   local direction = util.toDirection(args.direction)

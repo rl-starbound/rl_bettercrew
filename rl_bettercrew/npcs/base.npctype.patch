@@ -1,0 +1,14 @@
+[
+  { "op" : "test",
+    "path" : "/scriptConfig/personalities/11/1/personality",
+    "value" : "nocturnal"
+  },
+  { "op" : "test",
+    "path" : "/scriptConfig/personalities/11/1/reactions/spontaneous/0/1",
+    "value" : "sleep"
+  },
+  { "op" : "replace",
+    "path" : "/scriptConfig/personalities/11/1/reactions/spontaneous/0/2/timeRange/0",
+    "value" : 0.00001
+  }
+]
