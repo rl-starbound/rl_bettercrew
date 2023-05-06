@@ -9,6 +9,6 @@
   },
   { "op" : "replace",
     "path" : "/scriptConfig/personalities/11/1/reactions/spontaneous/0/2/timeRange/0",
-    "value" : 0.00001
+    "value" : 0.001
   }
 ]
