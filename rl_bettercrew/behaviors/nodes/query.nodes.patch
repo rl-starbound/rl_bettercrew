@@ -5,6 +5,6 @@
   },
   { "op" : "replace",
     "path" : "/findLoungable/script",
-    "value" : "/scripts/actions/rl_bettercrew.lua"
+    "value" : "/scripts/actions/rl_bettercrew_query.lua"
   }
 ]

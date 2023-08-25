@@ -1,0 +1,6 @@
+[
+  { "op" : "add",
+    "path" : "/swapItemSlots/script",
+    "value" : "/scripts/actions/rl_bettercrew_npc.lua"
+  }
+]

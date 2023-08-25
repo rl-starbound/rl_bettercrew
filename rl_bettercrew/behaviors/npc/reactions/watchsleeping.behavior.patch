@@ -1,7 +1,7 @@
 [
   { "op" : "add",
     "path" : "/scripts/-",
-    "value" : "/scripts/actions/rl_bettercrew.lua"
+    "value" : "/scripts/actions/rl_bettercrew_query.lua"
   },
   { "op" : "test",
     "path" : "/root/child/children/3/type",

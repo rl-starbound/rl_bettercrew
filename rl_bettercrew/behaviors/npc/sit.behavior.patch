@@ -5,7 +5,7 @@
   },
   { "op" : "add",
     "path" : "/scripts/-",
-    "value" : "/scripts/actions/rl_bettercrew.lua"
+    "value" : "/scripts/actions/rl_bettercrew_query.lua"
   },
   { "op" : "test",
     "path" : "/root/children/0/type",
@@ -83,7 +83,7 @@
                 "orderBy": {"value": "random"},
                 "orientation": {"value": "sit"},
                 "position": {"key": "spawn"},
-                "range": {"value": 200},
+                "range": {"value": 250},
                 "unoccupied": {"value": true}
               },
               "output": {
