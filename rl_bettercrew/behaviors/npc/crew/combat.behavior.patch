@@ -1,6 +1,95 @@
 [
-  { "op" : "add",
-    "path" : "/scripts/-",
-    "value" : "/scripts/actions/rl_bettercrew_npc.lua"
-  }
+  [
+    { "op" : "test",
+      "path" : "/root/children/2/child/children/0/child/children/1/child/children/3/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/2/child/children/0/child/children/1/child/children/3/name",
+      "value" : "entityInRange"
+    },
+    { "op" : "test",
+      "path" : "/root/children/2/child/children/0/child/children/1/child/children/3/parameters/entity/key",
+      "value" : "player"
+    },
+    { "op" : "test",
+      "path" : "/root/children/2/child/children/0/child/children/1/child/children/3/parameters/position/key",
+      "value" : "targetPosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/2/child/children/0/child/children/1/child/children/3",
+      "value" : {
+        "title": "sequence",
+        "type": "composite",
+        "name": "sequence",
+        "parameters": {},
+        "children": [
+          {
+            "title": "entityInRange",
+            "type": "action",
+            "name": "entityInRange",
+            "parameters": {
+              "entity": {"key": "player"},
+              "position": {"key": "targetPosition"},
+              "range": {"key": "<targetDangerRange>"}
+            }
+          },
+          {
+            "title": "Trigger non-medic benefits ASAP but wait for medic benefits",
+            "type": "composite",
+            "name": "selector",
+            "parameters": {},
+            "children": [
+              {
+                "title": "True if crew member is a not a medic",
+                "type": "decorator",
+                "name": "inverter",
+                "parameters": {},
+                "child": {
+                  "title": "True if crew member is a medic",
+                  "type": "action",
+                  "name": "hasFieldBenefit",
+                  "parameters": {}
+                }
+              },
+              {
+                "title": "Trigger medic only if player is injured",
+                "type": "composite",
+                "name": "sequence",
+                "parameters": {},
+                "children": [
+                  {
+                    "title": "entityHealthPercentage",
+                    "type": "action",
+                    "name": "entityHealthPercentage",
+                    "parameters": {
+                      "entity": {"key": "player"}
+                    },
+                    "output": {
+                      "number": "playerHealth"
+                    }
+                  },
+                  {
+                    "title": "greaterThan",
+                    "type": "action",
+                    "name": "greaterThan",
+                    "parameters": {
+                      "first": {"value": 0.8},
+                      "second": {"key": "playerHealth"}
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_npc.lua"
+    }
+  ]
 ]

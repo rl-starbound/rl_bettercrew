@@ -1,5 +1,5 @@
 function trigger()
-  -- In the vanilla implementation, beamin occurs immediately after
+  -- In the base implementation, beamin occurs immediately after
   -- beamout, which does not give the code the chance to setPosition of
   -- the entity to the new location, i.e., the beamin occurs at the same
   -- location as the beamout, and then the entity just appears at the

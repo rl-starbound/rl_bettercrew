@@ -1,6 +1,26 @@
 [
-  { "op" : "add",
-    "path" : "/scripts/-",
-    "value" : "/scripts/actions/rl_bettercrew_npc.lua"
-  }
+  [
+    { "op" : "test",
+      "path" : "/root/child/children/3/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/3/name",
+      "value" : "greaterThan"
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/3/parameters/second/key",
+      "value" : "playerHealth"
+    },
+    { "op" : "replace",
+      "path" : "/root/child/children/3/parameters/first/value",
+      "value" : 0.4
+    }
+  ],
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_npc.lua"
+    }
+  ]
 ]

@@ -7,7 +7,7 @@
 -- output entity
 -- output list
 function findLoungable(args, board)
-  -- In the vanilla implementation, this function's orderBy and
+  -- In the base implementation, this function's orderBy and
   -- withoutEntityId args were ignored accidentally.
 
   if args.position == nil then return false end

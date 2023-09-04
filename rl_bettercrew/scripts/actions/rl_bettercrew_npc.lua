@@ -1,6 +1,6 @@
 function swapItemSlots(args, board)
-  -- In the vanilla implementation, there are edge cases in which a call
-  -- to `npc.setItemSlot` will fail, sometimes returning false, and
+  -- In the base implementation, there are edge cases in which a call to
+  -- `npc.setItemSlot` will fail, sometimes returning false, and
   -- sometimes returning true but incorrectly setting the item in the
   -- slot to nil. If that happens, the core and instance values will go
   -- out of sync and the NPC may become disarmed. Fix this by verifying

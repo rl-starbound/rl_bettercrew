@@ -1,0 +1,78 @@
+[
+  { "op" : "test",
+    "path" : "/root/children/3/children/0/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/3/children/0/name",
+    "value" : "receivedNotification"
+  },
+  { "op" : "test",
+    "path" : "/root/children/3/children/0/parameters/type/value",
+    "value" : "unfollow"
+  },
+  { "op" : "test",
+    "path" : "/root/children/3/children/2/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/3/children/2/name",
+    "value" : "sayToEntity"
+  },
+  { "op" : "test",
+    "path" : "/root/children/3/children/2/parameters/dialogType/value",
+    "value" : "dialog.crewmember.unfollow"
+  },
+  { "op" : "test",
+    "path" : "/root/children/3/children/2/parameters/entity/key",
+    "value" : "player"
+  },
+  { "op" : "replace",
+    "path" : "/root/children/3/children/2",
+    "value" : {
+      "title": "sequence",
+      "type": "composite",
+      "name": "sequence",
+      "parameters": {},
+      "children": [
+        {
+          "title": "selector",
+          "type": "composite",
+          "name": "selector",
+          "parameters": {},
+          "children": [
+            {
+              "title": "Is ship world?",
+              "type": "action",
+              "name": "worldProperty",
+              "parameters": {
+                "property": {"value": "ship.level"}
+              }
+            },
+            {
+              "title": "If not on ship world replace spawn position",
+              "type": "action",
+              "name": "entityPosition",
+              "parameters": {
+                "entity": {"key": "player"}
+              },
+              "output": {
+                "position": "spawn"
+              }
+            }
+          ]
+        },
+        {
+          "title": "sayToEntity",
+          "type": "action",
+          "name": "sayToEntity",
+          "parameters": {
+            "dialogType": {"value": "dialog.crewmember.unfollow"},
+            "entity": {"key": "player"},
+            "tags": {"value": {}}
+          }
+        }
+      ]
+    }
+  }
+]

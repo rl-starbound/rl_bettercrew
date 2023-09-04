@@ -1,7 +1,7 @@
 -- param defaultPosition
 -- output position
 function rl_bettercrew_crewAnchorObject(args, board)
-  if math.random() < 0.125 then
+  if math.random() < 0.1 then
     return true, {position = args.defaultPosition}
   end
   local result = world.sendEntityMessage(
@@ -16,12 +16,12 @@ end
 -- param direction
 -- param run
 function rl_bettercrew_moveUnidirectionally(args, board, node)
-  -- In the vanilla function `move`, the args (specifically `direction`)
-  -- are updated on each tick. In some invocations, this caused NPCs to
-  -- become stuck moving back and forth rapidly if the `move` command
-  -- was invoked when the NPC was directly above or below their "home"
-  -- location. In this variant, we read the args only on the initial
-  -- function call.
+  -- In the base implementation of the function `move`, the args
+  -- (specifically `direction`) are updated on each tick. In some
+  -- invocations, this caused NPCs to become stuck moving back and forth
+  -- rapidly if the `move` command was invoked when the NPC was directly
+  -- above or below their "home" location. In this variant, we read the
+  -- args only on the initial function call.
 
   if args.direction == nil then return false end
   local direction = util.toDirection(args.direction)

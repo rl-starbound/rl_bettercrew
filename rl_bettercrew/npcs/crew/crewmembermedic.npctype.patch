@@ -1,0 +1,10 @@
+[
+  { "op" : "test",
+    "path" : "/scriptConfig/crew/role/benefits/0/type",
+    "value" : "Regeneration"
+  },
+  { "op" : "replace",
+    "path" : "/scriptConfig/crew/role/benefits/0/value",
+    "value" : 4
+  }
+]

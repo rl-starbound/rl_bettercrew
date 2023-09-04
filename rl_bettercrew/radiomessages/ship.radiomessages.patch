@@ -1,0 +1,26 @@
+[
+  { "op" : "add",
+    "path" : "/rallyRecruitsNoCrew",
+    "value" : {
+      "type" : "tutorial",
+      "text" : "You have no crew members to assist you. You should attempt to recruit some of the people you meet on your journey.",
+      "unique" : false
+    }
+  },
+  { "op" : "add",
+    "path" : "/rallyRecruitsNoResponse",
+    "value" : {
+      "type" : "tutorial",
+      "text" : "No crew members are available to assist you. Return to your ship to assign crew to travel with you off the ship.",
+      "unique" : false
+    }
+  },
+  { "op" : "add",
+    "path" : "/rallyRecruitsPremature",
+    "value" : {
+      "type" : "tutorial",
+      "text" : "The inter-crew communications system is currently non-functional. Repair your ship before attempting to recruit crew members.",
+      "unique" : false
+    }
+  }
+]

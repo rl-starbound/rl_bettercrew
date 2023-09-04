@@ -1,0 +1,20 @@
+[
+  { "op" : "replace",
+    "path" : "/companionsConfig/crewBenefits/shipRegeneration",
+    "value" : [
+      "shipregeneration1",
+      "shipregeneration1",
+      "shipregeneration1",
+      "shipregeneration1",
+      "shipregeneration5"
+    ]
+  },
+  { "op" : "replace",
+    "path" : "/genericScriptContexts/stealing",
+    "value" : "/scripts/player/rl_stealing.lua"
+  },
+  { "op" : "add",
+    "path" : "/companionsConfig/scripts/-",
+    "value" : "/scripts/companions/rl_bettercrew_player.lua"
+  }
+]

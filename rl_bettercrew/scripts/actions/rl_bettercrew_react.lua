@@ -7,7 +7,7 @@
 
 -- param reaction
 function playBehaviorReaction(args, board, nodeId, dt)
-  -- In the vanilla implementation, this function ignored personality of
+  -- In the base implementation, this function ignored personality of
   -- NPCs when passing parameters to behavior trees. This caused, among
   -- other problems, nocturnal NPCs to be unable to sleep and fast NPCs
   -- not to run.
