@@ -1,0 +1,51 @@
+[
+  { "op" : "test",
+    "path" : "/root/children/0/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/name",
+    "value" : "groundPosition"
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/parameters/position/key",
+    "value" : "targetPosition"
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/output/position",
+    "value" : "targetPosition"
+  },
+  { "op" : "replace",
+    "path" : "/root/children/0",
+    "value" : {
+      "title": "sequence",
+      "type": "composite",
+      "name": "sequence",
+      "parameters": {},
+      "children": [
+        {
+          "title": "groundPosition",
+          "type": "action",
+          "name": "groundPosition",
+          "parameters": {
+            "avoidLiquid": {"value": true},
+            "maxHeight": {"value": 5},
+            "minHeight": {"value": -5},
+            "position": {"key": "targetPosition"}
+          },
+          "output": {
+            "position": "targetPosition"
+          }
+        },
+        {
+          "title": "Fail if in zero gravity",
+          "type": "action",
+          "name": "rl_bettercrew_gravityPositive",
+          "parameters": {
+            "position": {"key": "targetPosition"}
+          }
+        }
+      ]
+    }
+  }
+]

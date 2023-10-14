@@ -13,6 +13,13 @@ function rl_bettercrew_crewAnchorObject(args, board)
   return true, {position = result}
 end
 
+-- param position
+function rl_bettercrew_gravityPositive(args, board, nodeId, dt)
+  if args.position == nil then return false end
+
+  return world.gravity(args.position) > 0
+end
+
 -- param direction
 -- param run
 function rl_bettercrew_moveUnidirectionally(args, board, node)
