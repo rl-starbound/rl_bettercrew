@@ -1,15 +1,27 @@
 [
-  { "op" : "add",
-    "path" : "/scripts",
-    "value" : [ "/scripts/rl_crewanchorobject.lua" ]
-  },
-  { "op" : "add",
-    "path" : "/crewAnchorTags",
-    "value" : [
-      "crewmemberchemistblue",
-      "crewmemberchemistgreen",
-      "crewmemberchemistorange",
-      "crewmemberchemistyellow"
-    ]
-  }
+  [
+    { "op" : "test",
+      "path" : "/scripts",
+      "inverse" : true
+    },
+    { "op" : "add",
+      "path" : "/scripts",
+      "value" : [ ]
+    }
+  ],
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/rl_crewanchorobject.lua"
+    },
+    { "op" : "add",
+      "path" : "/crewAnchorTags",
+      "value" : [
+        "crewmemberchemistblue",
+        "crewmemberchemistgreen",
+        "crewmemberchemistorange",
+        "crewmemberchemistyellow"
+      ]
+    }
+  ]
 ]

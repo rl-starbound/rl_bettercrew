@@ -4,5 +4,5 @@
   "friendlyName" : "Better Crew",
   "includes" : ["QuickbarMini"],
   "name" : "rl_bettercrew",
-  "version" : "1.4.0"
+  "version" : "1.4.1"
 }

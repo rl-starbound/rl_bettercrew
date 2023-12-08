@@ -47,10 +47,11 @@ When deciding which base game objects would be enriched with crew anchor tags, I
 
 Two pieces of metadata must be added to an object to make it a crew anchor object:
 
-1. The script `/scripts/rl_crewanchorobject.lua` must be appended to the object's `scripts` list. If the object is not scripted, then the `scripts` field must be added to the object and its value must be a JSON list containing this script.
+1. The script `/scripts/rl_crewanchorobject.lua` must be appended to the object's `scripts` list.
+1. If the object is not scripted, then the `scripts` field must be added to the object and its value must be a JSON list containing this script. Please see examples in this repo of a pattern for adding the `scripts` field to an object while minimizing the risk of a mod conflict.
 1. A new field called `crewAnchorTags` must be added to the object. It must be a JSON list containing at least one string. Each string must be one of the crewmember NPC types that will be attracted to this object.
 
-Once your mod contains at least one crew anchor object, you must add *rl_bettercrew* to the `requires` field in your mod's `_metadata` file. Failure to do so will cause your mod's objects to crash worlds when they are loaded, if players have not also added this mod. Due to the risk of mod incompatibility when adding mods to the `requires` field, it is generally preferable to offer compatibility as an additional mod on top of your mod. That is, if your mod is called *MyMod*, and you wish to add crew anchor tags to its objects, you should create a new mod, let's call it *MyMod Better Crew Compatibility*, have that mod require both *MyMod* and *rl_bettercrew*, and make patches to your objects in that mod.
+Once your mod contains at least one crew anchor object, you must add *rl_bettercrew* to the `requires` field in your mod's `_metadata` file. Failure to do so will cause your mod's objects to crash worlds when they are loaded, if players have not also added this mod. Due to the risk of mod incompatibility when adding mods to the `requires` field, it is generally preferable to offer compatibility as an additional mod on top of your mod. That is, if your mod is called *MyMod*, and you wish to add crew anchor tags to its objects, you should create a new mod, let's call it *MyMod Better Crew Compatibility*, make patches to your objects in that mod, and have that mod require both *MyMod* and *rl_bettercrew*.
 
 ## Additional Implementation Details
 
