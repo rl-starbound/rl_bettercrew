@@ -1,0 +1,13 @@
+[
+  { "op" : "add",
+    "path" : "/cantReachRanged",
+    "value" : {
+      "default" : {
+        "default" : [
+          "Frustrated. I cannot hit that target!",
+          "Frustrated. Come closer so I may shoot you!"
+        ]
+      }
+    }
+  }
+]

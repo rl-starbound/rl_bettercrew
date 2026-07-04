@@ -1,0 +1,67 @@
+[
+  // See notes on windup times in base.npctype.patch.
+  { "op" : "replace",
+    "path" : "/scriptConfig/combat/meleeWeaponWindups/broadsword",
+    "value" : 0.1
+  },
+  { "op" : "replace",
+    "path" : "/scriptConfig/combat/meleeWeaponWindups/dagger",
+    "value" : 0.05
+  },
+  { "op" : "replace",
+    "path" : "/scriptConfig/combat/meleeWeaponWindups/axe",
+    "value" : 0.3
+  },
+  { "op" : "replace",
+    "path" : "/scriptConfig/combat/meleeWeaponWindups/hammer",
+    "value" : 0.45
+  },
+  { "op" : "replace",
+    "path" : "/scriptConfig/combat/meleeWeaponWindups/shortsword",
+    "value" : 0.1
+  },
+  { "op" : "replace",
+    "path" : "/scriptConfig/combat/meleeWeaponWindups/spear",
+    "value" : 0.1
+  },
+
+  // See notes on cooldown times in base.npctype.patch.
+  { "op" : "replace",
+    "path" : "/scriptConfig/combat/meleeWeaponCooldowns/broadsword",
+    "value" : 0.9
+  },
+  { "op" : "replace",
+    "path" : "/scriptConfig/combat/meleeWeaponCooldowns/dagger",
+    "value" : 0.4
+  },
+  { "op" : "replace",
+    "path" : "/scriptConfig/combat/meleeWeaponCooldowns/axe",
+    "value" : 0.6
+  },
+  { "op" : "replace",
+    "path" : "/scriptConfig/combat/meleeWeaponCooldowns/hammer",
+    "value" : 0.75
+  },
+  { "op" : "replace",
+    "path" : "/scriptConfig/combat/meleeWeaponCooldowns/shortsword",
+    "value" : 0.65
+  },
+  { "op" : "replace",
+    "path" : "/scriptConfig/combat/meleeWeaponCooldowns/spear",
+    "value" : 1.1
+  },
+
+  // In general, hostile NPCs should not use cantReachRanged dialog
+  // because it will give away their location in dark environments.
+  { "op" : "add",
+    "path" : "/scriptConfig/behaviorConfig/cantReachRangedDialog",
+    "value" : false
+  },
+
+  // Give NPCs something to say if their target is out of range of their
+  // ranged weapon and they can't pathfind to get closer.
+  { "op" : "add",
+    "path" : "/scriptConfig/dialog/cantReachRanged",
+    "value" : "/dialog/combat.config:cantReachRanged"
+  }
+]

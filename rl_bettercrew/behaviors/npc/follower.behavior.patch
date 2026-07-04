@@ -1,0 +1,42 @@
+[
+  // Replace `moveToPosition` with the improved version this mod
+  // provides.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/children/3/children/2/children/3/children/0/children/1/children/1/child/children/0/children/1/child/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/children/3/children/2/children/3/children/0/children/1/children/1/child/children/0/children/1/child/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/1/children/3/children/2/children/3/children/0/children/1/children/1/child/children/0/children/1/child/name",
+      "value" : "rl_bettercrew_moveToPosition"
+    }
+  ],
+
+  // Replace `moveToPosition` with the improved version this mod
+  // provides.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/children/3/children/2/children/3/children/0/children/1/children/1/child/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/children/3/children/2/children/3/children/0/children/1/children/1/child/children/1/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/1/children/3/children/2/children/3/children/0/children/1/children/1/child/children/1/name",
+      "value" : "rl_bettercrew_moveToPosition"
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_move.lua"
+    }
+  ]
+]

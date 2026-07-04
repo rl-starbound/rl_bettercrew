@@ -1,0 +1,6 @@
+[
+  { "op" : "add",
+    "path" : "/sounds/rl_bettercrew_crewCommunication",
+    "value" : ["/sfx/interface/ship_confirm1.ogg"]
+  }
+]

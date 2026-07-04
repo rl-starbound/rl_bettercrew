@@ -1,0 +1,13 @@
+[
+  { "op" : "add",
+    "path" : "/cantReachRanged",
+    "value" : {
+      "default" : {
+        "default" : [
+          "Get over here and fight!",
+          "Come here so I can shoot you, you coward!"
+        ]
+      }
+    }
+  }
+]

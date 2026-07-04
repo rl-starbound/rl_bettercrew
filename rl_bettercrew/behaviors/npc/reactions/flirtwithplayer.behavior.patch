@@ -1,91 +1,137 @@
 [
-  { "op" : "test",
-    "path" : "/root/children/4/children/1/type",
-    "value" : "action"
-  },
-  { "op" : "test",
-    "path" : "/root/children/4/children/1/name",
-    "value" : "moveToPosition"
-  },
-  { "op" : "add",
-    "path" : "/parameters/pathingTimeLimit",
-    "value" : 10
-  },
-  { "op" : "replace",
-    "path" : "/root/children/4/children/1",
-    "value" : {
-      "title": "parallel",
-      "type": "composite",
-      "name": "parallel",
-      "parameters": {
-        "fail": {"value": 1},
-        "success": {"value": 1}
-      },
-      "children": [
-        {
-          "title": "moveToPosition",
-          "type": "action",
-          "name": "moveToPosition",
-          "parameters": {
-            "avoidLiquid": {"value": true},
-            "groundPosition": {"value": true},
-            "maxGround": {"value": 5},
-            "minGround": {"value": -5},
-            "position": {"key": "standPos"},
-            "run": {"value": false}
-          },
-          "output": {
-            "pathfinding": "isPathfinding"
-          }
+  // Wrap the `moveToPosition` function in a pathfinding time limit to
+  // prevent NPCs from freezing if the core engine cannot find a path to
+  // the position.
+  [
+    { "op" : "test",
+      "path" : "/root/children/4/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/4/children/1/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/children/4/children/1/parameters/avoidLiquid/value",
+      "value" : true
+    },
+    { "op" : "test",
+      "path" : "/root/children/4/children/1/parameters/groundPosition/value",
+      "value" : true
+    },
+    { "op" : "test",
+      "path" : "/root/children/4/children/1/parameters/maxGround/value",
+      "value" : 5
+    },
+    { "op" : "test",
+      "path" : "/root/children/4/children/1/parameters/minGround/value",
+      "value" : -5
+    },
+    { "op" : "test",
+      "path" : "/root/children/4/children/1/parameters/position/key",
+      "value" : "standPos"
+    },
+    { "op" : "test",
+      "path" : "/root/children/4/children/1/parameters/run/value",
+      "value" : false
+    },
+    { "op" : "test",
+      "path" : "/root/children/4/children/1/output/pathfinding",
+      "value" : "isPathfinding"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/4/children/1",
+      "value" : {
+        "title": "parallel",
+        "type": "composite",
+        "name": "parallel",
+        "parameters": {
+          "fail": {"value": 1},
+          "success": {"value": -1}
         },
-        {
-          "title": "failer",
-          "type": "decorator",
-          "name": "failer",
-          "parameters": {},
-          "child": {
+        "children": [
+          {
+            "title": "",
+            "type": "action",
+            "name": "rl_bettercrew_moveToPosition",
+            "parameters": {
+              "avoidLiquid": {"value": true},
+              "groundPosition": {"value": true},
+              "maxGround": {"value": 5},
+              "minGround": {"value": -5},
+              "position": {"key": "standPos"},
+              "run": {"value": false}
+            },
+            "output": {
+              "pathfinding": "isPathfinding"
+            }
+          },
+          {
             "title": "dynamic",
             "type": "composite",
             "name": "dynamic",
             "parameters": {},
             "children": [
               {
-                "title": "parallel",
-                "type": "composite",
-                "name": "parallel",
-                "parameters": {
-                  "fail": {"value": 1},
-                  "success": {"value": -1}
-                },
-                "children": [
-                  {
-                    "title": "hasFlag",
-                    "type": "action",
-                    "name": "hasFlag",
-                    "parameters": {
-                      "name": {"key": "isPathfinding"}
-                    }
-                  },
-                  {
-                    "title": "timer",
-                    "type": "action",
-                    "name": "timer",
-                    "parameters": {
-                      "time": {"value": "<pathingTimeLimit>"}
-                    }
+                "title": "inverter",
+                "type": "decorator",
+                "name": "inverter",
+                "parameters": {},
+                "child": {
+                  "title": "hasFlag",
+                  "type": "action",
+                  "name": "hasFlag",
+                  "parameters": {
+                    "name": {"key": "isPathfinding"}
                   }
-                ]
+                }
               },
               {
-                "title": "runner",
-                "type": "action",
-                "name": "runner",
-                "parameters": {}
+                "title": "failer",
+                "type": "decorator",
+                "name": "failer",
+                "parameters": {},
+                "child": {
+                  "title": "timer",
+                  "type": "action",
+                  "name": "timer",
+                  "parameters": {
+                    "time": {"value": "<pathingTimeLimit>"}
+                  }
+                }
               }
             ]
           }
-        }
-      ]
+        ]
+      }
     }
-  }
+  ],
+
+  // Replace `moveToPosition` with the improved version this mod
+  // provides.
+  [
+    { "op" : "test",
+      "path" : "/root/children/8/child/children/1/children/0/children/2/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/8/child/children/1/children/0/children/2/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/8/child/children/1/children/0/children/2/name",
+      "value" : "rl_bettercrew_moveToPosition"
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_move.lua"
+    },
+    { "op" : "add",
+      "path" : "/parameters/pathingTimeLimit",
+      "value" : 10
+    }
+  ]
 ]

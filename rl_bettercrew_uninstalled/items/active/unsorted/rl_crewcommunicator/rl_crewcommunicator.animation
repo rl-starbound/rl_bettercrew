@@ -1,0 +1,23 @@
+{
+  "globalTagDefaults" : {
+    "paletteSwaps" : ""
+  },
+
+  "animatedParts" : {
+     "parts" : {
+      "terminal" : {
+        "properties" : {
+          "zLevel" : 0,
+          "centered" : true,
+          "image" : "<partImage>",
+          "offset" : [0.25, 0.125],
+          "transformationGroups" : ["terminal"]
+        }
+      }
+    }
+  },
+
+  "transformationGroups" : {
+    "terminal" : {}
+  }
+}

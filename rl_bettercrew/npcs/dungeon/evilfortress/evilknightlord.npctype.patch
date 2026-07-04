@@ -1,0 +1,38 @@
+[
+  [
+    { "op" : "test",
+      "path" : "/items/override/0/1/0/sheathedprimary/0/name",
+      "value" : "npcbroadsword"
+    },
+    { "op" : "test",
+      "path" : "/items/override/0/1/0/sheathedprimary/1",
+      "inverse" : true
+    },
+    { "op" : "add",
+      "path" : "/items/override/0/1/0/sheathedprimary/-",
+      "value" : { "name" : "npcshortsword" }
+    }
+  ],
+  [
+    { "op" : "test",
+      "path" : "/items/override/0/1/0/alt/0",
+      "value" : "commonlargeshield"
+    },
+    { "op" : "test",
+      "path" : "/items/override/0/1/0/sheathedalt",
+      "inverse" : true
+    },
+    { "op" : "move",
+      "from" : "/items/override/0/1/0/alt",
+      "path" : "/items/override/0/1/0/sheathedalt"
+    }
+  ],
+  [
+    { "op" : "add",
+      "path" : "/scriptConfig/expendableItemReplacement",
+      "value" : {
+        "primary" : [ { "name" : "npctungstenbow" } ]
+      }
+    }
+  ]
+]

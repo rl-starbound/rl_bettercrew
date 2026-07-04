@@ -1,78 +1,87 @@
 [
-  { "op" : "test",
-    "path" : "/root/children/3/children/0/type",
-    "value" : "action"
-  },
-  { "op" : "test",
-    "path" : "/root/children/3/children/0/name",
-    "value" : "receivedNotification"
-  },
-  { "op" : "test",
-    "path" : "/root/children/3/children/0/parameters/type/value",
-    "value" : "unfollow"
-  },
-  { "op" : "test",
-    "path" : "/root/children/3/children/2/type",
-    "value" : "action"
-  },
-  { "op" : "test",
-    "path" : "/root/children/3/children/2/name",
-    "value" : "sayToEntity"
-  },
-  { "op" : "test",
-    "path" : "/root/children/3/children/2/parameters/dialogType/value",
-    "value" : "dialog.crewmember.unfollow"
-  },
-  { "op" : "test",
-    "path" : "/root/children/3/children/2/parameters/entity/key",
-    "value" : "player"
-  },
-  { "op" : "replace",
-    "path" : "/root/children/3/children/2",
-    "value" : {
-      "title": "sequence",
-      "type": "composite",
-      "name": "sequence",
-      "parameters": {},
-      "children": [
-        {
-          "title": "selector",
-          "type": "composite",
-          "name": "selector",
-          "parameters": {},
-          "children": [
-            {
-              "title": "Is ship world?",
-              "type": "action",
-              "name": "worldProperty",
-              "parameters": {
-                "property": {"value": "ship.level"}
-              }
-            },
-            {
-              "title": "If not on ship world replace spawn position",
-              "type": "action",
-              "name": "entityPosition",
-              "parameters": {
-                "entity": {"key": "player"}
-              },
-              "output": {
-                "position": "spawn"
-              }
-            }
-          ]
-        },
-        {
-          "title": "sayToEntity",
-          "type": "action",
-          "name": "sayToEntity",
-          "parameters": {
-            "dialogType": {"value": "dialog.crewmember.unfollow"},
-            "entity": {"key": "player"},
-            "tags": {"value": {}}
-          }
-        }
-      ]
+  // Replace `moveToPosition` with the improved version this mod
+  // provides.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/child/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/child/children/1/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/1/child/children/1/name",
+      "value" : "rl_bettercrew_moveToPosition"
     }
-  }
+  ],
+
+  // When not on the ship, and the player instructs a crew member to
+  // stop following, replace the crew member's "spawn" position with the
+  // player's current position. This will ensure that the crew member
+  // remains in approximately the same position, while still being able
+  // to engage in NPC wandering and reaction.
+  [
+    { "op" : "test",
+      "path" : "/root/children/3/type",
+      "value" : "composite"
+    },
+    { "op" : "test",
+      "path" : "/root/children/3/name",
+      "value" : "sequence"
+    },
+    { "op" : "test",
+      "path" : "/root/children/3/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/3/children/0/name",
+      "value" : "receivedNotification"
+    },
+    { "op" : "test",
+      "path" : "/root/children/3/children/0/parameters/type/value",
+      "value" : "unfollow"
+    },
+    { "op" : "test",
+      "path" : "/root/children/3/children/0/output/source",
+      "value" : "player"
+    },
+    { "op" : "add",
+      "path" : "/root/children/3/children/-",
+      "value" : {
+        "title": "selector",
+        "type": "composite",
+        "name": "selector",
+        "parameters": {},
+        "children": [
+          {
+            "title": "Is ship world?",
+            "type": "action",
+            "name": "worldProperty",
+            "parameters": {
+              "property": {"value": "ship.level"}
+            }
+          },
+          {
+            "title": "If not on ship world replace spawn position",
+            "type": "action",
+            "name": "entityPosition",
+            "parameters": {
+              "entity": {"key": "player"}
+            },
+            "output": {
+              "position": "spawn"
+            }
+          }
+        ]
+      }
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_move.lua"
+    }
+  ]
 ]

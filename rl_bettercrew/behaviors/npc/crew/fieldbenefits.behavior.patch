@@ -1,4 +1,7 @@
 [
+  // Outside of combat, medics should begin applying healing to the
+  // player when their health is below 60%. In the base game, the value
+  // is 20%.
   [
     { "op" : "test",
       "path" : "/root/child/children/3/type",
@@ -14,10 +17,49 @@
     },
     { "op" : "replace",
       "path" : "/root/child/children/3/parameters/first/value",
-      "value" : 0.4
+      "value" : 0.6
     }
   ],
+
+  // Replace the faulty base game `swapItemSlots` function with the
+  // improved version provided by this mod.
   [
+    { "op" : "test",
+      "path" : "/root/child/children/4/children/2/children/0/child/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/4/children/2/children/0/child/children/1/name",
+      "value" : "swapItemSlots"
+    },
+    { "op" : "replace",
+      "path" : "/root/child/children/4/children/2/children/0/child/children/1/name",
+      "value" : "rl_bettercrew_swapItemSlots"
+    }
+  ],
+
+  // Replace `moveToPosition` with the version in this mod that clears
+  // the outputs on success or failure.
+  [
+    { "op" : "test",
+      "path" : "/root/child/children/4/children/2/children/1/children/1/children/1/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/4/children/2/children/1/children/1/children/1/children/0/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/child/children/4/children/2/children/1/children/1/children/1/children/0/name",
+      "value" : "rl_bettercrew_moveToPosition"
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_move.lua"
+    },
     { "op" : "add",
       "path" : "/scripts/-",
       "value" : "/scripts/actions/rl_bettercrew_npc.lua"

@@ -1,5 +1,10 @@
 [
   [
+    // In the base game, nocturnal NPCs can become stuck in a sleep-wake
+    // loop on non-terrestrial worlds because those worlds are always at
+    // time 0.0, and nocturnal NPCs' sleep time and wake time overlaps
+    // at exactly time 0.0. Adjust the start of their sleep time to 0.1
+    // to avoid this overlap.
     { "op" : "test",
       "path" : "/scriptConfig/personalities/11/1/personality",
       "value" : "nocturnal"
@@ -13,7 +18,62 @@
       "value" : 0.1
     }
   ],
+
   [
+    // In the base game, NPC weapon windup time is not fixed by the
+    // weapon's stance configuration, but by the NPC's behavior. The
+    // base game makes NPC windup significantly longer than that used by
+    // similar player weapons, which results in NPCs holding up their
+    // weapons, taking damage but doing little damage in return. This
+    // mod adjusts their windup times to be equivalent to similar player
+    // weapons. Note these values are minimums; as NPC behavior scripts
+    // update only 6 times per second, actual times will be longer to
+    // increments of 1/6 of a second.
+    { "op" : "replace",
+      "path" : "/scriptConfig/combat/meleeWeaponWindups/broadsword",
+      "value" : 0.1
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/combat/meleeWeaponWindups/axe",
+      "value" : 0.3
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/combat/meleeWeaponWindups/shortsword",
+      "value" : 0.1
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/combat/meleeWeaponWindups/spear",
+      "value" : 0.1
+    },
+
+    // Cooldown time generally should be equal to fireTime, because the
+    // NPC behavior code may, in some cases, skip most of the windup.
+    // Axes and hammers are exceptions.
+    { "op" : "replace",
+      "path" : "/scriptConfig/combat/meleeWeaponCooldowns/broadsword",
+      "value" : 0.9
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/combat/meleeWeaponCooldowns/dagger",
+      "value" : 0.4
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/combat/meleeWeaponCooldowns/axe",
+      "value" : 0.6
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/combat/meleeWeaponCooldowns/hammer",
+      "value" : 0.75
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/combat/meleeWeaponCooldowns/shortsword",
+      "value" : 0.65
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/combat/meleeWeaponCooldowns/spear",
+      "value" : 1.1
+    },
+
     { "op" : "add",
       "path" : "/scripts/-",
       "value" : "/npcs/rl_bettercrew_bmain.lua"

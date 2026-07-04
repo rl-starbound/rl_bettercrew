@@ -1,0 +1,68 @@
+[
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/2/children/0/children/1/type",
+    "value" : "composite"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/2/children/0/children/1/name",
+    "value" : "dynamic"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/2/children/0/children/1/children/0/type",
+    "value" : "decorator"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/2/children/0/children/1/children/0/name",
+    "value" : "inverter"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/2/children/0/children/1/children/0/child/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/2/children/0/children/1/children/0/child/name",
+    "value" : "hasFlag"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/2/children/0/children/1/children/0/child/parameters/name/key",
+    "value" : "isPathfinding"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/2/children/0/children/1/children/1/type",
+    "value" : "decorator"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/2/children/0/children/1/children/1/name",
+    "value" : "failer"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/2/children/0/children/1/children/1/child/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/1/children/2/children/0/children/1/children/1/child/name",
+    "value" : "timer"
+  },
+  { "op" : "add",
+    "path" : "/root/children/1/children/1/children/2/children/0/children/1/children/-",
+    "value" : {
+      "title": "failer",
+      "type": "decorator",
+      "name": "failer",
+      "parameters": {},
+      "child": {
+        "title": "",
+        "type": "action",
+        "name": "rl_bettercrew_logPosition",
+        "parameters": {
+          "context": {"value": "sleep moveToPosition timed out pathfinding to"},
+          "position": {"key": "bed"}
+        }
+      }
+    }
+  },
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/actions/rl_bettercrew_debug.lua"
+  }
+]

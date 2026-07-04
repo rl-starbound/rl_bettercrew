@@ -1,0 +1,30 @@
+[
+  [
+    { "op" : "test",
+      "path" : "/items/default/0/1/0/primary/0",
+      "value" : "npcpistol"
+    },
+    { "op" : "test",
+      "path" : "/items/default/0/1/0/sheathedprimary/0",
+      "value" : "npcpistol"
+    },
+    { "op" : "replace",
+      "path" : "/items/default/0/1/0/sheathedprimary/0",
+      "value" : "npcdagger"
+    }
+  ],
+  [
+    { "op" : "test",
+      "path" : "/items/default/0/1/1/primary/0",
+      "value" : "npcpistol"
+    },
+    { "op" : "test",
+      "path" : "/items/default/0/1/1/sheathedprimary/0",
+      "value" : "npcpistol"
+    },
+    { "op" : "replace",
+      "path" : "/items/default/0/1/1/sheathedprimary/0",
+      "value" : "npcdagger"
+    }
+  ]
+]

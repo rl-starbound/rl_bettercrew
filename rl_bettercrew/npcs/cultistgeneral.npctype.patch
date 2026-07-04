@@ -1,0 +1,19 @@
+[
+  [
+    { "op" : "test",
+      "path" : "/items/override/0/1/0/alt/0",
+      "value" : "npccultistbroadsword"
+    },
+    { "op" : "remove",
+      "path" : "/items/override/0/1/0/alt"
+    }
+  ],
+  [
+    { "op" : "add",
+      "path" : "/scriptConfig/expendableItemReplacement",
+      "value" : {
+        "primary" : [ "npccultistbroadsword" ]
+      }
+    }
+  ]
+]

@@ -1,115 +1,295 @@
 [
-  { "op" : "test",
-    "path" : "/root/children/1/children/0/children/1/children/3/type",
-    "value" : "action"
-  },
-  { "op" : "test",
-    "path" : "/root/children/1/children/0/children/1/children/3/name",
-    "value" : "interactObject"
-  },
-  { "op" : "test",
-    "path" : "/root/children/1/children/0/children/1/children/4/children/1/type",
-    "value" : "decorator"
-  },
-  { "op" : "test",
-    "path" : "/root/children/1/children/0/children/1/children/4/children/1/name",
-    "value" : "repeater"
-  },
-  { "op" : "replace",
-    "path" : "/root/children/1/children/0/children/1/children/3",
-    "value" : {
-      "title": "",
-      "type": "action",
-      "name": "success",
-      "parameters": {}
-    }
-  },
-  { "op" : "replace",
-    "path" : "/root/children/1/children/0/children/1/children/4/children/1",
-    "value" : {
-      "title": "parallel",
-      "type": "composite",
-      "name": "parallel",
-      "parameters": {
-        "fail": {"value": 1},
-        "success": {"value": 1}
-      },
-      "children": [
-        {
-          "title": "repeater",
-          "type": "decorator",
-          "name": "repeater",
-          "parameters": {
-            "maxLoops": {"value": 5},
-            "untilSuccess": {"value": false}
-          },
-          "child": {
-            "title": "sequence",
-            "type": "composite",
-            "name": "sequence",
-            "parameters": {},
-            "children": [
-              {
-                "title": "interactObject",
-                "type": "action",
-                "name": "interactObject",
-                "parameters": {
-                  "entity": {"key": "reactTarget"}
-                }
-              },
-              {
-                "title": "timer",
-                "type": "action",
-                "name": "timer",
-                "parameters": {
-                  "time": {"value": 5.6}
-                }
-              }
-            ]
-          }
+  // Wrap the `moveToPosition` function in a pathfinding time limit to
+  // prevent NPCs from freezing if the core engine cannot find a path to
+  // the position.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/1/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/1/parameters/avoidLiquid/value",
+      "value" : true
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/1/parameters/groundPosition/value",
+      "value" : true
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/1/parameters/maxGround/value",
+      "value" : 5
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/1/parameters/minGround/value",
+      "value" : -5
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/1/parameters/position/key",
+      "value" : "reactTargetPos"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/1/parameters/run/value",
+      "value" : false
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/1/output/pathfinding",
+      "value" : "isPathfinding"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/0/children/1/children/1",
+      "value" : {
+        "title": "parallel",
+        "type": "composite",
+        "name": "parallel",
+        "parameters": {
+          "fail": {"value": 1},
+          "success": {"value": -1}
         },
-        {
-          "title": "repeater",
-          "type": "decorator",
-          "name": "repeater",
-          "parameters": {
-            "maxLoops": {"value": 14},
-            "untilSuccess": {"value": false}
+        "children": [
+          {
+            "title": "",
+            "type": "action",
+            "name": "rl_bettercrew_moveToPosition",
+            "parameters": {
+              "avoidLiquid": {"value": true},
+              "groundPosition": {"value": true},
+              "maxGround": {"value": 5},
+              "minGround": {"value": -5},
+              "position": {"key": "reactTargetPos"},
+              "run": {"value": false}
+            },
+            "output": {
+              "pathfinding": "isPathfinding"
+            }
           },
-          "child": {
-            "title": "sequence",
+          {
+            "title": "dynamic",
             "type": "composite",
-            "name": "sequence",
+            "name": "dynamic",
             "parameters": {},
             "children": [
               {
-                "title": "emote",
-                "type": "action",
-                "name": "emote",
-                "parameters": {
-                  "emote": {"value": "blabbering"}
+                "title": "inverter",
+                "type": "decorator",
+                "name": "inverter",
+                "parameters": {},
+                "child": {
+                  "title": "hasFlag",
+                  "type": "action",
+                  "name": "hasFlag",
+                  "parameters": {
+                    "name": {"key": "isPathfinding"}
+                  }
                 }
               },
               {
-                "title": "dance",
-                "type": "action",
-                "name": "dance",
-                "parameters": {
-                  "dance": {"value": "typing"}
-                }
-              },
-              {
-                "title": "timer",
-                "type": "action",
-                "name": "timer",
-                "parameters": {
-                  "time": {"value": 2}
+                "title": "failer",
+                "type": "decorator",
+                "name": "failer",
+                "parameters": {},
+                "child": {
+                  "title": "timer",
+                  "type": "action",
+                  "name": "timer",
+                  "parameters": {
+                    "time": {"value": "<pathingTimeLimit>"}
+                  }
                 }
               }
             ]
           }
-        }
-      ]
+        ]
+      }
     }
-  }
+  ],
+
+  // The piano song plays for only 5.6 seconds, but the NPC pantomimes
+  // playing for 30 seconds. Instead, have the NPC interact with the
+  // piano every 5.6 seconds and pantomime for 28 seconds total.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/3/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/3/name",
+      "value" : "interactObject"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/3/parameters/entity/key",
+      "value" : "reactTarget"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/type",
+      "value" : "decorator"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/name",
+      "value" : "repeater"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/parameters/maxLoops/value",
+      "value" : 15
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/parameters/untilSuccess/value",
+      "value" : false
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/child/type",
+      "value" : "composite"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/child/name",
+      "value" : "sequence"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/child/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/child/children/0/name",
+      "value" : "emote"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/child/children/0/parameters/emote/value",
+      "value" : "blabbering"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/child/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/child/children/1/name",
+      "value" : "dance"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/child/children/1/parameters/dance/value",
+      "value" : "typing"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/child/children/2/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/child/children/2/name",
+      "value" : "timer"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1/child/children/2/parameters/time/value",
+      "value" : 2
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/0/children/1/children/3",
+      "value" : {
+        "title": "",
+        "type": "action",
+        "name": "success",
+        "parameters": {}
+      }
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/0/children/1/children/4/children/1",
+      "value" : {
+        "title": "parallel",
+        "type": "composite",
+        "name": "parallel",
+        "parameters": {
+          "fail": {"value": 1},
+          "success": {"value": 1}
+        },
+        "children": [
+          {
+            "title": "repeater",
+            "type": "decorator",
+            "name": "repeater",
+            "parameters": {
+              "maxLoops": {"value": 5},
+              "untilSuccess": {"value": false}
+            },
+            "child": {
+              "title": "sequence",
+              "type": "composite",
+              "name": "sequence",
+              "parameters": {},
+              "children": [
+                {
+                  "title": "interactObject",
+                  "type": "action",
+                  "name": "interactObject",
+                  "parameters": {
+                    "entity": {"key": "reactTarget"}
+                  }
+                },
+                {
+                  "title": "timer",
+                  "type": "action",
+                  "name": "timer",
+                  "parameters": {
+                    "time": {"value": 5.6}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "title": "repeater",
+            "type": "decorator",
+            "name": "repeater",
+            "parameters": {
+              "maxLoops": {"value": 14},
+              "untilSuccess": {"value": false}
+            },
+            "child": {
+              "title": "sequence",
+              "type": "composite",
+              "name": "sequence",
+              "parameters": {},
+              "children": [
+                {
+                  "title": "emote",
+                  "type": "action",
+                  "name": "emote",
+                  "parameters": {
+                    "emote": {"value": "blabbering"}
+                  }
+                },
+                {
+                  "title": "dance",
+                  "type": "action",
+                  "name": "dance",
+                  "parameters": {
+                    "dance": {"value": "typing"}
+                  }
+                },
+                {
+                  "title": "timer",
+                  "type": "action",
+                  "name": "timer",
+                  "parameters": {
+                    "time": {"value": 2}
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_move.lua"
+    },
+    { "op" : "add",
+      "path" : "/parameters/pathingTimeLimit",
+      "value" : 10
+    }
+  ]
 ]

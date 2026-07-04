@@ -1,0 +1,157 @@
+#!/bin/sh
+
+set -eu
+
+########################################################################
+# This script packs mod assets into a Starbound `.pak` file. It first
+# runs some hygiene checks, as well as removing symlinks, typically for
+# Tiled assets. If symlinks were removed, the script attempts to replace
+# them after packing has completed.
+#
+# This script supports Linux and Mac OS. It does not support Windows.
+#
+# This script will attempt to find the Starbound installation folder
+# using a list of common installation folders. If it fails, then you
+# must set the `STARBOUND_FOLDER` environment variable to the full path
+# of the Starbound installation on your system, and export it.
+#
+# An optional `-i` parameter instructs the script to copy the mod pak
+# file into the Starbound installation's `mods` folder.
+########################################################################
+
+while getopts :i opts; do
+  case "${opts}" in
+    i)
+      install_pak=1;;
+    \?)
+      printf 'USAGE: %s [-i]\n' "$0"
+      exit 1;;
+  esac
+done
+
+if [ -z "${STARBOUND_FOLDER:-}" ]; then
+  case "$(uname)" in
+    Darwin)
+      if [ -d "${HOME}/GOG Games/Starbound" ]; then
+        STARBOUND_FOLDER="${HOME}/GOG Games/Starbound"
+      elif [ -d "${HOME}/Library/Application Support/Steam/steamapps/common/Starbound" ]; then
+        STARBOUND_FOLDER="${HOME}/Library/Application Support/Steam/steamapps/common/Starbound"
+      elif [ -d "${HOME}/Documents/Starbound" ]; then
+        # Due to a GOG installer bug, this may be the "default" folder
+        # when installed on newer versions of Mac OS.
+        STARBOUND_FOLDER="${HOME}/Documents/Starbound"
+      else
+        echo 'ERROR: could not find the Starbound folder (Mac OS)' >&2
+        exit 1
+      fi;;
+    Linux)
+      if [ -x "${HOME}/GOG Games/Starbound/game" ]; then
+        STARBOUND_FOLDER="${HOME}/GOG Games/Starbound/game"
+      elif [ -x "${HOME}/.steam/steam/steamapps/common/Starbound" ]; then
+        STARBOUND_FOLDER="${HOME}/.steam/steam/steamapps/common/Starbound"
+      else
+        echo 'ERROR: could not find the Starbound folder (Linux)' >&2
+        exit 1
+      fi;;
+    *)
+      printf 'ERROR: unsupported operating system: %s\n' "$(uname)" >&2
+      exit 1
+  esac
+elif [ ! -d "${STARBOUND_FOLDER}" ]; then
+  echo 'ERROR: could not find the Starbound folder (user specified)' >&2
+  exit 1
+fi
+
+printf 'Using Starbound installation: "%s"\n' "${STARBOUND_FOLDER}" >&2
+
+# Guess the `asset_packer` executable based on the architecture, and
+# then validate that it exists.
+case "$(uname)" in
+  Darwin)
+    SB_ASSET_PACKER="${STARBOUND_FOLDER}/osx/asset_packer";;
+  Linux)
+    SB_ASSET_PACKER="${STARBOUND_FOLDER}/linux/asset_packer";;
+  *)
+    printf 'ERROR: unsupported operating system: %s\n' "$(uname)" >&2
+    exit 1
+esac
+if [ ! -x "${SB_ASSET_PACKER:-}" ]; then
+  echo 'ERROR: could not find the Starbound asset_packer executable' >&2
+  exit 1
+fi
+
+# Guess the `mods` folder, and then validate that it exists and is writable.
+SB_MODS_FOLDER="${STARBOUND_FOLDER}/mods"
+if [ ! -d "${SB_MODS_FOLDER}" ]; then
+  echo 'ERROR: could not find the Starbound mods folder' >&2
+  exit 1
+fi
+if [ -n "${install_pak:-}" ] && [ ! -w "${SB_MODS_FOLDER}" ]; then
+  echo 'ERROR: the Starbound mods folder is not writable' >&2
+  exit 1
+fi
+
+# Fail if we're not at a mod root.
+if [ ! -f _metadata ] && [ ! -f .metadata ]; then
+  echo 'ERROR: not in mod root. Aborting.' >&2
+  exit 1
+fi
+
+MOD_NAME=$(basename "$(pwd)")
+
+# Fail if backup or recovery files exist in the source.
+find . -name "*~"
+if [ "$(find . -name "*~" | wc -l)" -gt 0 ]; then
+  echo 'Error: backup files found in mod source. Aborting.'  >&2
+  exit 1
+fi
+find . -name "#*#"
+if [ "$(find . -name "#*#" | wc -l)" -gt 0 ]; then
+  echo 'Error: recovery files found in mod source. Aborting.' >&2
+  exit 1
+fi
+find . -name ".#*"
+if [ "$(find . -name ".#*" | wc -l)" -gt 0 ]; then
+  echo 'Error: recovery files found in mod source. Aborting.' >&2
+  exit 1
+fi
+
+# Fail if empty files or folders exist in the source.
+find . -empty
+if [ "$(find . -empty | wc -l)" -gt 0 ]; then
+  echo 'Error: empty files or folders found in mod source. Aborting.' >&2
+  exit 1
+fi
+
+# Remove symlinks.
+if [ "$(find . -type l | wc -l)" -gt 0 ]; then
+  find . -type l -delete
+  SYMLINKS_REMOVED=yes
+fi
+
+# Be absolutely certain that no symlinks remain.
+find . -type l
+if [ "$(find . -type l | wc -l)" -gt 0 ]; then
+  echo 'Error: symlinks found in mod source. Aborting.' >&2
+  exit 1
+fi
+
+# Clean up file permissions.
+find . -type d ! -perm 00755 -exec chmod 00755 {} \;
+find . -type f ! -perm 00644 -exec chmod 00644 {} \;
+
+# Pack the mod.
+"${SB_ASSET_PACKER}" . "../${MOD_NAME}.pak"
+chmod 00644 "../${MOD_NAME}.pak"
+if [ -n "${install_pak:-}" ]; then
+  cp -p -- "../${MOD_NAME}.pak" "${SB_MODS_FOLDER}"
+fi
+
+# Restore symlinks.
+if [ -n "${SYMLINKS_REMOVED:-}" ]; then
+  if [ -r "../symlinks-add-${MOD_NAME}" ]; then
+    sh "../symlinks-add-${MOD_NAME}"
+  else
+    printf -- 'WARNING: symlinks removed, but unable to find script: symlinks-add-%s\n' "${MOD_NAME}" >&2
+  fi
+fi

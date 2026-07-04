@@ -1,3 +1,5 @@
+require "/scripts/companions/rl_bettercrew_recruitable.lua"
+
 function setNpcItemSlot(slotName, item)
   if not npc.setItemSlot(slotName, item) then return false end
   storage.itemSlots = storage.itemSlots or {}

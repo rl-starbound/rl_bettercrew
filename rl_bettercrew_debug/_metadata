@@ -1,0 +1,8 @@
+{
+  "author" : "rl.starbound",
+  "description" : "This mod adds debugging annotations to certain Better Crew behaviors, such as moveToPosition timeouts. It is not included in the base mod for performance reasons, but can be added if a player feels that their NPCs aren't path-finding correctly.\n\nFind more information, and the source code, at:\nhttps://github.com/rl-starbound/rl_bettercrew",
+  "friendlyName" : "Better Crew: Debugging",
+  "name" : "rl_bettercrew_debug",
+  "requires" : ["rl_bettercrew"],
+  "version" : "2.0.0"
+}

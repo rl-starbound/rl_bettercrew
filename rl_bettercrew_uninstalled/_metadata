@@ -1,0 +1,8 @@
+{
+  "author" : "rl.starbound",
+  "description" : "If you installed Better Crew & NPC Behavior, but then want to remove it, you must install this mod in its place to ensure a safe removal from your universe.\n\nFind documentation and the source code at:\nhttps://github.com/rl-starbound/rl_bettercrew",
+  "friendlyName" : "Better Crew Uninstalled",
+  "includes" : ["rl_bettercrew"],
+  "name" : "rl_bettercrew_uninstalled",
+  "version" : "2.0.0"
+}

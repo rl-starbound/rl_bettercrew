@@ -1,0 +1,13 @@
+[
+  { "op" : "add",
+    "path" : "/cantReachRanged",
+    "value" : {
+      "default" : {
+        "default" : [
+          "Frustrated. This cowardly foe will not come within my range!",
+          "Angry. Our foe is a coward, who does not face me directly!"
+        ]
+      }
+    }
+  }
+]

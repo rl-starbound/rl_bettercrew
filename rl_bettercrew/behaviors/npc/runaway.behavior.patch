@@ -1,0 +1,20 @@
+[
+  // Replace the base game `openDoors` function with a variant that
+  // ensures that only doors within the defined bounds are opened.
+  { "op" : "test",
+    "path" : "/root/children/0/children/2/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/children/2/name",
+    "value" : "openDoors"
+  },
+  { "op" : "replace",
+    "path" : "/root/children/0/children/2/name",
+    "value" : "rl_bettercrew_openDoors"
+  },
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/actions/rl_bettercrew_move.lua"
+  }
+]

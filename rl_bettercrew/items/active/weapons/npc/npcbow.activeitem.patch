@@ -1,0 +1,11 @@
+[
+  // In the base game, NPC arrows were capped at speed 50, but the aim
+  // calculations were based on speed 62.5. As a result, NPCs aimed too
+  // low. However, when the speed was raised to 62.5, NPCs aimed too
+  // high. This speed was chosen because it resulted in accurate aim
+  // most of the time.
+  { "op" : "replace",
+    "path" : "/primaryAbility/projectileParameters/speed",
+    "value" : 58
+  }
+]

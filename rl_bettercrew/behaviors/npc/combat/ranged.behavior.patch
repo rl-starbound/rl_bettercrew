@@ -1,6 +1,706 @@
 [
-  { "op" : "add",
-    "path" : "/scripts/-",
-    "value" : "/scripts/actions/rl_bettercrew_npc.lua"
-  }
+  // Fix a typo in which the wrong variable name is used, resulting in
+  // calls to `moveToPosition` failing due to null input position.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/name",
+      "value" : "entityPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/parameters/entity/key",
+      "value" : "target"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/output/position",
+      "value" : "movePosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/1/output/position",
+      "value" : "rangedPosition"
+    }
+  ],
+
+  // In the base game, the minimum firing distance for each weapon type
+  // was ignored and the value 3 was used universally. In this mod, the
+  // minimum distance is now half of the weapon's minimum distance, or
+  // 5, whichever is smaller. If the NPC is too close to the target to
+  // aim the ranged weapon, increment the `rangedWeaponCrowdedTicks`
+  // counter, which eventually will allow the NPC to swap back to a
+  // melee weapon. Reset this counter any time the NPC is far enough
+  // away to aim the ranged weapon.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/0/children/1/type",
+      "value" : "decorator"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/0/children/1/name",
+      "value" : "inverter"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/0/children/1/child/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/0/children/1/child/name",
+      "value" : "entityInRange"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/0/children/1/child/parameters/entity/key",
+      "value" : "target"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/0/children/1/child/parameters/position/key",
+      "value" : "self"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/0/child/children/0/children/1",
+      "value" : {
+        "title": "sequence",
+        "type": "composite",
+        "name": "sequence",
+        "parameters": {},
+        "children": [
+          {
+            "title": "multiply",
+            "type": "action",
+            "name": "multiply",
+            "parameters": {
+              "factor": {"value": 0.5},
+              "number": {"key": "minRange"}
+            },
+            "output": {
+              "result": "minFiringRange"
+            }
+          },
+          {
+            "title": "",
+            "type": "action",
+            "name": "rl_bettercrew_min",
+            "parameters": {
+              "first": {"value": 5},
+              "second": {"key": "minFiringRange"}
+            },
+            "output": {
+              "result": "minFiringRange"
+            }
+          },
+          {
+            "title": "inverter",
+            "type": "decorator",
+            "name": "inverter",
+            "parameters": {},
+            "child": {
+              "title": "sequence",
+              "type": "composite",
+              "name": "sequence",
+              "parameters": {},
+              "children": [
+                {
+                  "title": "entityInRange",
+                  "type": "action",
+                  "name": "entityInRange",
+                  "parameters": {
+                    "entity": {"key": "target"},
+                    "position": {"key": "self"},
+                    "range": {"key": "minFiringRange"}
+                  }
+                },
+                {
+                  "title": "",
+                  "type": "action",
+                  "name": "rl_bettercrew_incrementCounter",
+                  "parameters": {
+                    "name": {"value": "rangedWeaponCrowdedTicks"}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "title": "",
+            "type": "action",
+            "name": "rl_bettercrew_resetCounter",
+            "parameters": {
+              "name": {"value": "rangedWeaponCrowdedTicks"}
+            }
+          }
+        ]
+      }
+    }
+  ],
+
+  // When determining if a ranged weapon can be fired, also check
+  // whether it's an expendable-type weapon (e.g., a pet capture pod).
+  // This will enable code elsewhere to replace expended weapons if the
+  // NPC is configured to do so.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/2/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/2/name",
+      "value" : "canFire"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/0/child/children/2",
+      "value" : {
+        "title": "sequence",
+        "type": "composite",
+        "name": "sequence",
+        "parameters": {},
+        "children": [
+          {
+            "title": "succeeder",
+            "type": "decorator",
+            "name": "succeeder",
+            "parameters": {},
+            "child": {
+              "title": "sequence",
+              "type": "composite",
+              "name": "sequence",
+              "parameters": {},
+              "children": [
+                {
+                  "title": "primaryWeaponTag",
+                  "type": "action",
+                  "name": "primaryWeaponTag",
+                  "parameters": {
+                    "tag": {"value": "expendable"}
+                  }
+                },
+                {
+                  "title": "setFlag",
+                  "type": "action",
+                  "name": "setFlag",
+                  "parameters": {
+                    "name": {"value": "weaponIsExpendable"}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "title": "canFire",
+            "type": "action",
+            "name": "canFire",
+            "parameters": {}
+          }
+        ]
+      }
+    }
+  ],
+
+  // Replace the base game `entityPosition` action with a version that
+  // checks for and compensates for crouching NPCs or players.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/1/name",
+      "value" : "entityPosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/1/name",
+      "value" : "rl_bettercrew_entityPosition"
+    }
+  ],
+
+  // Replace the base game `projectileAimVector` action with a version
+  // that does not normalize the aim vector. The loss of precision of
+  // floating point arithmetic caused by unnecessary normalization threw
+  // off aim.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/2/child/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/2/child/children/0/name",
+      "value" : "projectileAimVector"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/2/child/children/0/output/aimVector",
+      "value" : "aimVector"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/2/child/children/0/name",
+      "value" : "rl_bettercrew_projectileAimVector"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/2/child/children/0/output/aimVector",
+      "value" : "aimOffset"
+    }
+  ],
+
+  // The base game's vector multiplication after setting the arrow aim
+  // vector appears to be an attempt to compensate for the loss of
+  // floating point precision caused by unnecessary normalization.
+  // Assuming the previous sub-patch applied, this multiplication is
+  // unnecessary.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/2/child/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/2/child/children/0/name",
+      "value" : "rl_bettercrew_projectileAimVector"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/2/child/children/0/output/aimVector",
+      "value" : "aimOffset"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/2/child/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/2/child/children/1/name",
+      "value" : "vecMultiply"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/2/child/children/1/parameters/first/key",
+      "value" : "aimVector"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/0/child/children/3/children/0/children/1/children/1/children/2/children/2/child/children/1",
+      "value" : {
+        "title": "",
+        "type": "action",
+        "name": "success",
+        "parameters": {}
+      }
+    }
+  ],
+
+  // Replace the base game `entityPosition` action with a version that
+  // checks for and compensates for crouching NPCs or players.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/1/children/0/children/0/children/2/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/1/children/0/children/0/children/2/name",
+      "value" : "entityPosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/0/child/children/3/children/1/children/0/children/0/children/2/name",
+      "value" : "rl_bettercrew_entityPosition"
+    }
+  ],
+
+  // In the base game, NPCs using bows continue to update their aim
+  // while winding up, but NPCs using other ranged weapons stop aiming
+  // after their initial windup. This block continuously updates aim
+  // during fire of non-bow ranged weapons.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/1/children/0/children/2/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/0/child/children/3/children/1/children/0/children/2/children/0/name",
+      "value" : "primaryFire"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/0/child/children/3/children/1/children/0/children/2/children/0",
+      "value" : {
+        "title": "sequence",
+        "type": "composite",
+        "name": "sequence",
+        "parameters": {},
+        "children": [
+          {
+            "title": "succeeder",
+            "type": "decorator",
+            "name": "succeeder",
+            "parameters": {},
+            "child": {
+              "title": "sequence",
+              "type": "composite",
+              "name": "sequence",
+              "parameters": {},
+              "children": [
+                {
+                  "title": "entityInSight",
+                  "type": "action",
+                  "name": "entityInSight",
+                  "parameters": {
+                    "entity": {"key": "target"}
+                  }
+                },
+                {
+                  "title": "",
+                  "type": "action",
+                  "name": "rl_bettercrew_entityPosition",
+                  "parameters": {
+                    "entity": {"key": "target"}
+                  },
+                  "output": {
+                    "position": "targetPosition"
+                  }
+                },
+                {
+                  "title": "offsetPosition",
+                  "type": "action",
+                  "name": "offsetPosition",
+                  "parameters": {
+                    "offset": {"value": [0, 0]},
+                    "position": {"key": "targetPosition"}
+                  },
+                  "output": {
+                    "position": "aimPosition"
+                  }
+                },
+                {
+                  "title": "setAimPosition",
+                  "type": "action",
+                  "name": "setAimPosition",
+                  "parameters": {
+                    "position": {"key": "aimPosition"}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "title": "primaryFire",
+            "type": "action",
+            "name": "primaryFire",
+            "parameters": {}
+          }
+        ]
+      }
+    }
+  ],
+
+  // In addition to triggering item swap on running out of energy, also
+  // trigger it if the NPC is unable to aim and fire the ranged weapon
+  // due to being too close to the target for at least 12 consecutive
+  // update intervals (2 seconds).
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/0/children/0/type",
+      "value" : "decorator"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/0/children/0/name",
+      "value" : "inverter"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/0/children/0/child/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/0/children/0/child/name",
+      "value" : "canFire"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/1/children/0/children/0",
+      "value" : {
+        "title": "selector",
+        "type": "composite",
+        "name": "selector",
+        "parameters": {},
+        "children": [
+          {
+            "title": "inverter",
+            "type": "decorator",
+            "name": "inverter",
+            "parameters": {},
+            "child": {
+              "title": "canFire",
+              "type": "action",
+              "name": "canFire",
+              "parameters": {}
+            }
+          },
+          {
+            "title": "greaterThan",
+            "type": "action",
+            "name": "greaterThan",
+            "parameters": {
+              "first": {"key": "rangedWeaponCrowdedTicks"},
+              "second": {"value": 11}
+            }
+          }
+        ]
+      }
+    },
+    { "op" : "move",
+      "from" : "/root/children/1/children/1/children/0/children/0",
+      "path" : "/root/children/1/children/1/children/0/children/2"
+    }
+  ],
+
+  // Replace the faulty base game `swapItemSlots` function with the
+  // improved version provided by this mod.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/0/children/3/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/0/children/3/name",
+      "value" : "swapItemSlots"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/1/children/0/children/3/name",
+      "value" : "rl_bettercrew_swapItemSlots"
+    }
+  ],
+
+  // If the group coordinator cannot find a viable position (within the
+  // min and max weapon ranges) from which to fire a ranged attack, the
+  // code defaults to moving the NPC to the position of the target. If
+  // this movement completes and the NPC is being crowded (a likely
+  // result), then the code will get stuck in the movement loop and
+  // won't trigger the melee swap above. Check for this condition and
+  // break out if it happens. Also, detect and break out of general
+  // pathfinding failures. If the target is out of range and pathfinding
+  // fails, then the NPC might say `cantReachRanged` dialog.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/1/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/1/children/0/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/1/children/0/parameters/avoidLiquid/value",
+      "value" : true
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/1/children/0/parameters/groundPosition/value",
+      "value" : false
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/1/children/0/parameters/maxGround/value",
+      "value" : 5
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/1/children/0/parameters/minGround/value",
+      "value" : -10
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/1/children/0/parameters/position/key",
+      "value" : "rangedPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/1/children/0/parameters/run/value",
+      "value" : true
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/children/1/children/0/output/pathfinding",
+      "value" : "rangedPathing"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/1/children/1/children/0",
+      "value" : {
+        "title": "parallel",
+        "type": "composite",
+        "name": "parallel",
+        "parameters": {
+          "fail": {"value": 1},
+          "success": {"value": -1}
+        },
+        "children": [
+          {
+            "title": "",
+            "type": "action",
+            "name": "rl_bettercrew_moveToPosition",
+            "parameters": {
+              "avoidLiquid": {"value": true},
+              "groundPosition": {"value": false},
+              "maxGround": {"value": 5},
+              "minGround": {"value": -10},
+              "position": {"key": "rangedPosition"},
+              "run": {"value": true}
+            },
+            "output": {
+              "pathfinding": "rangedPathing"
+            }
+          },
+          {
+            "title": "dynamic",
+            "type": "composite",
+            "name": "dynamic",
+            "parameters": {},
+            "children": [
+              {
+                "title": "inverter",
+                "type": "decorator",
+                "name": "inverter",
+                "parameters": {},
+                "child": {
+                  "title": "hasFlag",
+                  "type": "action",
+                  "name": "hasFlag",
+                  "parameters": {
+                    "name": {"key": "rangedPathing"}
+                  }
+                }
+              },
+              {
+                "title": "failer",
+                "type": "decorator",
+                "name": "failer",
+                "parameters": {},
+                "child": {
+                  "title": "sequence",
+                  "type": "composite",
+                  "name": "sequence",
+                  "parameters": {},
+                  "children": [
+                    {
+                      "title": "timer",
+                      "type": "action",
+                      "name": "timer",
+                      "parameters": {
+                        "time": {"value": 1}
+                      }
+                    },
+                    {
+                      "title": "greaterThan",
+                      "type": "action",
+                      "name": "greaterThan",
+                      "parameters": {
+                        "first": {"key": "maxRange"},
+                        "second": {"value": 0}
+                      }
+                    },
+                    {
+                      "title": "entityInSight",
+                      "type": "action",
+                      "name": "entityInSight",
+                      "parameters": {
+                        "entity": {"key": "target"}
+                      }
+                    },
+                    {
+                      "title": "inverter",
+                      "type": "decorator",
+                      "name": "inverter",
+                      "parameters": {},
+                      "child": {
+                        "title": "entityInRange",
+                        "type": "action",
+                        "name": "entityInRange",
+                        "parameters": {
+                          "entity": {"key": "target"},
+                          "position": {"key": "self"},
+                          "range": {"key": "maxRange"}
+                        }
+                      }
+                    },
+                    {
+                      "title": "optional",
+                      "type": "decorator",
+                      "name": "optional",
+                      "parameters": {
+                        "shouldRun": {"key": "<cantReachRangedDialog>"}
+                      },
+                      "child": {
+                        "title": "cooldown",
+                        "type": "decorator",
+                        "name": "cooldown",
+                        "parameters": {
+                          "cooldown": {"value": 10},
+                          "onFail": {"value": false}
+                        },
+                        "child": {
+                          "title": "selector",
+                          "type": "composite",
+                          "name": "selector",
+                          "parameters": {},
+                          "children": [
+                            {
+                              "title": "chance",
+                              "type": "action",
+                              "name": "chance",
+                              "parameters": {
+                                "chance": {"value": 0.65}
+                              }
+                            },
+                            {
+                              "title": "",
+                              "type": "action",
+                              "name": "rl_bettercrew_sayToEntityIfExists",
+                              "parameters": {
+                                "dialogMode": {"value": "random"},
+                                "dialogType": {"value": "dialog.cantReachRanged"},
+                                "entity": {"key": "target"},
+                                "tags": {"value": {}}
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "title": "inverter",
+            "type": "decorator",
+            "name": "inverter",
+            "parameters": {},
+            "child": {
+              "title": "greaterThan",
+              "type": "action",
+              "name": "greaterThan",
+              "parameters": {
+                "first": {"key": "rangedWeaponCrowdedTicks"},
+                "second": {"value": 10}
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_dialog.lua"
+    },
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_math.lua"
+    },
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_move.lua"
+    },
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_npc.lua"
+    },
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_proj.lua"
+    },
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_world.lua"
+    },
+    { "op" : "add",
+      "path" : "/parameters/cantReachRangedDialog",
+      "value" : true
+    }
+  ]
 ]

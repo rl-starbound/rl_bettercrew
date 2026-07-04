@@ -1,0 +1,71 @@
+[
+  { "op" : "test",
+    "path" : "/root/children/0/children/0/children/2/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/children/0/children/2/name",
+    "value" : "setEntity"
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/children/0/children/2/parameters/entity/key",
+    "value" : "damageSource"
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/children/0/children/2/output/entity",
+    "value" : "fleeTarget"
+  },
+  { "op" : "replace",
+    "path" : "/root/children/0/children/0/children/2",
+    "value" : {
+      "title": "sequence",
+      "type": "composite",
+      "name": "sequence",
+      "parameters": {},
+      "children": [
+        {
+          "title": "succeeder",
+          "type": "decorator",
+          "name": "succeeder",
+          "parameters": {},
+          "child": {
+            "title": "sequence",
+            "type": "composite",
+            "name": "sequence",
+            "parameters": {},
+            "children": [
+              {
+                "title": "entityInTypes",
+                "type": "action",
+                "name": "entityInTypes",
+                "parameters": {
+                  "entity": {"key": "damageSource"},
+                  "types": {"value": ["player"]}
+                }
+              },
+              {
+                "title": "setDamageTeam",
+                "type": "action",
+                "name": "setDamageTeam",
+                "parameters": {
+                  "damageTeam": {"key": "<hostileDamageTeam>"}
+                }
+              }
+            ]
+          }
+        },
+        {
+          "title": "setEntity",
+          "type": "action",
+          "name": "setEntity",
+          "parameters": {
+            "entity": {"key": "damageSource"}
+          },
+          "output": {
+            "entity": "fleeTarget"
+          }
+        }
+      ]
+    }
+  }
+]

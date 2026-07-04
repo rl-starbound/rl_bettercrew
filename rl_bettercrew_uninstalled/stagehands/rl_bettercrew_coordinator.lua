@@ -1,0 +1,3 @@
+-- This script file is empty. It exists to appease stagehands that were
+-- created when Better Crew & NPC Behavior was installed in this game
+-- universe.

@@ -1,4 +1,23 @@
 [
+  // Replace the faulty base game `friendlyTargeting` function with the
+  // improved version provided by this mod.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/name",
+      "value" : "friendlyTargeting"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/name",
+      "value" : "rl_bettercrew_friendlyTargeting"
+    }
+  ],
+
+  // Medics should wait until the player is actually injured before
+  // applying healing effects during combat.
   [
     { "op" : "test",
       "path" : "/root/children/2/child/children/0/child/children/1/child/children/3/type",
@@ -86,7 +105,46 @@
       }
     }
   ],
+
+  // Replace the faulty base game `swapItemSlots` function with the
+  // improved version provided by this mod.
   [
+    { "op" : "test",
+      "path" : "/root/children/2/child/children/0/child/children/1/child/children/4/children/2/children/0/child/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/2/child/children/0/child/children/1/child/children/4/children/2/children/0/child/children/1/name",
+      "value" : "swapItemSlots"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/2/child/children/0/child/children/1/child/children/4/children/2/children/0/child/children/1/name",
+      "value" : "rl_bettercrew_swapItemSlots"
+    }
+  ],
+
+  // Replace `moveToPosition` with the improved version this mod
+  // provides.
+  [
+    { "op" : "test",
+      "path" : "/root/children/2/child/children/0/child/children/1/child/children/4/children/2/children/1/children/1/children/1/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/2/child/children/0/child/children/1/child/children/4/children/2/children/1/children/1/children/1/children/0/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/2/child/children/0/child/children/1/child/children/4/children/2/children/1/children/1/children/1/children/0/name",
+      "value" : "rl_bettercrew_moveToPosition"
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_move.lua"
+    },
     { "op" : "add",
       "path" : "/scripts/-",
       "value" : "/scripts/actions/rl_bettercrew_npc.lua"

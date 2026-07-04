@@ -1,0 +1,8 @@
+{
+  "author" : "rl.starbound",
+  "description" : "This mod is intended for users of the Better Crew & NPC Behavior mod (v2.0.0 or later) who do not have the Stardust Core Lite or Stardust Core mods installed. It allows players to purchase a Crew Communicator from Penguin Pete, which allows them to rally crew members when off their ship. If you have either Stardust Core Lite or Stardust Core, then you do not need this mod, because Crew Communications will be available in the Quickbar.\n\nFind more information, and the source code, at:\nhttps://github.com/rl-starbound/rl_bettercrew",
+  "friendlyName" : "Better Crew - No Quickbar",
+  "name" : "rl_bettercrew_noquickbar",
+  "requires" : ["rl_bettercrew"],
+  "version" : "2.0.0"
+}

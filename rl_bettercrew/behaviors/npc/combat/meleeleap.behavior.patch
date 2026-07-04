@@ -1,0 +1,286 @@
+[
+  // Allow the meleeleap to terminate if meleecombat-aim fails.
+  [
+
+    { "op" : "test",
+      "path" : "/root/children/5/child/type",
+      "value" : "composite"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/name",
+      "value" : "parallel"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/parameters/fail/value",
+      "value" : -1
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/parameters/success/value",
+      "value" : -1
+    },
+    { "op" : "replace",
+      "path" : "/root/children/5/child/parameters/fail/value",
+      "value" : 1
+    }
+  ],
+
+  // This setAimPosition is redundant, because the final node of the
+  // meleecombat-aim module also runs it with the same parameters.
+  // Instead, move setting the run flag to this position to ensure it
+  // gets set on each tick.
+  [
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/0/type",
+      "value" : "module"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/0/name",
+      "value" : "meleecombat-aim"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/1/name",
+      "value" : "setAimPosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/5/child/children/1",
+      "value" : {
+        "title": "setFlag",
+        "type": "action",
+        "name": "setFlag",
+        "parameters": {
+          "name": {"value": "run"}
+        }
+      }
+    }
+  ],
+
+  // Rewrite the windup and leap-slash logic. In the base game, if the
+  // sequence fails after windup (i.e., at the onGround check), the
+  // windup timer is restarted, which results in overly long periods in
+  // which the NPC is holding up their weapon without swinging it. In
+  // this version, once the windup has been completed, if the leap-slash
+  // can't be executed in the current update interval, it is queued for
+  // the next update interval in which the tests pass. Furthermore, use
+  // the second timer only if the target is more than 10 blocks away, to
+  // prevent NPCs jumping toward an enemy, bouncing off the enemy's
+  // collision poly in between update intervals, and then swinging the
+  // weapon out of range of the enemy. If closer than 10 blocks, the
+  // swing happens concurrently with the jump.
+  [
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/type",
+      "value" : "composite"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/name",
+      "value" : "sequence"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/0/name",
+      "value" : "setFlag"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/0/parameters/name/value",
+      "value" : "run"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/1/name",
+      "value" : "timer"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/1/parameters/time/value",
+      "value" : "<leapWindup>"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/2/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/2/name",
+      "value" : "onGround"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/3/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/3/name",
+      "value" : "vecMultiply"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/3/parameters/first/key",
+      "value" : "jumpVector"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/3/parameters/number/key",
+      "value" : "leapSpeed"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/3/output/vector",
+      "value" : "jumpVelocity"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/4/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/4/name",
+      "value" : "setVelocity"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/4/parameters/velocity/key",
+      "value" : "jumpVelocity"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/5/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/5/name",
+      "value" : "timer"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/5/parameters/time/value",
+      "value" : 0.1
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/6/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/5/child/children/4/children/6/name",
+      "value" : "endPrimaryFire"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/5/child/children/4",
+      "value" : {
+        "title": "sequence",
+        "type": "composite",
+        "name": "sequence",
+        "parameters": {},
+        "children": [
+          {
+            "title": "timer",
+            "type": "action",
+            "name": "timer",
+            "parameters": {
+              "time": {"value": "<leapWindup>"}
+            }
+          },
+          {
+            "title": "dynamic",
+            "type": "composite",
+            "name": "dynamic",
+            "parameters": {},
+            "children": [
+              {
+                "title": "sequence",
+                "type": "composite",
+                "name": "sequence",
+                "parameters": {},
+                "children": [
+                  {
+                    "title": "onGround",
+                    "type": "action",
+                    "name": "onGround",
+                    "parameters": {}
+                  },
+                  {
+                    "title": "setFlag",
+                    "type": "action",
+                    "name": "setFlag",
+                    "parameters": {
+                      "name": {"value": "meleeAttackImminent"}
+                    }
+                  },
+                  {
+                    "title": "vecMultiply",
+                    "type": "action",
+                    "name": "vecMultiply",
+                    "parameters": {
+                      "first": {"key": "jumpVector"},
+                      "number": {"key": "leapSpeed"}
+                    },
+                    "output": {
+                      "vector": "jumpVelocity"
+                    }
+                  },
+                  {
+                    "title": "setVelocity",
+                    "type": "action",
+                    "name": "setVelocity",
+                    "parameters": {
+                      "velocity": {"key": "jumpVelocity"}
+                    }
+                  },
+                  {
+                    "title": "succeeder",
+                    "type": "decorator",
+                    "name": "succeeder",
+                    "parameters": {},
+                    "child": {
+                      "title": "sequence",
+                      "type": "composite",
+                      "name": "sequence",
+                      "parameters": {},
+                      "children": [
+                        {
+                          "title": "inverter",
+                          "type": "decorator",
+                          "name": "inverter",
+                          "parameters": {},
+                          "child": {
+                            "title": "entityInRange",
+                            "type": "action",
+                            "name": "entityInRange",
+                            "parameters": {
+                              "entity": {"key": "target"},
+                              "position": {"key": "self"},
+                              "xRange": {"value": 10}
+                            }
+                          }
+                        },
+                        {
+                          "title": "timer",
+                          "type": "action",
+                          "name": "timer",
+                          "parameters": {
+                            "time": {"value": 0.1}
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "title": "endPrimaryFire",
+                    "type": "action",
+                    "name": "endPrimaryFire",
+                    "parameters": {}
+                  }
+                ]
+              },
+              {
+                "title": "runner",
+                "type": "action",
+                "name": "runner",
+                "parameters": {}
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+]

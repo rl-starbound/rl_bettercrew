@@ -1,0 +1,46 @@
+[
+  [
+    { "op" : "test",
+      "path" : "/cantReach/default/default/2",
+      "value" : "Get back here!"
+    },
+    { "op" : "replace",
+      "path" : "/cantReach/default/default/2",
+      "value" : "Come closer!"
+    }
+  ],
+  [
+    { "op" : "add",
+      "path" : "/cantReachRanged",
+      "value" : {
+        "default" : {
+          "default" : [
+            "Target out of range!",
+            "I don't have a clean shot.",
+            "Come closer!",
+            "How can I hit such a long shot?",
+            "I can't hit that shot!"
+          ]
+        },
+        "glitch" : {
+          "default" : [
+            "Irritated. They are beyond my range!",
+            "Angry. Come closer!",
+            "Frustrated. How can I hit that shot?",
+            "Sullen. That foe is too far away.",
+            "Irate. Come closer so I can shoot you!"
+          ]
+        },
+        "floran" : {
+          "default" : [
+            "They're too far away to shoot!",
+            "Jusst out of range!",
+            "Come clossser!",
+            "Trickssy prey is out of range!",
+            "Floran can't hit target!"
+          ]
+        }
+      }
+    }
+  ]
+]

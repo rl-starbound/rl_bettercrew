@@ -1,4 +1,7 @@
 [
+  // Wrap the `moveToPosition` function in a pathfinding time limit to
+  // prevent NPCs from freezing if the core engine cannot find a path to
+  // the position.
   { "op" : "test",
     "path" : "/root/children/5/children/2/type",
     "value" : "action"
@@ -7,13 +10,29 @@
     "path" : "/root/children/5/children/2/name",
     "value" : "moveToPosition"
   },
-  { "op" : "add",
-    "path" : "/scripts/-",
-    "value" : "/scripts/actions/time.lua"
+  { "op" : "test",
+    "path" : "/root/children/5/children/2/parameters/avoidLiquid/value",
+    "value" : true
   },
-  { "op" : "add",
-    "path" : "/parameters/pathingTimeLimit",
-    "value" : 10
+  { "op" : "test",
+    "path" : "/root/children/5/children/2/parameters/groundPosition/value",
+    "value" : true
+  },
+  { "op" : "test",
+    "path" : "/root/children/5/children/2/parameters/maxGround/value",
+    "value" : 5
+  },
+  { "op" : "test",
+    "path" : "/root/children/5/children/2/parameters/minGround/value",
+    "value" : -5
+  },
+  { "op" : "test",
+    "path" : "/root/children/5/children/2/parameters/position/key",
+    "value" : "standPosition"
+  },
+  { "op" : "test",
+    "path" : "/root/children/5/children/2/parameters/run/key",
+    "value" : "<alwaysRun>"
   },
   { "op" : "replace",
     "path" : "/root/children/5/children/2",
@@ -23,13 +42,13 @@
       "name": "parallel",
       "parameters": {
         "fail": {"value": 1},
-        "success": {"value": 1}
+        "success": {"value": -1}
       },
       "children": [
         {
-          "title": "moveToPosition",
+          "title": "",
           "type": "action",
-          "name": "moveToPosition",
+          "name": "rl_bettercrew_moveToPosition",
           "parameters": {
             "avoidLiquid": {"value": true},
             "groundPosition": {"value": true},
@@ -43,53 +62,54 @@
           }
         },
         {
-          "title": "failer",
-          "type": "decorator",
-          "name": "failer",
+          "title": "dynamic",
+          "type": "composite",
+          "name": "dynamic",
           "parameters": {},
-          "child": {
-            "title": "dynamic",
-            "type": "composite",
-            "name": "dynamic",
-            "parameters": {},
-            "children": [
-              {
-                "title": "parallel",
-                "type": "composite",
-                "name": "parallel",
-                "parameters": {
-                  "fail": {"value": 1},
-                  "success": {"value": -1}
-                },
-                "children": [
-                  {
-                    "title": "hasFlag",
-                    "type": "action",
-                    "name": "hasFlag",
-                    "parameters": {
-                      "name": {"key": "isPathfinding"}
-                    }
-                  },
-                  {
-                    "title": "timer",
-                    "type": "action",
-                    "name": "timer",
-                    "parameters": {
-                      "time": {"value": "<pathingTimeLimit>"}
-                    }
-                  }
-                ]
-              },
-              {
-                "title": "runner",
+          "children": [
+            {
+              "title": "inverter",
+              "type": "decorator",
+              "name": "inverter",
+              "parameters": {},
+              "child": {
+                "title": "hasFlag",
                 "type": "action",
-                "name": "runner",
-                "parameters": {}
+                "name": "hasFlag",
+                "parameters": {
+                  "name": {"key": "isPathfinding"}
+                }
               }
-            ]
-          }
+            },
+            {
+              "title": "failer",
+              "type": "decorator",
+              "name": "failer",
+              "parameters": {},
+              "child": {
+                "title": "timer",
+                "type": "action",
+                "name": "timer",
+                "parameters": {
+                  "time": {"value": "<pathingTimeLimit>"}
+                }
+              }
+            }
+          ]
         }
       ]
     }
+  },
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/actions/time.lua"
+  },
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/actions/rl_bettercrew_move.lua"
+  },
+  { "op" : "add",
+    "path" : "/parameters/pathingTimeLimit",
+    "value" : 10
   }
 ]

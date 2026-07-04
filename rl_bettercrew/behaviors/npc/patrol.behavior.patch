@@ -1,91 +1,151 @@
 [
-  { "op" : "test",
-    "path" : "/root/children/0/children/0/children/0/type",
-    "value" : "action"
-  },
-  { "op" : "test",
-    "path" : "/root/children/0/children/0/children/0/name",
-    "value" : "moveToPosition"
-  },
-  { "op" : "add",
-    "path" : "/parameters/pathingTimeLimit",
-    "value" : 10
-  },
-  { "op" : "replace",
-    "path" : "/root/children/0/children/0/children/0",
-    "value" : {
-      "title": "parallel",
-      "type": "composite",
-      "name": "parallel",
-      "parameters": {
-        "fail": {"value": 1},
-        "success": {"value": 1}
-      },
-      "children": [
-        {
-          "title": "moveToPosition",
-          "type": "action",
-          "name": "moveToPosition",
-          "parameters": {
-            "avoidLiquid": {"value": true},
-            "groundPosition": {"value": true},
-            "maxGround": {"value": 5},
-            "minGround": {"value": -5},
-            "position": {"key": "spawn"},
-            "run": {"key": "<alwaysRun>"}
-          },
-          "output": {
-            "pathfinding": "isPathfinding"
-          }
+  // Wrap the `moveToPosition` function in a pathfinding time limit to
+  // prevent NPCs from freezing if the core engine cannot find a path to
+  // the position.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/parameters/avoidLiquid/value",
+      "value" : true
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/parameters/groundPosition/value",
+      "value" : true
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/parameters/maxGround/value",
+      "value" : 5
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/parameters/minGround/value",
+      "value" : -5
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/parameters/position/key",
+      "value" : "spawn"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/parameters/run/key",
+      "value" : "<alwaysRun>"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/0/children/0",
+      "value" : {
+        "title": "parallel",
+        "type": "composite",
+        "name": "parallel",
+        "parameters": {
+          "fail": {"value": 1},
+          "success": {"value": -1}
         },
-        {
-          "title": "failer",
-          "type": "decorator",
-          "name": "failer",
-          "parameters": {},
-          "child": {
+        "children": [
+          {
+            "title": "",
+            "type": "action",
+            "name": "rl_bettercrew_moveToPosition",
+            "parameters": {
+              "avoidLiquid": {"value": true},
+              "groundPosition": {"value": true},
+              "maxGround": {"value": 5},
+              "minGround": {"value": -5},
+              "pathOptions": {"value": {"returnBest": true}},
+              "position": {"key": "spawn"},
+              "run": {"key": "<alwaysRun>"}
+            },
+            "output": {
+              "pathfinding": "isPathfinding"
+            }
+          },
+          {
             "title": "dynamic",
             "type": "composite",
             "name": "dynamic",
             "parameters": {},
             "children": [
               {
-                "title": "parallel",
-                "type": "composite",
-                "name": "parallel",
-                "parameters": {
-                  "fail": {"value": 1},
-                  "success": {"value": -1}
-                },
-                "children": [
-                  {
-                    "title": "hasFlag",
-                    "type": "action",
-                    "name": "hasFlag",
-                    "parameters": {
-                      "name": {"key": "isPathfinding"}
-                    }
-                  },
-                  {
-                    "title": "timer",
-                    "type": "action",
-                    "name": "timer",
-                    "parameters": {
-                      "time": {"value": "<pathingTimeLimit>"}
-                    }
+                "title": "inverter",
+                "type": "decorator",
+                "name": "inverter",
+                "parameters": {},
+                "child": {
+                  "title": "hasFlag",
+                  "type": "action",
+                  "name": "hasFlag",
+                  "parameters": {
+                    "name": {"key": "isPathfinding"}
                   }
-                ]
+                }
               },
               {
-                "title": "runner",
-                "type": "action",
-                "name": "runner",
-                "parameters": {}
+                "title": "failer",
+                "type": "decorator",
+                "name": "failer",
+                "parameters": {},
+                "child": {
+                  "title": "timer",
+                  "type": "action",
+                  "name": "timer",
+                  "parameters": {
+                    "time": {"value": "<pathingTimeLimit>"}
+                  }
+                }
               }
             ]
           }
-        }
-      ]
+        ]
+      }
     }
-  }
+  ],
+
+  // Replace the base game `openDoors` function with a variant that
+  // ensures that only doors within the defined bounds are opened.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/2/child/children/0/children/0/children/0/child/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/2/child/children/0/children/0/children/0/child/name",
+      "value" : "openDoors"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/0/children/2/child/children/0/children/0/children/0/child/name",
+      "value" : "rl_bettercrew_openDoors"
+    }
+  ],
+
+  // Replace the base game `closeDoors` function with a variant that
+  // ensures that only doors within the defined bounds are closed.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/2/child/children/0/children/1/child/children/0/child/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/2/child/children/0/children/1/child/children/0/child/name",
+      "value" : "closeDoors"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/0/children/2/child/children/0/children/1/child/children/0/child/name",
+      "value" : "rl_bettercrew_closeDoors"
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_move.lua"
+    },
+    { "op" : "add",
+      "path" : "/parameters/pathingTimeLimit",
+      "value" : 10
+    }
+  ]
 ]

@@ -1,4 +1,12 @@
 [
+  { "op" : "replace",
+    "path" : "/npcToy/preciseStandPositionLeft/1",
+    "value" : 3.0
+  },
+  { "op" : "replace",
+    "path" : "/npcToy/preciseStandPositionRight/1",
+    "value" : 3.0
+  },
   { "op" : "add",
     "path" : "/scripts/-",
     "value" : "/scripts/rl_crewanchorobject.lua"
