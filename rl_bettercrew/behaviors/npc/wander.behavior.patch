@@ -1,410 +1,608 @@
 [
-  { "op" : "test",
-    "path" : "/root/children/0/children/0/children/2/children/0/children/0/type",
-    "value" : "action"
-  },
-  { "op" : "test",
-    "path" : "/root/children/0/children/0/children/2/children/0/children/0/name",
-    "value" : "moveToPosition"
-  },
-  { "op" : "test",
-    "path" : "/root/children/0/children/0/children/2/children/0/children/1/children/2/type",
-    "value" : "action"
-  },
-  { "op" : "test",
-    "path" : "/root/children/0/children/0/children/2/children/0/children/1/children/2/name",
-    "value" : "move"
-  },
-  { "op" : "test",
-    "path" : "/root/children/0/children/1/children/3/children/1/type",
-    "value" : "action"
-  },
-  { "op" : "test",
-    "path" : "/root/children/0/children/1/children/3/children/1/name",
-    "value" : "moveToPosition"
-  },
-  { "op" : "test",
-    "path" : "/root/children/0/children/2/children/3/children/1/type",
-    "value" : "action"
-  },
-  { "op" : "test",
-    "path" : "/root/children/0/children/2/children/3/children/1/name",
-    "value" : "moveToPosition"
-  },
-  { "op" : "add",
-    "path" : "/scripts/-",
-    "value" : "/scripts/actions/rl_bettercrew.lua"
-  },
-  { "op" : "add",
-    "path" : "/parameters/pathingTimeLimit",
-    "value" : 10
-  },
-  { "op" : "replace",
-    "path" : "/root/children/0/children/0/children/0/children/0",
-    "value" : {
-      "title": "sequence",
-      "type": "composite",
-      "name": "sequence",
-      "parameters": {},
-      "children": [
-        {
-          "title": "hasRecruiter",
-          "type": "action",
-          "name": "hasRecruiter",
-          "parameters": {}
-        },
-        {
-          "title": "selector",
-          "type": "composite",
-          "name": "selector",
-          "parameters": {},
-          "children": [
-            {
-              "title": "sequence",
-              "type": "composite",
-              "name": "sequence",
-              "parameters": {},
-              "children": [
-                {
-                  "title": "isFollowingRecruiter",
-                  "type": "action",
-                  "name": "isFollowingRecruiter",
-                  "parameters": {}
-                },
-                {
-                  "title": "recruiterEntity",
-                  "type": "action",
-                  "name": "recruiterEntity",
-                  "parameters": {},
-                  "output": {
-                    "entity": "player"
-                  }
-                },
-                {
-                  "title": "entityPosition",
-                  "type": "action",
-                  "name": "entityPosition",
-                  "parameters": {
-                    "entity": {"key": "player"}
-                  },
-                  "output": {
-                    "position": "home"
-                  }
-                }
-              ]
-            },
-            {
-              "title": "sequence",
-              "type": "composite",
-              "name": "sequence",
-              "parameters": {},
-              "children": [
-                {
-                  "title": "Is ship world?",
-                  "type": "action",
-                  "name": "worldProperty",
-                  "parameters": {
-                    "property": {"value": "ship.level"}
-                  }
-                },
-                {
-                  "title": "rl_bettercrew_crewAnchorObject",
-                  "type": "action",
-                  "name": "rl_bettercrew_crewAnchorObject",
-                  "parameters": {
-                    "defaultPosition": {"key": "spawn"}
-                  },
-                  "output": {
-                    "position": "home"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "title": "random",
-          "type": "action",
-          "name": "random",
-          "parameters": {
-            "max": {"value": 2},
-            "min": {"value": -2}
-          },
-          "output": {
-            "number": "offsetX"
-          }
-        },
-        {
-          "title": "offsetPosition",
-          "type": "action",
-          "name": "offsetPosition",
-          "parameters": {
-            "position": {"key": "home"},
-            "x": {"key": "offsetX"},
-            "y": {"value": 0}
-          },
-          "output": {
-            "position": "home"
-          }
-        }
-      ]
-    }
-  },
-  { "op" : "replace",
-    "path" : "/root/children/0/children/0/children/2/children/0/children/1/children/2",
-    "value" : {
-      "title": "",
-      "type": "composite",
-      "name": "parallel",
-      "parameters": {
-        "fail": {"value": 1},
-        "success": {"value": 1}
-      },
-      "children": [
-        {
-          "title": "rl_bettercrew_moveUnidirectionally",
-          "type": "action",
-          "name": "rl_bettercrew_moveUnidirectionally",
-          "parameters": {
-            "direction": {"key": "homeX"},
-            "run": {"value": false}
-          }
-        },
-        {
-          "title": "failer",
-          "type": "decorator",
-          "name": "failer",
-          "parameters": {},
-          "child": {
-            "title": "timer",
+  // Crew members following the player (on or off ship) use the player's
+  // current location as their home location. When on the ship, non-
+  // following crew members use randomly-selected crew anchor objects as
+  // their home locations.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/children/0/type",
+      "value" : "composite"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/children/0/name",
+      "value" : "sequence"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/children/0/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/children/0/children/0/name",
+      "value" : "hasRecruiter"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/children/0/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/children/0/children/1/name",
+      "value" : "isFollowingRecruiter"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/children/0/children/2/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/children/0/children/2/name",
+      "value" : "recruiterEntity"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/children/0/children/2/output/entity",
+      "value" : "player"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/children/0/children/3/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/children/0/children/3/name",
+      "value" : "entityPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/children/0/children/3/parameters/entity/key",
+      "value" : "player"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/0/children/0/children/3/output/position",
+      "value" : "home"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/0/children/0/children/0",
+      "value" : {
+        "title": "sequence",
+        "type": "composite",
+        "name": "sequence",
+        "parameters": {},
+        "children": [
+          {
+            "title": "hasRecruiter",
             "type": "action",
-            "name": "timer",
+            "name": "hasRecruiter",
+            "parameters": {}
+          },
+          {
+            "title": "selector",
+            "type": "composite",
+            "name": "selector",
+            "parameters": {},
+            "children": [
+              {
+                "title": "sequence",
+                "type": "composite",
+                "name": "sequence",
+                "parameters": {},
+                "children": [
+                  {
+                    "title": "isFollowingRecruiter",
+                    "type": "action",
+                    "name": "isFollowingRecruiter",
+                    "parameters": {}
+                  },
+                  {
+                    "title": "recruiterEntity",
+                    "type": "action",
+                    "name": "recruiterEntity",
+                    "parameters": {},
+                    "output": {
+                      "entity": "player"
+                    }
+                  },
+                  {
+                    "title": "entityPosition",
+                    "type": "action",
+                    "name": "entityPosition",
+                    "parameters": {
+                      "entity": {"key": "player"}
+                    },
+                    "output": {
+                      "position": "home"
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "sequence",
+                "type": "composite",
+                "name": "sequence",
+                "parameters": {},
+                "children": [
+                  {
+                    "title": "Is ship world?",
+                    "type": "action",
+                    "name": "worldProperty",
+                    "parameters": {
+                      "property": {"value": "ship.level"}
+                    }
+                  },
+                  {
+                    "title": "rl_bettercrew_crewAnchorObject",
+                    "type": "action",
+                    "name": "rl_bettercrew_crewAnchorObject",
+                    "parameters": {
+                      "defaultPosition": {"key": "spawn"}
+                    },
+                    "output": {
+                      "position": "home"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "random",
+            "type": "action",
+            "name": "random",
             "parameters": {
-              "time": {"value": "<pathingTimeLimit>"}
+              "max": {"value": 2},
+              "min": {"value": -2}
+            },
+            "output": {
+              "number": "offsetX"
+            }
+          },
+          {
+            "title": "offsetPosition",
+            "type": "action",
+            "name": "offsetPosition",
+            "parameters": {
+              "position": {"key": "home"},
+              "x": {"key": "offsetX"},
+              "y": {"value": 0}
+            },
+            "output": {
+              "position": "home"
             }
           }
-        }
-      ]
+        ]
+      }
     }
-  },
-  { "op" : "replace",
-    "path" : "/root/children/0/children/0/children/2/children/0/children/0",
-    "value" : {
-      "title": "parallel",
-      "type": "composite",
-      "name": "parallel",
-      "parameters": {
-        "fail": {"value": 1},
-        "success": {"value": 1}
-      },
-      "children": [
-        {
-          "title": "",
-          "type": "action",
-          "name": "moveToPosition",
-          "parameters": {
-            "pathOptions": {"value": {"returnBest": true}},
-            "position": {"key": "home"},
-            "run": {"key": "<alwaysRun>"}
-          },
-          "output": {
-            "pathfinding": "isPathfinding"
-          }
+  ],
+
+  // Wrap the `moveToPosition` function in a pathfinding time limit to
+  // prevent NPCs from freezing if the core engine cannot find a path to
+  // the position.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/2/children/0/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/2/children/0/children/0/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/2/children/0/children/0/parameters/pathOptions/value/returnBest",
+      "value" : true
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/2/children/0/children/0/parameters/position/key",
+      "value" : "home"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/2/children/0/children/0/parameters/run/key",
+      "value" : "<alwaysRun>"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/0/children/2/children/0/children/0",
+      "value" : {
+        "title": "parallel",
+        "type": "composite",
+        "name": "parallel",
+        "parameters": {
+          "fail": {"value": 1},
+          "success": {"value": -1}
         },
-        {
-          "title": "failer",
-          "type": "decorator",
-          "name": "failer",
-          "parameters": {},
-          "child": {
+        "children": [
+          {
+            "title": "",
+            "type": "action",
+            "name": "rl_bettercrew_moveToPosition",
+            "parameters": {
+              "pathOptions": {"value": {"maxDistance": 400, "returnBest": true}},
+              "position": {"key": "home"},
+              "run": {"key": "<alwaysRun>"}
+            },
+            "output": {
+              "pathfinding": "isPathfinding"
+            }
+          },
+          {
             "title": "dynamic",
             "type": "composite",
             "name": "dynamic",
             "parameters": {},
             "children": [
               {
-                "title": "parallel",
-                "type": "composite",
-                "name": "parallel",
-                "parameters": {
-                  "fail": {"value": 1},
-                  "success": {"value": -1}
-                },
-                "children": [
-                  {
-                    "title": "hasFlag",
-                    "type": "action",
-                    "name": "hasFlag",
-                    "parameters": {
-                      "name": {"key": "isPathfinding"}
-                    }
-                  },
-                  {
-                    "title": "timer",
-                    "type": "action",
-                    "name": "timer",
-                    "parameters": {
-                      "time": {"value": "<pathingTimeLimit>"}
-                    }
+                "title": "inverter",
+                "type": "decorator",
+                "name": "inverter",
+                "parameters": {},
+                "child": {
+                  "title": "hasFlag",
+                  "type": "action",
+                  "name": "hasFlag",
+                  "parameters": {
+                    "name": {"key": "isPathfinding"}
                   }
-                ]
+                }
               },
               {
-                "title": "runner",
-                "type": "action",
-                "name": "runner",
-                "parameters": {}
+                "title": "failer",
+                "type": "decorator",
+                "name": "failer",
+                "parameters": {},
+                "child": {
+                  "title": "timer",
+                  "type": "action",
+                  "name": "timer",
+                  "parameters": {
+                    "time": {"value": "<pathingTimeLimit>"}
+                  }
+                }
               }
             ]
           }
-        }
-      ]
+        ]
+      }
     }
-  },
-  { "op" : "replace",
-    "path" : "/root/children/0/children/1/children/3/children/1",
-    "value" : {
-      "title": "parallel",
-      "type": "composite",
-      "name": "parallel",
-      "parameters": {
-        "fail": {"value": 1},
-        "success": {"value": 1}
-      },
-      "children": [
-        {
-          "title": "",
-          "type": "action",
-          "name": "moveToPosition",
-          "parameters": {
-            "position": {"key": "insideDoor"},
-            "run": {"key": "<alwaysRun>"}
-          },
-          "output": {
-            "pathfinding": "isInsideDoorPathfinding"
-          }
+  ],
+
+  // In the base game, the `move` function can cause an NPC to become
+  // stuck moving back and forth indefinitely if they are directly above
+  // or below their "home" position.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/2/children/0/children/1/children/2/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/2/children/0/children/1/children/2/name",
+      "value" : "move"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/2/children/0/children/1/children/2/parameters/direction/key",
+      "value" : "homeX"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/children/2/children/0/children/1/children/2/parameters/run/value",
+      "value" : false
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/0/children/2/children/0/children/1/children/2",
+      "value" : {
+        "title": "",
+        "type": "composite",
+        "name": "parallel",
+        "parameters": {
+          "fail": {"value": 1},
+          "success": {"value": 1}
         },
-        {
-          "title": "failer",
-          "type": "decorator",
-          "name": "failer",
-          "parameters": {},
-          "child": {
+        "children": [
+          {
+            "title": "",
+            "type": "action",
+            "name": "rl_bettercrew_moveUnidirectionally",
+            "parameters": {
+              "direction": {"key": "homeX"},
+              "run": {"value": false}
+            }
+          },
+          {
+            "title": "failer",
+            "type": "decorator",
+            "name": "failer",
+            "parameters": {},
+            "child": {
+              "title": "timer",
+              "type": "action",
+              "name": "timer",
+              "parameters": {
+                "time": {"value": "<wanderingTimeLimit>"}
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+
+  // Wrap the `moveToPosition` function in a pathfinding time limit to
+  // prevent NPCs from freezing if the core engine cannot find a path to
+  // the position.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/children/3/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/children/3/children/1/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/children/3/children/1/parameters/position/key",
+      "value" : "insideDoor"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/children/3/children/1/parameters/run/key",
+      "value" : "<alwaysRun>"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/1/children/3/children/1",
+      "value" : {
+        "title": "parallel",
+        "type": "composite",
+        "name": "parallel",
+        "parameters": {
+          "fail": {"value": 1},
+          "success": {"value": -1}
+        },
+        "children": [
+          {
+            "title": "",
+            "type": "action",
+            "name": "rl_bettercrew_moveToPosition",
+            "parameters": {
+              "position": {"key": "insideDoor"},
+              "run": {"key": "<alwaysRun>"}
+            },
+            "output": {
+              "pathfinding": "isInsideDoorPathfinding"
+            }
+          },
+          {
             "title": "dynamic",
             "type": "composite",
             "name": "dynamic",
             "parameters": {},
             "children": [
               {
-                "title": "parallel",
-                "type": "composite",
-                "name": "parallel",
-                "parameters": {
-                  "fail": {"value": 1},
-                  "success": {"value": -1}
-                },
-                "children": [
-                  {
-                    "title": "hasFlag",
-                    "type": "action",
-                    "name": "hasFlag",
-                    "parameters": {
-                      "name": {"key": "isInsideDoorPathfinding"}
-                    }
-                  },
-                  {
-                    "title": "timer",
-                    "type": "action",
-                    "name": "timer",
-                    "parameters": {
-                      "time": {"value": "<pathingTimeLimit>"}
-                    }
+                "title": "inverter",
+                "type": "decorator",
+                "name": "inverter",
+                "parameters": {},
+                "child": {
+                  "title": "hasFlag",
+                  "type": "action",
+                  "name": "hasFlag",
+                  "parameters": {
+                    "name": {"key": "isInsideDoorPathfinding"}
                   }
-                ]
+                }
               },
               {
-                "title": "runner",
-                "type": "action",
-                "name": "runner",
-                "parameters": {}
+                "title": "failer",
+                "type": "decorator",
+                "name": "failer",
+                "parameters": {},
+                "child": {
+                  "title": "timer",
+                  "type": "action",
+                  "name": "timer",
+                  "parameters": {
+                    "time": {"value": "<pathingTimeLimit>"}
+                  }
+                }
               }
             ]
           }
-        }
-      ]
+        ]
+      }
     }
-  },
-  { "op" : "replace",
-    "path" : "/root/children/0/children/2/children/3/children/1",
-    "value" : {
-      "title": "parallel",
-      "type": "composite",
-      "name": "parallel",
-      "parameters": {
-        "fail": {"value": 1},
-        "success": {"value": 1}
-      },
-      "children": [
-        {
-          "title": "",
-          "type": "action",
-          "name": "moveToPosition",
-          "parameters": {
-            "position": {"key": "outsideDoor"},
-            "run": {"key": "<alwaysRun>"}
-          },
-          "output": {
-            "pathfinding": "isOutsideDoorPathfinding"
-          }
+  ],
+
+  // Replace the base game `openDoors` function with a variant that
+  // ensures that only doors within the defined bounds are opened.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/children/3/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/children/3/children/0/name",
+      "value" : "openDoors"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/1/children/3/children/0/name",
+      "value" : "rl_bettercrew_openDoors"
+    }
+  ],
+
+  // Replace the base game `closeDoors` function with a variant that
+  // ensures that only doors within the defined bounds are closed.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/children/4/child/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/1/children/4/child/name",
+      "value" : "closeDoors"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/1/children/4/child/name",
+      "value" : "rl_bettercrew_closeDoors"
+    }
+  ],
+
+  // Wrap the `moveToPosition` function in a pathfinding time limit to
+  // prevent NPCs from freezing if the core engine cannot find a path to
+  // the position.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/3/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/3/children/1/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/3/children/1/parameters/position/key",
+      "value" : "outsideDoor"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/3/children/1/parameters/run/key",
+      "value" : "<alwaysRun>"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/2/children/3/children/1",
+      "value" : {
+        "title": "parallel",
+        "type": "composite",
+        "name": "parallel",
+        "parameters": {
+          "fail": {"value": 1},
+          "success": {"value": -1}
         },
-        {
-          "title": "failer",
-          "type": "decorator",
-          "name": "failer",
-          "parameters": {},
-          "child": {
+        "children": [
+          {
+            "title": "",
+            "type": "action",
+            "name": "rl_bettercrew_moveToPosition",
+            "parameters": {
+              "position": {"key": "outsideDoor"},
+              "run": {"key": "<alwaysRun>"}
+            },
+            "output": {
+              "pathfinding": "isOutsideDoorPathfinding"
+            }
+          },
+          {
             "title": "dynamic",
             "type": "composite",
             "name": "dynamic",
             "parameters": {},
             "children": [
               {
-                "title": "parallel",
-                "type": "composite",
-                "name": "parallel",
-                "parameters": {
-                  "fail": {"value": 1},
-                  "success": {"value": -1}
-                },
-                "children": [
-                  {
-                    "title": "hasFlag",
-                    "type": "action",
-                    "name": "hasFlag",
-                    "parameters": {
-                      "name": {"key": "isOutsideDoorPathfinding"}
-                    }
-                  },
-                  {
-                    "title": "timer",
-                    "type": "action",
-                    "name": "timer",
-                    "parameters": {
-                      "time": {"value": "<pathingTimeLimit>"}
-                    }
+                "title": "inverter",
+                "type": "decorator",
+                "name": "inverter",
+                "parameters": {},
+                "child": {
+                  "title": "hasFlag",
+                  "type": "action",
+                  "name": "hasFlag",
+                  "parameters": {
+                    "name": {"key": "isOutsideDoorPathfinding"}
                   }
-                ]
+                }
               },
               {
-                "title": "runner",
-                "type": "action",
-                "name": "runner",
-                "parameters": {}
+                "title": "failer",
+                "type": "decorator",
+                "name": "failer",
+                "parameters": {},
+                "child": {
+                  "title": "timer",
+                  "type": "action",
+                  "name": "timer",
+                  "parameters": {
+                    "time": {"value": "<pathingTimeLimit>"}
+                  }
+                }
               }
             ]
           }
-        }
-      ]
+        ]
+      }
     }
-  }
+  ],
+
+  // Replace the base game `openDoors` function with a variant that
+  // ensures that only doors within the defined bounds are opened.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/3/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/3/children/0/name",
+      "value" : "openDoors"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/2/children/3/children/0/name",
+      "value" : "rl_bettercrew_openDoors"
+    }
+  ],
+
+  // Replace the base game `closeDoors` function with a variant that
+  // ensures that only doors within the defined bounds are closed.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/4/child/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/4/child/name",
+      "value" : "closeDoors"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/2/children/4/child/name",
+      "value" : "rl_bettercrew_closeDoors"
+    }
+  ],
+
+  // Replace the base game `openDoors` function with a variant that
+  // ensures that only doors within the defined bounds are opened.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/3/children/2/child/children/1/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/3/children/2/child/children/1/children/0/name",
+      "value" : "openDoors"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/3/children/2/child/children/1/children/0/name",
+      "value" : "rl_bettercrew_openDoors"
+    }
+  ],
+
+  // Replace the base game `closeDoors` function with a variant that
+  // ensures that only doors within the defined bounds are closed.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/3/children/2/child/children/1/children/1/child/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/3/children/2/child/children/1/children/1/child/name",
+      "value" : "closeDoors"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/3/children/2/child/children/1/children/1/child/name",
+      "value" : "rl_bettercrew_closeDoors"
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_move.lua"
+    },
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_query.lua"
+    },
+    { "op" : "add",
+      "path" : "/parameters/pathingTimeLimit",
+      "value" : 10
+    },
+    { "op" : "add",
+      "path" : "/parameters/wanderingTimeLimit",
+      "value" : 30
+    }
+  ]
 ]

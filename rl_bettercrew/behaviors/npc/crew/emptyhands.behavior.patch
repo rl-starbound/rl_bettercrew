@@ -1,6 +1,42 @@
 [
-  { "op" : "add",
-    "path" : "/scripts/-",
-    "value" : "/scripts/actions/rl_bettercrew_npc.lua"
-  }
+  // Replace the faulty base game `swapItemSlots` function with the
+  // improved version provided by this mod.
+  [
+    { "op" : "test",
+      "path" : "/root/child/children/0/child/children/2/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/0/child/children/2/children/1/name",
+      "value" : "swapItemSlots"
+    },
+    { "op" : "replace",
+      "path" : "/root/child/children/0/child/children/2/children/1/name",
+      "value" : "rl_bettercrew_swapItemSlots"
+    }
+  ],
+
+  // Replace the faulty base game `swapItemSlots` function with the
+  // improved version provided by this mod.
+  [
+    { "op" : "test",
+      "path" : "/root/child/children/1/child/children/1/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/1/child/children/1/children/1/name",
+      "value" : "swapItemSlots"
+    },
+    { "op" : "replace",
+      "path" : "/root/child/children/1/child/children/1/children/1/name",
+      "value" : "rl_bettercrew_swapItemSlots"
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_npc.lua"
+    }
+  ]
 ]

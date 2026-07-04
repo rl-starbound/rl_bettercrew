@@ -1,6 +1,0 @@
-[
-  { "op" : "replace",
-    "path" : "/playBehaviorReaction/script",
-    "value" : "/scripts/actions/rl_bettercrew_react.lua"
-  }
-]

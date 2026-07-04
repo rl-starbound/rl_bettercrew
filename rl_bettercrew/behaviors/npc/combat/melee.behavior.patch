@@ -1,6 +1,164 @@
 [
-  { "op" : "add",
-    "path" : "/scripts/-",
-    "value" : "/scripts/actions/rl_bettercrew_npc.lua"
-  }
+  // Do not swap items if a melee attack is imminent. Also, replace the
+  // faulty base game `swapItemSlots` function with the improved version
+  // provided by this mod.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/2/children/0/child/children/2/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/2/children/0/child/children/2/name",
+      "value" : "swapItemSlots"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/2/children/0/child/children/2",
+      "value" : {
+        "title": "sequence",
+        "type": "composite",
+        "name": "sequence",
+        "parameters": {},
+        "children": [
+          {
+            "title": "inverter",
+            "type": "decorator",
+            "name": "inverter",
+            "parameters": {},
+            "child": {
+              "title": "hasFlag",
+              "type": "action",
+              "name": "hasFlag",
+              "parameters": {
+                "name": {"key": "meleeAttackImminent"}
+              }
+            }
+          },
+          {
+            "title": "swapItemSlots",
+            "type": "action",
+            "name": "rl_bettercrew_swapItemSlots",
+            "parameters": {}
+          }
+        ]
+      }
+    }
+  ],
+
+  // Re-aim before testing for on-ground and weapon range, so the NPC is
+  // facing the correct direction, in case that changed between ticks.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/3/children/0/child/children/1/children/3/child/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/3/children/0/child/children/1/children/3/child/children/0/name",
+      "value" : "onGround"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/3/children/0/child/children/1/children/3/child/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/3/children/0/child/children/1/children/3/child/children/1/name",
+      "value" : "entityInRange"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/3/children/0/child/children/1/children/3/child/children/2/type",
+      "value" : "module"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/3/children/0/child/children/1/children/3/child/children/2/name",
+      "value" : "meleecombat-aim"
+    },
+    { "op" : "move",
+      "from" : "/root/children/1/children/3/children/0/child/children/1/children/3/child/children/2",
+      "path" : "/root/children/1/children/3/children/0/child/children/1/children/3/child/children/0"
+    }
+  ],
+
+  // Add a flag when the melee attack becomes imminent, to avoid
+  // swapping items just before the strike occurs.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/3/children/0/child/children/1/children/3/child/children/3/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/3/children/0/child/children/1/children/3/child/children/3/name",
+      "value" : "primaryFire"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/3/children/0/child/children/1/children/3/child/children/3",
+      "value" : {
+        "title": "sequence",
+        "type": "composite",
+        "name": "sequence",
+        "parameters": {},
+        "children": [
+          {
+            "title": "primaryFire",
+            "type": "action",
+            "name": "primaryFire",
+            "parameters": {}
+          },
+          {
+            "title": "setFlag",
+            "type": "action",
+            "name": "setFlag",
+            "parameters": {
+              "name": {"value": "meleeAttackImminent"}
+            }
+          }
+        ]
+      }
+    }
+  ],
+
+  // Unset the meleeAttackImminent flag when a melee attack is no longer
+  // imminent.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/3/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/3/children/1/name",
+      "value" : "faceEntity"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/3/children/1",
+      "value" : {
+        "title": "sequence",
+        "type": "composite",
+        "name": "sequence",
+        "parameters": {},
+        "children": [
+          {
+            "title": "unsetFlag",
+            "type": "action",
+            "name": "unsetFlag",
+            "parameters": {
+              "name": {"value": "meleeAttackImminent"}
+            }
+          },
+          {
+            "title": "faceEntity",
+            "type": "action",
+            "name": "faceEntity",
+            "parameters": {
+              "entity": {"key": "target"}
+            }
+          }
+        ]
+      }
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_npc.lua"
+    }
+  ]
 ]

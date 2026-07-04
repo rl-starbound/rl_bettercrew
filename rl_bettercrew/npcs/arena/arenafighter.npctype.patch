@@ -1,0 +1,15 @@
+[
+  // Give NPCs something to say if their target is out of range of
+  // their ranged weapon and they can't pathfind to get closer.
+  { "op" : "add",
+    "path" : "/scriptConfig/dialog/cantReachRanged",
+    "value" : {
+      "default" : {
+        "default" : [
+          "Come closer!",
+          "I'll get you!"
+        ]
+      }
+    }
+  }
+]

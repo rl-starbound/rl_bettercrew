@@ -1,0 +1,15 @@
+{
+  "rl_bettercrew_logPosition": {
+    "type": "action",
+    "name": "rl_bettercrew_logPosition",
+    "title": "rl_bettercrew_logPosition",
+    "properties": {
+      "level": {"type": "string", "value": "info"},
+      "context": {"type": "string", "key": null},
+      "position": {"type": "position", "value": null}
+    },
+    "category": "debug",
+    "script": "/scripts/actions/rl_bettercrew_debug.lua",
+    "output": {}
+  }
+}

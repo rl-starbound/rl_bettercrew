@@ -1,0 +1,145 @@
+[
+  // If no ground position from which to initiate a melee attack exists
+  // (e.g., if the target is floating high above the ground), then the
+  // base game meleecombat-approach code will freeze. If the NPC doesn't
+  // have a ranged weapon, they'll stand still indefinitely. This patch
+  // ensures that they'll always have some position to which to attempt
+  // to move. Note, this will merely enable `moveToPosition` to yield
+  // with `pathfinding` true, which will enable the `cantReach` dialog,
+  // which should clue the player into why the NPC isn't moving. This
+  // code can't force a route to a melee attack.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/name",
+      "value" : "groupResource"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/parameters/groupId/value",
+      "value" : "combat"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/parameters/name/value",
+      "value" : "meleePosition"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/output/position",
+      "value" : "meleePosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0",
+      "value" : {
+        "title": "selector",
+        "type": "composite",
+        "name": "selector",
+        "parameters": {},
+        "children": [
+          {
+            "title": "groupResource",
+            "type": "action",
+            "name": "groupResource",
+            "parameters": {
+              "groupId": {"value": "combat"},
+              "name": {"value": "meleePosition"}
+            },
+            "output": {
+              "position": "meleePosition"
+            }
+          },
+          {
+            "title": "entityPosition",
+            "type": "action",
+            "name": "entityPosition",
+            "parameters": {
+              "entity": {"key": "target"}
+            },
+            "output": {
+              "position": "meleePosition"
+            }
+          }
+        ]
+      }
+    }
+  ],
+
+  // Replace `moveToPosition` with the improved version this mod
+  // provides.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/children/1/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/children/1/name",
+      "value" : "rl_bettercrew_moveToPosition"
+    }
+  ],
+
+  // Slightly increase the probability that the NPC will say something
+  // if the target is unreachable, and allow them a more dynamic choice
+  // of what to say.
+  [
+    { "op" : "test",
+      "path" : "/root/children/2/children/2/child/child/child/children/1/type",
+      "value" : "composite"
+    },
+    { "op" : "test",
+      "path" : "/root/children/2/children/2/child/child/child/children/1/name",
+      "value" : "selector"
+    },
+    { "op" : "test",
+      "path" : "/root/children/2/children/2/child/child/child/children/1/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/2/children/2/child/child/child/children/1/children/0/name",
+      "value" : "chance"
+    },
+    { "op" : "test",
+      "path" : "/root/children/2/children/2/child/child/child/children/1/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/2/children/2/child/child/child/children/1/children/1/name",
+      "value" : "sayToEntity"
+    },
+    { "op" : "test",
+      "path" : "/root/children/2/children/2/child/child/child/children/1/children/1/parameters/dialogType/value",
+      "value" : "dialog.cantReach"
+    },
+    { "op" : "test",
+      "path" : "/root/children/2/children/2/child/child/child/children/1/children/1/parameters/entity/key",
+      "value" : "target"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/2/children/2/child/child/child/children/1/children/0/parameters/chance/value",
+      "value" : 0.65
+    },
+    { "op" : "replace",
+      "path" : "/root/children/2/children/2/child/child/child/children/1/children/1/name",
+      "value" : "rl_bettercrew_sayToEntityIfExists"
+    },
+    { "op" : "add",
+      "path" : "/root/children/2/children/2/child/child/child/children/1/children/1/parameters/dialogMode",
+      "value" : {"value": "random"}
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_dialog.lua"
+    },
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_move.lua"
+    }
+  ]
+]

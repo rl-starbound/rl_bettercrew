@@ -1,0 +1,93 @@
+[
+  { "op" : "test",
+    "path" : "/root/children/1/children/2/children/1/child/children/0/children/1/child/children/0/type",
+    "value" : "composite"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/2/children/1/child/children/0/children/1/child/children/0/name",
+    "value" : "parallel"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/2/children/1/child/children/0/children/1/child/children/0/parameters/fail/value",
+    "value" : 1
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/2/children/1/child/children/0/children/1/child/children/0/parameters/success/value",
+    "value" : -1
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/2/children/1/child/children/0/children/1/child/children/0/children/0/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/2/children/1/child/children/0/children/1/child/children/0/children/0/name",
+    "value" : "hasFlag"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/2/children/1/child/children/0/children/1/child/children/0/children/0/parameters/name/key",
+    "value" : "isPathfinding"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/2/children/1/child/children/0/children/1/child/children/0/children/1/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/2/children/1/child/children/0/children/1/child/children/0/children/1/name",
+    "value" : "timer"
+  },
+  { "op" : "test",
+    "path" : "/root/children/1/children/2/children/1/child/children/0/children/1/child/children/0/children/1/parameters/time/value",
+    "value" : "<pathingTimeLimit>"
+  },
+  { "op" : "replace",
+    "path" : "/root/children/1/children/2/children/1/child/children/0/children/1/child/children/0",
+    "value" : {
+      "title": "sequence",
+      "type": "composite",
+      "name": "sequence",
+      "parameters": {},
+      "children": [
+        {
+          "title": "parallel",
+          "type": "composite",
+          "name": "parallel",
+          "parameters": {
+            "fail": {"value": 1},
+            "success": {"value": -1}
+          },
+          "children": [
+            {
+              "title": "hasFlag",
+              "type": "action",
+              "name": "hasFlag",
+              "parameters": {
+                "name": {"key": "isPathfinding"}
+              }
+            },
+            {
+              "title": "timer",
+              "type": "action",
+              "name": "timer",
+              "parameters": {
+                "time": {"value": "<pathingTimeLimit>"}
+              }
+            }
+          ]
+        },
+        {
+          "title": "",
+          "type": "action",
+          "name": "rl_bettercrew_logPosition",
+          "parameters": {
+            "context": {"value": "override-follow moveToPosition timed out pathfinding to"},
+            "position": {"key": "targetPosition"}
+          }
+        }
+      ]
+    }
+  },
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/actions/rl_bettercrew_debug.lua"
+  }
+]

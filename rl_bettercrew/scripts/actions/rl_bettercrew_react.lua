@@ -1,16 +1,24 @@
 -- This file was supposed to be called `rl_bettercrew_reaction.lua`, but
 -- it seems that there is an undocumented length limit on the paths to
 -- behavior scripts. At its intended length, the behavior tree system
--- was not invoking the function in this file, and the original function
--- was being called instead. When I shortened the length of this file
--- name and made no other changes, this function began to be called.
+-- was not invoking the function in this file, but when I shortened the
+-- length of this file name and made no other changes, the function was
+-- invoked.
+
+function playBehaviorReaction(args, board, nodeId, dt)
+  if not self.rl_bettercrew_playBehaviorReactionWarned then
+    sb.logWarn("behavior action 'playBehaviorReaction' invoked; should call 'rl_bettercrew_playBehaviorReaction' instead")
+    self.rl_bettercrew_playBehaviorReactionWarned = true
+  end
+  return rl_bettercrew_playBehaviorReaction(args, board, nodeId, dt)
+end
 
 -- param reaction
-function playBehaviorReaction(args, board, nodeId, dt)
-  -- In the base implementation, this function ignored personality of
-  -- NPCs when passing parameters to behavior trees. This caused, among
-  -- other problems, nocturnal NPCs to be unable to sleep and fast NPCs
-  -- not to run.
+function rl_bettercrew_playBehaviorReaction(args, board, nodeId, dt)
+  -- In the base game implementation, this function ignored personality
+  -- of NPCs when passing parameters to behavior trees. This caused,
+  -- among other problems, nocturnal NPCs to be unable to sleep and fast
+  -- NPCs not to run.
 
   local reaction = root.assetJson("/npcs/default_reactions.config:behaviorReactions")[args.reaction]
 

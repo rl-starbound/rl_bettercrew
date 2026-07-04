@@ -1,0 +1,22 @@
+{
+  "itemName" : "rl_crewcommunicator",
+  "price" : 1000,
+  "maxStack" : 1,
+  "rarity" : "Essential",
+  "description" : "A handheld terminal used to rally crew members off ship.",
+  "shortdescription" : "Crew Communicator",
+  "twoHanded" : false,
+  "category" : "tool",
+  "itemTags" : ["tool"],
+
+  "inventoryIcon" : "rl_crewcommunicatoricon.png",
+  "animation" : "rl_crewcommunicator.animation",
+  "animationParts" : {
+    "terminal" : "rl_crewcommunicator.png",
+    "terminalfullbright" : "rl_crewcommunicatorfullbright.png"
+  },
+  "animationCustom" : {},
+
+  "scripts" : ["rl_crewcommunicator.lua"],
+  "scriptDelta" : 1
+}

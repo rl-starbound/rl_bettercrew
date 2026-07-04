@@ -1,11 +1,11 @@
 [
   { "op" : "add",
-    "path" : "/items/rl_bettercrew:rallyRecruits",
+    "path" : "/items/rl_bettercrew:rallyCrew",
     "value" : {
       "label" : "Crew Communications",
-      "icon" : "/scripts/quickbar/actions/rl_bettercrew_rallyRecruits.png",
+      "icon" : "/scripts/quickbar/actions/rl_bettercrew_rallyCrew.png",
       "weight" : 0,
-      "action" : [ "exec", "/scripts/quickbar/actions/rl_bettercrew_rallyRecruits.lua" ],
+      "action" : [ "exec", "/scripts/quickbar/actions/rl_bettercrew_rallyCrew.lua" ],
       "condition" : [ "not", "ownShip" ]
     }
   }

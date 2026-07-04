@@ -1,0 +1,14 @@
+[
+  { "op" : "replace",
+    "path" : "/primaryAbility/fireTime",
+    "value" : 0.9
+  },
+  { "op" : "replace",
+    "path" : "/primaryAbility/baseDps",
+    "value" : 7
+  },
+  { "op" : "replace",
+    "path" : "/primaryAbility/stances/windup/duration",
+    "value" : 0.1
+  }
+]

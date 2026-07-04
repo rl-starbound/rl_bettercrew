@@ -1,0 +1,25 @@
+[
+  // Replace the faulty base game `friendlyTargeting` function with the
+  // improved version provided by this mod.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/0/name",
+      "value" : "friendlyTargeting"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/0/name",
+      "value" : "rl_bettercrew_friendlyTargeting"
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_npc.lua"
+    }
+  ]
+]

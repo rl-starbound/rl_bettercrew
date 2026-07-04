@@ -1,0 +1,29 @@
+[
+  // Use a variant of Firestorm's Fury meant for NPCs. This corrects
+  // minor deficiencies in how Inferno used the weapon.
+  [
+    { "op" : "test",
+      "path" : "/items/override/0/1/0/primary/0",
+      "value" : "flamingdemonsword"
+    },
+    { "op" : "replace",
+      "path" : "/items/override/0/1/0/primary/0",
+      "value" : "npcflamingdemonsword"
+    }
+  ],
+
+  // Give NPCs something to say if their target is out of range of their
+  // ranged weapon and they can't pathfind to get closer.
+  [
+    { "op" : "add",
+      "path" : "/scriptConfig/dialog/cantReachRanged",
+      "value" : {
+        "default" : {
+          "default" : [
+            "You cannot escape the reach of my flames!"
+          ]
+        }
+      }
+    }
+  ]
+]

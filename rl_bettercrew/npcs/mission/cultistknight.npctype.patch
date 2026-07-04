@@ -1,0 +1,8 @@
+[
+  // The `cultistknight` NPC's melee windups and cooldowns are unused
+  // because they were erroneously placed under `/combat` instead of
+  // `/scriptConfig/combat`. But that doesn't matter because they are
+  // identical in all relevant aspects to the values in the base type
+  // `hostile` NPC. Simply ignore the erroneous configuration and allow
+  // the game to continue using the values from the base type.
+]

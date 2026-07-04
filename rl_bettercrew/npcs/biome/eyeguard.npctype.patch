@@ -1,0 +1,95 @@
+[
+  // In the base game, the eyeguard NPCs use eyepatch dialog, which is
+  // probably a mistake. Use their more aggressive dialog instead.
+  [
+    { "op" : "test",
+      "path" : "/scriptConfig/dialog/attack",
+      "value" : "/dialog/eyepatch.config:attack"
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/dialog/attack",
+      "value" : "/dialog/eyeguard.config:attack"
+    }
+  ],
+  [
+    { "op" : "test",
+      "path" : "/scriptConfig/dialog/reattack",
+      "value" : "/dialog/eyepatch.config:reattack"
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/dialog/reattack",
+      "value" : "/dialog/eyeguard.config:reattack"
+    }
+  ],
+  [
+    { "op" : "test",
+      "path" : "/scriptConfig/dialog/killedTarget",
+      "value" : "/dialog/eyepatch.config:killedTarget"
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/dialog/killedTarget",
+      "value" : "/dialog/eyeguard.config:killedTarget"
+    }
+  ],
+  [
+    { "op" : "test",
+      "path" : "/scriptConfig/dialog/lostTarget",
+      "value" : "/dialog/eyepatch.config:lostTarget"
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/dialog/lostTarget",
+      "value" : "/dialog/eyeguard.config:lostTarget"
+    }
+  ],
+  [
+    { "op" : "test",
+      "path" : "/scriptConfig/dialog/outOfSight",
+      "value" : "/dialog/eyepatch.config:outOfSight"
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/dialog/outOfSight",
+      "value" : "/dialog/eyeguard.config:outOfSight"
+    }
+  ],
+  [
+    { "op" : "test",
+      "path" : "/scriptConfig/dialog/cheerOn",
+      "value" : "/dialog/eyepatch.config:cheerOn"
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/dialog/cheerOn",
+      "value" : "/dialog/eyeguard.config:cheerOn"
+    }
+  ],
+  [
+    { "op" : "test",
+      "path" : "/scriptConfig/dialog/cantReach",
+      "value" : "/dialog/eyepatch.config:cantReach"
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/dialog/cantReach",
+      "value" : "/dialog/eyeguard.config:cantReach"
+    }
+  ],
+
+  // Use the custom drop pool, which was unused in the base game.
+  [
+    { "op" : "test",
+      "path" : "/dropPools",
+      "inverse" : true
+    },
+    { "op" : "add",
+      "path" : "/dropPools",
+      "value" : [ "eyeguardtreasure" ]
+    }
+  ],
+
+  // Give NPCs something to say if their target is out of range of their
+  // ranged weapon and they can't pathfind to get closer.
+  [
+    { "op" : "add",
+      "path" : "/scriptConfig/dialog/cantReachRanged",
+      "value" : "/dialog/eyeguard.config:cantReachRanged"
+    }
+  ]
+]

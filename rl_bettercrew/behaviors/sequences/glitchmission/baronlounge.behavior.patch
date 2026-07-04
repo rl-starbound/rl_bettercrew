@@ -1,6 +1,31 @@
 [
-  { "op" : "add",
-    "path" : "/scripts/-",
-    "value" : "/scripts/actions/rl_bettercrew_query.lua"
-  }
+  // Note: In the base game, the only NPC that uses this behavior exists
+  // in an instance world, where we know ahead of time that he cannot
+  // experience trouble pathfinding to his destination. Therefore, we
+  // don't need to wrap the `moveToPosition` function in this module in
+  // a pathfinding time limit.
+
+  // Replace the faulty base game `findLoungable` function with the
+  // improved version provided by this mod.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/name",
+      "value" : "findLoungable"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1/name",
+      "value" : "rl_bettercrew_findLoungable"
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_query.lua"
+    }
+  ]
 ]

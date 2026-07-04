@@ -1,332 +1,384 @@
 [
-  { "op" : "test",
-    "path" : "/root/children/0/children/2/children/2/children/0/type",
-    "value" : "action"
-  },
-  { "op" : "test",
-    "path" : "/root/children/0/children/2/children/2/children/0/name",
-    "value" : "addEphemeralEffect"
-  },
-  { "op" : "test",
-    "path" : "/root/children/0/children/2/children/2/children/0/parameters/name/value",
-    "value" : "beamoutandteleport"
-  },
-  { "op" : "test",
-    "path" : "/root/children/0/children/2/children/2/children/1/children/0/children/1/type",
-    "value" : "action"
-  },
-  { "op" : "test",
-    "path" : "/root/children/0/children/2/children/2/children/1/children/0/children/1/name",
-    "value" : "setPosition"
-  },
-  { "op" : "test",
-    "path" : "/root/children/1/type",
-    "value" : "action"
-  },
-  { "op" : "test",
-    "path" : "/root/children/1/name",
-    "value" : "moveToPosition"
-  },
-  { "op" : "add",
-    "path" : "/scripts/-",
-    "value" : "/scripts/actions/rl_bettercrew.lua"
-  },
-  { "op" : "add",
-    "path" : "/parameters/pathingTimeLimit",
-    "value" : 10
-  },
-  { "op" : "replace",
-    "path" : "/root/children/0/children/2/children/2/children/0/parameters/name/value",
-    "value" : "rl_bettercrew_beamoutandteleport"
-  },
-  { "op" : "replace",
-    "path" : "/root/children/0/children/2/children/2/children/1/children/0/children/1",
-    "value" : {
-      "title": "sequence",
-      "type": "composite",
-      "name": "sequence",
-      "parameters": {},
-      "children": [
-        {
-          "title": "setPosition",
-          "type": "action",
-          "name": "setPosition",
-          "parameters": {
-            "footPosition": {"key": "footPosition"},
-            "position": {"key": "homePosition"}
-          }
-        },
-        {
-          "title": "addEphemeralEffect",
-          "type": "action",
-          "name": "addEphemeralEffect",
-          "parameters": {
-            "name": {"value": "beamin"}
-          }
-        }
-      ]
+  // Replace `moveToPosition` with the improved version this mod
+  // provides.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/1/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/1/children/0/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/2/children/1/children/0/name",
+      "value" : "rl_bettercrew_moveToPosition"
     }
-  },
-  { "op" : "replace",
-    "path" : "/root/children/1",
-    "value" : {
-      "title": "parallel",
-      "type": "composite",
-      "name": "parallel",
-      "parameters": {
-        "fail": {"value": 1},
-        "success": {"value": 1}
-      },
-      "children": [
-        {
-          "title": "moveToPosition",
-          "type": "action",
-          "name": "moveToPosition",
-          "parameters": {
-            "avoidLiquid": {"value": true},
-            "groundPosition": {"value": true},
-            "maxGround": {"value": 5},
-            "minGround": {"value": -5},
-            "position": {"key": "spawn"},
-            "run": {"value": false}
+  ],
+
+  // In the base game, when an NPC teleports to their home location, the
+  // `beamin` animation plays immediately after the `beamout` animation,
+  // before the game actually moves the NPC. This patch ensures the
+  // `beamin` animation is played as the NPC is moved.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/2/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/2/children/0/name",
+      "value" : "addEphemeralEffect"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/2/children/0/parameters/name/value",
+      "value" : "beamoutandteleport"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/2/children/1/children/0/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/2/children/1/children/0/children/1/name",
+      "value" : "setPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/2/children/1/children/0/children/1/parameters/footPosition/key",
+      "value" : "footPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/children/2/children/2/children/1/children/0/children/1/parameters/position/key",
+      "value" : "homePosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/2/children/2/children/0/parameters/name/value",
+      "value" : "rl_bettercrew_beamoutandteleport"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/children/2/children/2/children/1/children/0/children/1",
+      "value" : {
+        "title": "sequence",
+        "type": "composite",
+        "name": "sequence",
+        "parameters": {},
+        "children": [
+          {
+            "title": "setPosition",
+            "type": "action",
+            "name": "setPosition",
+            "parameters": {
+              "footPosition": {"key": "footPosition"},
+              "position": {"key": "homePosition"}
+            }
           },
-          "output": {
-            "pathfinding": "isPathfinding"
+          {
+            "title": "addEphemeralEffect",
+            "type": "action",
+            "name": "addEphemeralEffect",
+            "parameters": {
+              "name": {"value": "beamin"}
+            }
           }
+        ]
+      }
+    }
+  ],
+
+  // Wrap the `moveToPosition` function in a pathfinding time limit to
+  // prevent NPCs from freezing if the core engine cannot find a path to
+  // the position. But also, before attempting to move to the spawn
+  // location, first check if the NPC is a crew member. Crew members
+  // following the player should always return to the player. Crew
+  // members on the player's ship but not following the player should
+  // find a crew anchor object to which to move.
+  [
+    { "op" : "test",
+      "path" : "/root/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/parameters/avoidLiquid/value",
+      "value" : true
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/parameters/groundPosition/value",
+      "value" : true
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/parameters/maxGround/value",
+      "value" : 5
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/parameters/minGround/value",
+      "value" : -5
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/parameters/position/key",
+      "value" : "spawn"
+    },
+    { "op" : "test",
+      "path" : "/root/children/1/parameters/run/value",
+      "value" : false
+    },
+    { "op" : "replace",
+      "path" : "/root/children/1",
+      "value" : {
+        "title": "parallel",
+        "type": "composite",
+        "name": "parallel",
+        "parameters": {
+          "fail": {"value": 1},
+          "success": {"value": -1}
         },
-        {
-          "title": "failer",
-          "type": "decorator",
-          "name": "failer",
-          "parameters": {},
-          "child": {
+        "children": [
+          {
+            "title": "",
+            "type": "action",
+            "name": "rl_bettercrew_moveToPosition",
+            "parameters": {
+              "avoidLiquid": {"value": true},
+              "groundPosition": {"value": true},
+              "maxGround": {"value": 5},
+              "minGround": {"value": -5},
+              "pathOptions": {"value": {"returnBest": true}},
+              "position": {"key": "spawn"},
+              "run": {"value": false}
+            },
+            "output": {
+              "pathfinding": "isPathfinding"
+            }
+          },
+          {
             "title": "dynamic",
             "type": "composite",
             "name": "dynamic",
             "parameters": {},
             "children": [
               {
-                "title": "parallel",
+                "title": "inverter",
+                "type": "decorator",
+                "name": "inverter",
+                "parameters": {},
+                "child": {
+                  "title": "hasFlag",
+                  "type": "action",
+                  "name": "hasFlag",
+                  "parameters": {
+                    "name": {"key": "isPathfinding"}
+                  }
+                }
+              },
+              {
+                "title": "failer",
+                "type": "decorator",
+                "name": "failer",
+                "parameters": {},
+                "child": {
+                  "title": "timer",
+                  "type": "action",
+                  "name": "timer",
+                  "parameters": {
+                    "time": {"value": "<pathingTimeLimit>"}
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    { "op" : "add",
+      "path" : "/root/children/1",
+      "value" : {
+        "title": "sequence",
+        "type": "composite",
+        "name": "sequence",
+        "parameters": {},
+        "children": [
+          {
+            "title": "hasRecruiter",
+            "type": "action",
+            "name": "hasRecruiter",
+            "parameters": {}
+          },
+          {
+            "title": "selector",
+            "type": "composite",
+            "name": "selector",
+            "parameters": {},
+            "children": [
+              {
+                "title": "sequence",
                 "type": "composite",
-                "name": "parallel",
-                "parameters": {
-                  "fail": {"value": 1},
-                  "success": {"value": -1}
-                },
+                "name": "sequence",
+                "parameters": {},
                 "children": [
                   {
-                    "title": "hasFlag",
+                    "title": "isFollowingRecruiter",
                     "type": "action",
-                    "name": "hasFlag",
-                    "parameters": {
-                      "name": {"key": "isPathfinding"}
+                    "name": "isFollowingRecruiter",
+                    "parameters": {}
+                  },
+                  {
+                    "title": "recruiterEntity",
+                    "type": "action",
+                    "name": "recruiterEntity",
+                    "parameters": {},
+                    "output": {
+                      "entity": "player"
                     }
                   },
                   {
-                    "title": "timer",
+                    "title": "entityPosition",
                     "type": "action",
-                    "name": "timer",
+                    "name": "entityPosition",
                     "parameters": {
-                      "time": {"value": "<pathingTimeLimit>"}
+                      "entity": {"key": "player"}
+                    },
+                    "output": {
+                      "position": "homePosition"
                     }
                   }
                 ]
               },
               {
-                "title": "runner",
-                "type": "action",
-                "name": "runner",
-                "parameters": {}
+                "title": "sequence",
+                "type": "composite",
+                "name": "sequence",
+                "parameters": {},
+                "children": [
+                  {
+                    "title": "Is ship world?",
+                    "type": "action",
+                    "name": "worldProperty",
+                    "parameters": {
+                      "property": {"value": "ship.level"}
+                    }
+                  },
+                  {
+                    "title": "rl_bettercrew_crewAnchorObject",
+                    "type": "action",
+                    "name": "rl_bettercrew_crewAnchorObject",
+                    "parameters": {
+                      "defaultPosition": {"key": "spawn"}
+                    },
+                    "output": {
+                      "position": "homePosition"
+                    }
+                  }
+                ]
               }
             ]
-          }
-        }
-      ]
-    }
-  },
-  { "op" : "add",
-    "path" : "/root/children/1",
-    "value" : {
-      "title": "sequence",
-      "type": "composite",
-      "name": "sequence",
-      "parameters": {},
-      "children": [
-        {
-          "title": "hasRecruiter",
-          "type": "action",
-          "name": "hasRecruiter",
-          "parameters": {}
-        },
-        {
-          "title": "selector",
-          "type": "composite",
-          "name": "selector",
-          "parameters": {},
-          "children": [
-            {
-              "title": "sequence",
-              "type": "composite",
-              "name": "sequence",
-              "parameters": {},
-              "children": [
-                {
-                  "title": "isFollowingRecruiter",
-                  "type": "action",
-                  "name": "isFollowingRecruiter",
-                  "parameters": {}
-                },
-                {
-                  "title": "recruiterEntity",
-                  "type": "action",
-                  "name": "recruiterEntity",
-                  "parameters": {},
-                  "output": {
-                    "entity": "player"
-                  }
-                },
-                {
-                  "title": "entityPosition",
-                  "type": "action",
-                  "name": "entityPosition",
-                  "parameters": {
-                    "entity": {"key": "player"}
-                  },
-                  "output": {
-                    "position": "homePosition"
-                  }
-                }
-              ]
+          },
+          {
+            "title": "random",
+            "type": "action",
+            "name": "random",
+            "parameters": {
+              "max": {"value": 2},
+              "min": {"value": -2}
             },
-            {
-              "title": "sequence",
-              "type": "composite",
-              "name": "sequence",
-              "parameters": {},
-              "children": [
-                {
-                  "title": "Is ship world?",
-                  "type": "action",
-                  "name": "worldProperty",
-                  "parameters": {
-                    "property": {"value": "ship.level"}
-                  }
-                },
-                {
-                  "title": "rl_bettercrew_crewAnchorObject",
-                  "type": "action",
-                  "name": "rl_bettercrew_crewAnchorObject",
-                  "parameters": {
-                    "defaultPosition": {"key": "spawn"}
-                  },
-                  "output": {
-                    "position": "homePosition"
-                  }
-                }
-              ]
+            "output": {
+              "number": "offsetX"
             }
-          ]
-        },
-        {
-          "title": "random",
-          "type": "action",
-          "name": "random",
-          "parameters": {
-            "max": {"value": 2},
-            "min": {"value": -2}
           },
-          "output": {
-            "number": "offsetX"
-          }
-        },
-        {
-          "title": "offsetPosition",
-          "type": "action",
-          "name": "offsetPosition",
-          "parameters": {
-            "position": {"key": "homePosition"},
-            "x": {"key": "offsetX"},
-            "y": {"value": 0}
-          },
-          "output": {
-            "position": "homePosition"
-          }
-        },
-        {
-          "title": "parallel",
-          "type": "composite",
-          "name": "parallel",
-          "parameters": {
-            "fail": {"value": 1},
-            "success": {"value": 1}
-          },
-          "children": [
-            {
-              "title": "moveToPosition",
-              "type": "action",
-              "name": "moveToPosition",
-              "parameters": {
-                "avoidLiquid": {"value": true},
-                "groundPosition": {"value": true},
-                "maxGround": {"value": 5},
-                "minGround": {"value": -5},
-                "position": {"key": "homePosition"},
-                "run": {"value": false}
-              },
-              "output": {
-                "pathfinding": "isPathfinding"
-              }
+          {
+            "title": "offsetPosition",
+            "type": "action",
+            "name": "offsetPosition",
+            "parameters": {
+              "position": {"key": "homePosition"},
+              "x": {"key": "offsetX"},
+              "y": {"value": 0}
             },
-            {
-              "title": "failer",
-              "type": "decorator",
-              "name": "failer",
-              "parameters": {},
-              "child": {
+            "output": {
+              "position": "homePosition"
+            }
+          },
+          {
+            "title": "parallel",
+            "type": "composite",
+            "name": "parallel",
+            "parameters": {
+              "fail": {"value": 1},
+              "success": {"value": -1}
+            },
+            "children": [
+              {
+                "title": "",
+                "type": "action",
+                "name": "rl_bettercrew_moveToPosition",
+                "parameters": {
+                  "avoidLiquid": {"value": true},
+                  "groundPosition": {"value": true},
+                  "maxGround": {"value": 5},
+                  "minGround": {"value": -5},
+                  "pathOptions": {"value": {"maxDistance": 400, "returnBest": true}},
+                  "position": {"key": "homePosition"},
+                  "run": {"value": false}
+                },
+                "output": {
+                  "pathfinding": "isPathfinding"
+                }
+              },
+              {
                 "title": "dynamic",
                 "type": "composite",
                 "name": "dynamic",
                 "parameters": {},
                 "children": [
                   {
-                    "title": "parallel",
-                    "type": "composite",
-                    "name": "parallel",
-                    "parameters": {
-                      "fail": {"value": 1},
-                      "success": {"value": -1}
-                    },
-                    "children": [
-                      {
-                        "title": "hasFlag",
-                        "type": "action",
-                        "name": "hasFlag",
-                        "parameters": {
-                          "name": {"key": "isPathfinding"}
-                        }
-                      },
-                      {
-                        "title": "timer",
-                        "type": "action",
-                        "name": "timer",
-                        "parameters": {
-                          "time": {"value": "<pathingTimeLimit>"}
-                        }
+                    "title": "inverter",
+                    "type": "decorator",
+                    "name": "inverter",
+                    "parameters": {},
+                    "child": {
+                      "title": "hasFlag",
+                      "type": "action",
+                      "name": "hasFlag",
+                      "parameters": {
+                        "name": {"key": "isPathfinding"}
                       }
-                    ]
+                    }
                   },
                   {
-                    "title": "runner",
-                    "type": "action",
-                    "name": "runner",
-                    "parameters": {}
+                    "title": "failer",
+                    "type": "decorator",
+                    "name": "failer",
+                    "parameters": {},
+                    "child": {
+                      "title": "timer",
+                      "type": "action",
+                      "name": "timer",
+                      "parameters": {
+                        "time": {"value": "<pathingTimeLimit>"}
+                      }
+                    }
                   }
                 ]
               }
-            }
-          ]
-        }
-      ]
+            ]
+          }
+        ]
+      }
     }
-  }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_move.lua"
+    },
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_query.lua"
+    },
+    { "op" : "add",
+      "path" : "/parameters/pathingTimeLimit",
+      "value" : 10
+    }
+  ]
 ]

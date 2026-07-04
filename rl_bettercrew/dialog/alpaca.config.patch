@@ -1,0 +1,26 @@
+[
+  [
+    { "op" : "test",
+      "path" : "/cantReach/default/default/0",
+      "value" : "Get back with ye!"
+    },
+    { "op" : "replace",
+      "path" : "/cantReach/default/default/0",
+      "value" : "Get o'er here with ye!"
+    }
+  ],
+  [
+    { "op" : "add",
+      "path" : "/cantReachRanged",
+      "value" : {
+        "default" : {
+          "default" : [
+            "Come at me!",
+            "Ye craven! Just because I can't reach ye!",
+            "I cannae hit ye from here!"
+          ]
+        }
+      }
+    }
+  ]
+]

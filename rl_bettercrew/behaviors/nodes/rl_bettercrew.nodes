@@ -1,4 +1,16 @@
 {
+  "rl_bettercrew_closeDoors": {
+    "type": "action",
+    "name": "rl_bettercrew_closeDoors",
+    "title": "rl_bettercrew_closeDoors",
+    "properties": {
+      "direction": {"type": "number", "value": null},
+      "distance": {"type": "number", "value": 2}
+    },
+    "category": "movement",
+    "script": "/scripts/actions/rl_bettercrew_move.lua",
+    "output": {}
+  },
   "rl_bettercrew_crewAnchorObject": {
     "type": "action",
     "name": "rl_bettercrew_crewAnchorObject",
@@ -6,10 +18,63 @@
     "properties": {
       "defaultPosition": {"type": "position", "key": "self"}
     },
-    "category": "world",
-    "script": "/scripts/actions/rl_bettercrew.lua",
+    "category": "query",
+    "script": "/scripts/actions/rl_bettercrew_query.lua",
     "output": {
       "position": {"type": "position", "key": null}
+    }
+  },
+  "rl_bettercrew_entityPosition": {
+    "type": "action",
+    "name": "rl_bettercrew_entityPosition",
+    "title": "rl_bettercrew_entityPosition",
+    "properties": {
+      "entity": {"type": "entity", "key": "self"}
+    },
+    "category": "world",
+    "script": "/scripts/actions/rl_bettercrew_world.lua",
+    "output": {
+      "position": {"type": "position", "key": null},
+      "x": {"type": "number", "key": null},
+      "y": {"type": "number", "key": null}
+    }
+  },
+  "rl_bettercrew_findLoungable": {
+    "type": "action",
+    "name": "rl_bettercrew_findLoungable",
+    "title": "rl_bettercrew_findLoungable",
+    "properties": {
+      "orderBy": {"type": "string", "value": "nearest"},
+      "orientation": {"type": "string", "value": "sit"},
+      "position": {"type": "position", "key": "self"},
+      "range": {"type": "number", "value": 20},
+      "unoccupied": {"type": "bool", "value": true},
+      "withoutEntity": {"type": "entity", "value": null}
+    },
+    "category": "query",
+    "script": "/scripts/actions/rl_bettercrew_query.lua",
+    "output": {
+      "entity": {"type": "entity", "key": null},
+      "list": {"type": "list", "key": null}
+    }
+  },
+  "rl_bettercrew_friendlyTargeting": {
+    "type": "action",
+    "name": "rl_bettercrew_friendlyTargeting",
+    "title": "rl_bettercrew_friendlyTargeting",
+    "properties": {
+      "attackOnSight": {"type": "list", "value": []},
+      "broadcastInterval": {"type": "number", "value": 2},
+      "hostileDamageTeam": {"type": "json", "value": {"type": "enemy", "team": 1}},
+      "losTime": {"type": "number", "value": 8},
+      "queryRange": {"type": "number", "value": 50},
+      "trackingRange": {"type": "number", "value": 50}
+    },
+    "category": "npc",
+    "script": "/scripts/actions/rl_bettercrew_npc.lua",
+    "output": {
+      "target": {"type": "entity", "key": null},
+      "attackOnSight": {"type": "list", "key": null}
     }
   },
   "rl_bettercrew_gravityPositive": {
@@ -20,8 +85,89 @@
       "position": {"type": "position", "key": null}
     },
     "category": "world",
-    "script": "/scripts/actions/rl_bettercrew.lua",
+    "script": "/scripts/actions/rl_bettercrew_world.lua",
     "output": {}
+  },
+  "rl_bettercrew_hasAltItem": {
+    "type": "action",
+    "name": "rl_bettercrew_hasAltItem",
+    "title": "rl_bettercrew_hasAltItem",
+    "properties": {},
+    "category": "npc",
+    "script": "/scripts/actions/rl_bettercrew_npc.lua",
+    "output": {}
+  },
+  "rl_bettercrew_hasPrimaryItem": {
+    "type": "action",
+    "name": "rl_bettercrew_hasPrimaryItem",
+    "title": "rl_bettercrew_hasPrimaryItem",
+    "properties": {},
+    "category": "npc",
+    "script": "/scripts/actions/rl_bettercrew_npc.lua",
+    "output": {}
+  },
+  "rl_bettercrew_incrementCounter": {
+    "type": "action",
+    "name": "rl_bettercrew_incrementCounter",
+    "title": "rl_bettercrew_incrementCounter",
+    "properties": {
+      "name": {"type": "string", "key": null}
+    },
+    "category": "math",
+    "script": "/scripts/actions/rl_bettercrew_math.lua",
+    "output": {
+      "number": {"type": "number", "key": null}
+    }
+  },
+  "rl_bettercrew_max": {
+    "type": "action",
+    "name": "rl_bettercrew_max",
+    "title": "rl_bettercrew_max",
+    "properties": {
+      "first": {"type": "number", "key": null},
+      "second": {"type": "number", "key": null}
+    },
+    "category": "math",
+    "script": "/scripts/actions/rl_bettercrew_math.lua",
+    "output": {
+      "result": {"type": "number", "key": null}
+    }
+  },
+  "rl_bettercrew_min": {
+    "type": "action",
+    "name": "rl_bettercrew_min",
+    "title": "rl_bettercrew_min",
+    "properties": {
+      "first": {"type": "number", "key": null},
+      "second": {"type": "number", "key": null}
+    },
+    "category": "math",
+    "script": "/scripts/actions/rl_bettercrew_math.lua",
+    "output": {
+      "result": {"type": "number", "key": null}
+    }
+  },
+  "rl_bettercrew_moveToPosition": {
+    "type": "action",
+    "name": "rl_bettercrew_moveToPosition",
+    "title": "rl_bettercrew_moveToPosition",
+    "properties": {
+      "avoidLiquid": {"type": "bool", "value": true},
+      "groundPosition": {"type": "bool", "value": true},
+      "maxGround": {"type": "number", "value": 5},
+      "minGround": {"type": "number", "value": -5},
+      "closeDoors": {"type": "bool", "value": true},
+      "pathOptions": {"type": "json", "value": {}},
+      "position": {"type": "position", "value": "target"},
+      "run": {"type": "bool", "value": false},
+      "runSpeed": {"type": "number", "value": null}
+    },
+    "category": "movement",
+    "script": "/scripts/actions/rl_bettercrew_move.lua",
+    "output": {
+      "direction": {"type": "number", "key": null},
+      "pathfinding": {"type": "bool", "key": null}
+    }
   },
   "rl_bettercrew_moveUnidirectionally": {
     "type": "action",
@@ -32,7 +178,94 @@
       "run": {"type": "bool", "value": false}
     },
     "category": "movement",
-    "script": "/scripts/actions/rl_bettercrew.lua",
+    "script": "/scripts/actions/rl_bettercrew_move.lua",
+    "output": {}
+  },
+  "rl_bettercrew_openDoors": {
+    "type": "action",
+    "name": "rl_bettercrew_openDoors",
+    "title": "rl_bettercrew_openDoors",
+    "properties": {
+      "direction": {"type": "number", "value": null},
+      "distance": {"type": "number", "value": 1.5},
+      "openLocked": {"type": "bool", "value": false}
+    },
+    "category": "movement",
+    "script": "/scripts/actions/rl_bettercrew_move.lua",
+    "output": {}
+  },
+  "rl_bettercrew_playBehaviorReaction": {
+    "type": "action",
+    "name": "rl_bettercrew_playBehaviorReaction",
+    "title": "rl_bettercrew_playBehaviorReaction",
+    "properties": {
+      "reaction": {"type": "string", "value": null}
+    },
+    "category": "tenant",
+    "script": "/scripts/actions/rl_bettercrew_react.lua",
+    "output": {}
+  },
+  "rl_bettercrew_projectileAimVector": {
+    "type": "action",
+    "name": "rl_bettercrew_projectileAimVector",
+    "title": "rl_bettercrew_projectileAimVector",
+    "properties": {
+      "collisionCheck": {"type": "bool", "value": true},
+      "fromPosition": {"type": "position", "key": "self"},
+      "gravityMultiplier": {"type": "number", "value": null},
+      "speed": {"type": "number", "value": 0},
+      "toPosition": {"type": "position", "value": null},
+      "useHighArc": {"type": "bool", "value": true}
+    },
+    "category": "projectiles",
+    "script": "/scripts/actions/rl_bettercrew_proj.lua",
+    "output": {
+      "aimVector": {"type": "vec2", "key": null},
+      "aimAngle": {"type": "number", "key": null}
+    }
+  },
+  "rl_bettercrew_replaceExpendableItem": {
+    "type": "action",
+    "name": "rl_bettercrew_replaceExpendableItem",
+    "title": "rl_bettercrew_replaceExpendableItem",
+    "properties": {},
+    "category": "npc",
+    "script": "/scripts/actions/rl_bettercrew_npc.lua",
+    "output": {}
+  },
+  "rl_bettercrew_resetCounter": {
+    "type": "action",
+    "name": "rl_bettercrew_resetCounter",
+    "title": "rl_bettercrew_resetCounter",
+    "properties": {
+      "name": {"type": "string", "key": null}
+    },
+    "category": "math",
+    "script": "/scripts/actions/rl_bettercrew_math.lua",
+    "output": {}
+  },
+  "rl_bettercrew_sayToEntityIfExists": {
+    "type": "action",
+    "name": "rl_bettercrew_sayToEntityIfExists",
+    "title": "rl_bettercrew_sayToEntityIfExists",
+    "properties": {
+      "dialog": {"type": "table", "value": null},
+      "dialogMode": {"type": "string", "value": null},
+      "dialogType": {"type": "string", "value": "\"converse.dialog\""},
+      "entity": {"type": "entity", "value": null},
+      "tags": {"type": "json", "value": {}}
+    },
+    "category": "dialog",
+    "script": "/scripts/actions/rl_bettercrew_dialog.lua",
+    "output": {}
+  },
+  "rl_bettercrew_swapItemSlots": {
+    "type": "action",
+    "name": "rl_bettercrew_swapItemSlots",
+    "title": "rl_bettercrew_swapItemSlots",
+    "properties": {},
+    "category": "npc",
+    "script": "/scripts/actions/rl_bettercrew_npc.lua",
     "output": {}
   }
 }

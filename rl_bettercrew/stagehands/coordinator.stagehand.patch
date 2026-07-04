@@ -1,0 +1,197 @@
+[
+  // In the base game, `forceMoveRange` for the npcbow was less than
+  // `maxRange`. As a result, the coordinator could give an NPC a
+  // "movePosition" (which is based on `maxRange`) to which the NPC
+  // could route but from which they could not fire (which is based on
+  // `forceMoveRange`, which is confusingly referred to as "maxRange"
+  // when requested via the groupResource action). `forceMoveRange` must
+  // be strictly greater than `maxRange` for the coordinator to provide
+  // a usable "movePosition".
+  { "op" : "replace",
+    "path" : "/npcCombat/rangedWeaponRanges/npcbow/maxRange",
+    "value" : 35
+  },
+
+  // Fix a crash bug in coordinator.lua.
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/stagehands/rl_bettercrew_coordinator.lua"
+  },
+
+  // Add entries for all of the base game NPC ranged weapons.
+  { "op" : "add",
+    "path" : "/npcCombat/rangedWeaponRanges/flamethrowerblade",
+    "value" : {
+      "minRange" : 10,
+      "maxRange" : 25,
+      "forceMoveRange" : 40
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/rangedWeaponRanges/hunterrifle",
+    "value" : {
+      "minRange" : 15,
+      "maxRange" : 35,
+      "forceMoveRange" : 50
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/rangedWeaponRanges/npcdeadbeatassaultrifle",
+    "value" : {
+      "minRange" : 10,
+      "maxRange" : 25,
+      "forceMoveRange" : 40
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/rangedWeaponRanges/npcfirebow",
+    "value" : {
+      "minRange" : 10,
+      "maxRange" : 35,
+      "forceMoveRange" : 40
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/rangedWeaponRanges/npcfloranassaultrifle",
+    "value" : {
+      "minRange" : 10,
+      "maxRange" : 25,
+      "forceMoveRange" : 40
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/rangedWeaponRanges/npcneopistol",
+    "value" : {
+      "minRange" : 8,
+      "maxRange" : 20,
+      "forceMoveRange" : 25
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/rangedWeaponRanges/npcneoshotgun",
+    "value" : {
+      "minRange" : 8,
+      "maxRange" : 15,
+      "forceMoveRange" : 30
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/rangedWeaponRanges/npcneotommygun",
+    "value" : {
+      "minRange" : 10,
+      "maxRange" : 25,
+      "forceMoveRange" : 40
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/rangedWeaponRanges/npcneouzi",
+    "value" : {
+      "minRange" : 8,
+      "maxRange" : 15,
+      "forceMoveRange" : 30
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/rangedWeaponRanges/npcpetcapturepod",
+    "value" : {
+      "minRange" : 7,
+      "maxRange" : 15,
+      "forceMoveRange" : 30
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/rangedWeaponRanges/npcrocketlauncher",
+    "value" : {
+      "minRange" : 15,
+      "maxRange" : 35,
+      "forceMoveRange" : 50
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/rangedWeaponRanges/npctungstenbow",
+    "value" : {
+      "minRange" : 10,
+      "maxRange" : 35,
+      "forceMoveRange" : 40
+    }
+  },
+
+  // Add entries for all of the base game NPC melee weapons.
+  { "op" : "add",
+    "path" : "/npcCombat/meleeWeaponRanges/npcflamingdemonsword",
+    "value" : {
+      "minRange" : 2.5,
+      "maxRange" : 4.0
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/meleeWeaponRanges/npcavianbroadsword",
+    "value" : {
+      "minRange" : 2.5,
+      "maxRange" : 4.0
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/meleeWeaponRanges/npcbruisersword",
+    "value" : {
+      "minRange" : 2.5,
+      "maxRange" : 4.0
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/meleeWeaponRanges/npccultistbroadsword",
+    "value" : {
+      "minRange" : 2.5,
+      "maxRange" : 4.0
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/meleeWeaponRanges/npccultistshortsword",
+    "value" : {
+      "minRange" : 1.5,
+      "maxRange" : 3.0
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/meleeWeaponRanges/npcdeadbeataxe",
+    "value" : {
+      "minRange" : 1.5,
+      "maxRange" : 3.0
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/meleeWeaponRanges/npceyesword",
+    "value" : {
+      "minRange" : 2.5,
+      "maxRange" : 4.0
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/meleeWeaponRanges/npcfeneroxspear",
+    "value" : {
+      "minRange" : 3.0,
+      "maxRange" : 5.0
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/meleeWeaponRanges/npcgangbroadsword",
+    "value" : {
+      "minRange" : 2.5,
+      "maxRange" : 4.0
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/meleeWeaponRanges/npcwrench",
+    "value" : {
+      "minRange" : 2.5,
+      "maxRange" : 4.0
+    }
+  },
+  { "op" : "add",
+    "path" : "/npcCombat/meleeWeaponRanges/nurusspearmelee",
+    "value" : {
+      "minRange" : 3.0,
+      "maxRange" : 5.0
+    }
+  }
+]

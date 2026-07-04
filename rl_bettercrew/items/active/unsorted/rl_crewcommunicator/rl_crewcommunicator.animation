@@ -1,0 +1,42 @@
+{
+  "globalTagDefaults" : {
+    "paletteSwaps" : ""
+  },
+
+  "animatedParts" : {
+     "parts" : {
+      "terminal" : {
+        "properties" : {
+          "zLevel" : 0,
+          "centered" : true,
+          "image" : "<partImage>",
+          "offset" : [0.25, 0.125],
+          "transformationGroups" : ["terminal"]
+        }
+      },
+      "terminalfullbright" : {
+        "properties" : {
+          "zLevel" : 1,
+          "centered" : true,
+          "fullbright" : true,
+          "image" : "<partImage>",
+          "offset" : [0.25, 0.125],
+          "transformationGroups" : ["terminal"]
+        }
+      }
+    }
+  },
+
+  "transformationGroups" : {
+    "terminal" : {}
+  },
+
+  "lights" : {
+    "glow" : {
+      "active" : true,
+      "position" : [0, 0.125],
+      "color" : [92, 72, 28],
+      "transformationGroups" : ["terminal"]
+    }
+  }
+}

@@ -1,4 +1,6 @@
 [
+  // NPCs cannot properly move in zero gravity, so abort the blink-
+  // teleport if the target position is in zero gravity.
   { "op" : "test",
     "path" : "/root/children/0/type",
     "value" : "action"
@@ -6,6 +8,18 @@
   { "op" : "test",
     "path" : "/root/children/0/name",
     "value" : "groundPosition"
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/parameters/avoidLiquid/value",
+    "value" : true
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/parameters/maxHeight/value",
+    "value" : 5
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/parameters/minHeight/value",
+    "value" : -5
   },
   { "op" : "test",
     "path" : "/root/children/0/parameters/position/key",
@@ -47,5 +61,9 @@
         }
       ]
     }
+  },
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/actions/rl_bettercrew_world.lua"
   }
 ]

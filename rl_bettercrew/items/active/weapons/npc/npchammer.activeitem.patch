@@ -1,0 +1,10 @@
+[
+  { "op" : "replace",
+    "path" : "/primaryAbility/fireTime",
+    "value" : [0.6, 0.6]
+  },
+  { "op" : "replace",
+    "path" : "/primaryAbility/baseDps",
+    "value" : [12, 13]
+  }
+]

@@ -1,20 +1,62 @@
 [
-  { "op" : "replace",
-    "path" : "/companionsConfig/crewBenefits/shipRegeneration",
-    "value" : [
-      "shipregeneration1",
-      "shipregeneration1",
-      "shipregeneration1",
-      "shipregeneration1",
-      "shipregeneration5"
-    ]
-  },
-  { "op" : "replace",
-    "path" : "/genericScriptContexts/stealing",
-    "value" : "/scripts/player/rl_stealing.lua"
-  },
-  { "op" : "add",
-    "path" : "/companionsConfig/scripts/-",
-    "value" : "/scripts/companions/rl_bettercrew_player.lua"
-  }
+  [
+    { "op" : "test",
+      "path" : "/companionsConfig/crewBenefits/shipRegeneration/1",
+      "value" : "shipregeneration2"
+    },
+    { "op" : "replace",
+      "path" : "/companionsConfig/crewBenefits/shipRegeneration/1",
+      "value" : "shipregeneration1"
+    }
+  ],
+  [
+    { "op" : "test",
+      "path" : "/companionsConfig/crewBenefits/shipRegeneration/2",
+      "value" : "shipregeneration3"
+    },
+    { "op" : "replace",
+      "path" : "/companionsConfig/crewBenefits/shipRegeneration/2",
+      "value" : "shipregeneration1"
+    }
+  ],
+  [
+    { "op" : "test",
+      "path" : "/companionsConfig/crewBenefits/shipRegeneration/3",
+      "value" : "shipregeneration4"
+    },
+    { "op" : "replace",
+      "path" : "/companionsConfig/crewBenefits/shipRegeneration/3",
+      "value" : "shipregeneration1"
+    }
+  ],
+  [
+    { "op" : "replace",
+      "path" : "/genericScriptContexts/stealing",
+      "value" : "/scripts/player/rl_stealing.lua"
+    },
+    { "op" : "add",
+      "path" : "/statusControllerSettings/primaryScriptSources/-",
+      "value" : "/stats/rl_bettercrew_player_primary.lua"
+    },
+    { "op" : "add",
+      "path" : "/companionsConfig/scripts/-",
+      "value" : "/scripts/companions/rl_bettercrew_player.lua"
+    },
+    { "op" : "add",
+      "path" : "/companionsConfig/recruitExtraPersistentEffects",
+      "value" : {
+        "allowedUniqueEffects" : {
+          "electricblockaugment" : true,
+          "fireblockaugment" : true,
+          "iceblockaugment" : true,
+          "poisonblockaugment" : true
+        },
+        "translations" : {
+          "peacekeeperaugment1" : [{"stat" : "protection", "statType" : "amount", "assetJson" : "/stats/effects/peacekeeperaugment/peacekeeperaugment1.statuseffect:effectConfig.protection"}],
+          "peacekeeperaugment2" : [{"stat" : "protection", "statType" : "amount", "assetJson" : "/stats/effects/peacekeeperaugment/peacekeeperaugment2.statuseffect:effectConfig.protection"}],
+          "peacekeeperaugment3" : [{"stat" : "protection", "statType" : "amount", "assetJson" : "/stats/effects/peacekeeperaugment/peacekeeperaugment3.statuseffect:effectConfig.protection"}]
+        }
+      }
+    }
+  ]
 ]

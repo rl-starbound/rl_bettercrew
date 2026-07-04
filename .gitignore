@@ -1,3 +1,6 @@
 *.pak
 README.html
-technical.html
+README_noquickbar.html
+README_uninstalled.html
+modding-guide.html
+user-guide.html

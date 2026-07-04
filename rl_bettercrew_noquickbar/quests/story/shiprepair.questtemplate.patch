@@ -1,0 +1,14 @@
+[
+  { "op" : "test",
+    "path" : "/rewards/0/0/0",
+    "value" : "rewardbag"
+  },
+  { "op" : "test",
+    "path" : "/rewards/0/0/1",
+    "value" : 1
+  },
+  { "op" : "add",
+    "path" : "/rewards/0/-",
+    "value" : ["rl_crewcommunicator", 1]
+  }
+]

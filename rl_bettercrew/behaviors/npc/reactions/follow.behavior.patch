@@ -1,0 +1,20 @@
+[
+  // Replace `moveToPosition` with the improved version this mod
+  // provides.
+  { "op" : "test",
+    "path" : "/root/children/0/children/1/children/1/type",
+    "value" : "action"
+  },
+  { "op" : "test",
+    "path" : "/root/children/0/children/1/children/1/name",
+    "value" : "moveToPosition"
+  },
+  { "op" : "replace",
+    "path" : "/root/children/0/children/1/children/1/name",
+    "value" : "rl_bettercrew_moveToPosition"
+  },
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/actions/rl_bettercrew_move.lua"
+  }
+]

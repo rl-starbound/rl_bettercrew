@@ -1,6 +1,25 @@
 [
-  { "op" : "add",
-    "path" : "/scripts/-",
-    "value" : "/scripts/actions/rl_bettercrew_react.lua"
-  }
+  // Replace the faulty base game `playBehaviorReaction` function with
+  // the improved version provided by this mod.
+  [
+    { "op" : "test",
+      "path" : "/root/children/2/child/children/1/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/2/child/children/1/children/1/name",
+      "value" : "playBehaviorReaction"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/2/child/children/1/children/1/name",
+      "value" : "rl_bettercrew_playBehaviorReaction"
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_react.lua"
+    }
+  ]
 ]

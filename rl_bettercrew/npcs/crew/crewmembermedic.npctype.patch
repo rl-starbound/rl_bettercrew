@@ -1,10 +1,48 @@
 [
-  { "op" : "test",
-    "path" : "/scriptConfig/crew/role/benefits/0/type",
-    "value" : "Regeneration"
-  },
-  { "op" : "replace",
-    "path" : "/scriptConfig/crew/role/benefits/0/value",
-    "value" : 4
-  }
+  [
+    { "op" : "test",
+      "path" : "/scriptConfig/crew/role/benefits/0/type",
+      "value" : "Regeneration"
+    },
+    { "op" : "replace",
+      "path" : "/scriptConfig/crew/role/benefits/0/value",
+      "value" : 4
+    }
+  ],
+  [
+    { "op" : "test",
+      "path" : "/statusControllerSettings",
+      "inverse": true
+    },
+    { "op" : "add",
+      "path" : "/statusControllerSettings",
+      "value": {}
+    }
+  ],
+  [
+    { "op" : "test",
+      "path" : "/statusControllerSettings/stats",
+      "inverse": true
+    },
+    { "op" : "add",
+      "path" : "/statusControllerSettings/stats",
+      "value": {}
+    }
+  ],
+  [
+    { "op" : "test",
+      "path" : "/statusControllerSettings/stats/powerMultiplier",
+      "inverse": true
+    },
+    { "op" : "add",
+      "path" : "/statusControllerSettings/stats/powerMultiplier",
+      "value": {}
+    }
+  ],
+  [
+    { "op" : "add",
+      "path" : "/statusControllerSettings/stats/powerMultiplier/baseValue",
+      "value" : 0.65
+    }
+  ]
 ]

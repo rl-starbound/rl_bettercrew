@@ -1,0 +1,21 @@
+{
+  "itemName" : "rl_crewcommunicator",
+  "price" : 0,
+  "maxStack" : 1,
+  "rarity" : "Common",
+  "description" : "A broken handheld terminal once used to communicate with crew members.",
+  "shortdescription" : "Broken Crew Communicator",
+  "twoHanded" : false,
+  "category" : "junk",
+  "itemTags" : [],
+
+  "inventoryIcon" : "rl_crewcommunicator.png",
+  "animation" : "rl_crewcommunicator.animation",
+  "animationParts" : {
+    "terminal" : "rl_crewcommunicator.png"
+  },
+  "animationCustom" : {},
+
+  "scripts" : ["rl_crewcommunicator.lua"],
+  "scriptDelta" : 1
+}

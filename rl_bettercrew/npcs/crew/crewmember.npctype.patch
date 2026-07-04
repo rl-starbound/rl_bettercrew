@@ -1,0 +1,61 @@
+[
+  // Penguins have unique `cantreach` dialog, but due to a typo in the
+  // config, it is ignored.
+  [
+    {
+      "op" : "test",
+      "path" : "/scriptConfig/dialog/crewmember/penguin",
+      "inverse" : false
+    },
+    {
+      "op" : "test",
+      "path" : "/scriptConfig/dialog/crewmember/cantreach/penguin",
+      "inverse" : true
+    },
+    {
+      "op" : "move",
+      "from" : "/scriptConfig/dialog/crewmember/penguin",
+      "path" : "/scriptConfig/dialog/crewmember/cantreach/penguin"
+    }
+  ],
+
+  // Novakids are missing unique 'cantreach' dialog.
+  [
+    {
+      "op" : "test",
+      "path" : "/scriptConfig/dialog/crewmember/cantreach/novakid",
+      "inverse" : true
+    },
+    {
+      "op" : "add",
+      "path" : "/scriptConfig/dialog/crewmember/cantreach/novakid",
+      "value" : {
+        "default" : [
+          "Whoa there partner, hold up!",
+          "Don't go too far, ya hear?",
+          "Let me catch up, partner!"
+        ]
+      }
+    }
+  ],
+
+  [
+    // For unknown reasons, Chucklefish nerfed crewmembers to a 0.25
+    // multiplier on base damage. This is substantially lower than any
+    // other combat-capable NPC, and renders them nearly useless in
+    // combat, even when the player is equipped with high tier armor.
+    // Increasing this to a more reasonable value dramatically improves
+    // their utility in combat.
+    { "op" : "replace",
+      "path" : "/statusControllerSettings/stats/powerMultiplier/baseValue",
+      "value" : 0.75
+    },
+
+    // Give NPCs something to say if their target is out of range of
+    // their ranged weapon and they can't pathfind to get closer.
+    { "op" : "add",
+      "path" : "/scriptConfig/dialog/cantReachRanged",
+      "value" : "/dialog/combat.config:cantReachRanged"
+    }
+  ]
+]

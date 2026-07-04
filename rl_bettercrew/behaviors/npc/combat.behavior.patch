@@ -1,6 +1,145 @@
 [
-  { "op" : "add",
-    "path" : "/scripts/-",
-    "value" : "/scripts/actions/rl_bettercrew_npc.lua"
-  }
+  // Replace the faulty base game `swapItemSlots` function with the
+  // improved version provided by this mod.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/child/children/3/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/child/children/3/name",
+      "value" : "swapItemSlots"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/child/children/3/name",
+      "value" : "rl_bettercrew_swapItemSlots"
+    }
+  ],
+
+  // This block implements a method for NPCs that have just used an
+  // expendable item (e.g., a pet ball) to fill that empty slot with a
+  // new weapon.
+  [
+    { "op" : "test",
+      "path" : "/root/children/0/child/children/2/type",
+      "value" : "composite"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/child/children/2/name",
+      "value" : "selector"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/child/children/2/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/child/children/2/children/0/name",
+      "value" : "hasMeleeSheathed"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/child/children/2/children/1/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/child/children/2/children/1/name",
+      "value" : "hasRangedSheathed"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/child/children/3/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/children/0/child/children/3/name",
+      "value" : "rl_bettercrew_swapItemSlots"
+    },
+    { "op" : "remove",
+      "path" : "/root/children/0/child/children/3"
+    },
+    { "op" : "replace",
+      "path" : "/root/children/0/child/children/2",
+      "value" : {
+        "title": "selector",
+        "type": "composite",
+        "name": "selector",
+        "parameters": {},
+        "children": [
+          {
+            "title": "sequence",
+            "type": "composite",
+            "name": "sequence",
+            "parameters": {},
+            "children": [
+              {
+                "title": "inverter",
+                "type": "decorator",
+                "name": "inverter",
+                "parameters": {},
+                "child": {
+                  "title": "",
+                  "type": "action",
+                  "name": "rl_bettercrew_hasPrimaryItem",
+                  "parameters": {}
+                }
+              },
+              {
+                "title": "hasFlag",
+                "type": "action",
+                "name": "hasFlag",
+                "parameters": {
+                  "name": {"key": "weaponIsExpendable"}
+                }
+              },
+              {
+                "title": "",
+                "type": "action",
+                "name": "rl_bettercrew_replaceExpendableItem",
+                "parameters": {}
+              }
+            ]
+          },
+          {
+            "title": "sequence",
+            "type": "composite",
+            "name": "sequence",
+            "parameters": {},
+            "children": [
+              {
+                "title": "selector",
+                "type": "composite",
+                "name": "selector",
+                "parameters": {},
+                "children": [
+                  {
+                    "title": "hasMeleeSheathed",
+                    "type": "action",
+                    "name": "hasMeleeSheathed",
+                    "parameters": {}
+                  },
+                  {
+                    "title": "hasRangedSheathed",
+                    "type": "action",
+                    "name": "hasRangedSheathed",
+                    "parameters": {}
+                  }
+                ]
+              },
+              {
+                "title": "",
+                "type": "action",
+                "name": "rl_bettercrew_swapItemSlots",
+                "parameters": {}
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_npc.lua"
+    }
+  ]
 ]

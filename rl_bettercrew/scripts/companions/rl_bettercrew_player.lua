@@ -3,31 +3,31 @@ require "/scripts/companions/rl_bettercrew_recruitspawner.lua"
 local previous_init = init
 local previous_update = update
 
-local recruitPersistentEffectsStrings = {
-    electricblockaugment = true,
-    fireblockaugment = true,
-    iceblockaugment = true,
-    poisonblockaugment = true
-  }
-
--- This table should be equal to /scripts/companions/player.lua table
--- petPersistentEffects.
-local recruitPersistentEffectsTables = {
+-- This table should be equal to the `/scripts/companions/player.lua`
+-- table `petPersistentEffects`.
+local recruitPersistentEffects = {
     powerMultiplier = true,
     protection = true,
     maxHealth = true
   }
 
 function getRecruitPersistentEffects()
-  local effects = util.filter(status.getPersistentEffects("armor"),
-    function (effect)
-      local effectType = type(effect)
-      if effectType == "table" then
-        return recruitPersistentEffectsTables[effect.stat]
-      elseif effectType == "string" then
-        return recruitPersistentEffectsStrings[effect]
+  local effects = {}
+  for _,effect in ipairs(status.getPersistentEffects("armor")) do
+    local effectType = type(effect)
+    if effectType == "table" then
+      if recruitPersistentEffects[effect.stat] then
+        table.insert(effects, effect)
       end
-    end)
+    elseif effectType == "string" then
+      local translation = self.recruitExtraPersistentEffects.translations[effect]
+      if translation then
+        util.appendLists(effects, translation)
+      elseif self.recruitExtraPersistentEffects.allowedUniqueEffects[effect] then
+        table.insert(effects, effect)
+      end
+    end
+  end
   if onOwnShip() then
     util.appendLists(effects, recruitSpawner:getShipPersistentEffects())
   end
@@ -36,6 +36,15 @@ end
 
 function init()
   previous_init()
+
+  self.recruitExtraPersistentEffects = config.getParameter("recruitExtraPersistentEffects")
+  for k,v in pairs(self.recruitExtraPersistentEffects.translations) do
+    local output = {}
+    for _,t in ipairs(v) do
+      table.insert(output, {stat = t.stat, [t.statType] = root.assetJson(t.assetJson)})
+    end
+    self.recruitExtraPersistentEffects.translations[k] = output
+  end
 
   self.rallyRecruitsRadioMessageTimer = 0
   self.rallyRecruitsRadioMessageTimeout = 10
@@ -52,6 +61,7 @@ end
 
 function rallyRecruits()
   if onOwnShip() then return end
+  world.sendEntityMessage(player.id(), "rl_bettercrew_playCrewCommunicationSound")
   if not player.hasCompletedQuest("shiprepair") then
     if self.rallyRecruitsRadioMessageTimer <= 0 then
       player.radioMessage("rallyRecruitsPremature")

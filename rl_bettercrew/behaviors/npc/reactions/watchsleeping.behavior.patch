@@ -1,146 +1,171 @@
 [
-  { "op" : "add",
-    "path" : "/scripts/-",
-    "value" : "/scripts/actions/rl_bettercrew_query.lua"
-  },
-  { "op" : "test",
-    "path" : "/root/child/children/3/type",
-    "value" : "action"
-  },
-  { "op" : "test",
-    "path" : "/root/child/children/3/name",
-    "value" : "entityPosition"
-  },
-  { "op" : "test",
-    "path" : "/root/child/children/4/children/2/children/1/type",
-    "value" : "composite"
-  },
-  { "op" : "test",
-    "path" : "/root/child/children/4/children/2/children/1/name",
-    "value" : "parallel"
-  },
-  { "op" : "test",
-    "path" : "/root/child/children/4/children/2/children/1/children/0/type",
-    "value" : "action"
-  },
-  { "op" : "test",
-    "path" : "/root/child/children/4/children/2/children/1/children/0/name",
-    "value" : "moveToPosition"
-  },
-  { "op" : "add",
-    "path" : "/parameters/pathingTimeLimit",
-    "value" : 10
-  },
-  { "op" : "replace",
-    "path" : "/root/child/children/3",
-    "value" : {
-      "title": null,
-      "type": "composite",
-      "name": "sequence",
-      "parameters": {},
-      "children": [
-        {
-          "title": "entityPosition",
-          "type": "action",
-          "name": "entityPosition",
-          "parameters": {
-            "entity": {"key": "bed"}
-          },
-          "output": {
-            "position": "bedPosition"
-          }
-        },
-        {
-          "title": null,
-          "type": "action",
-          "name": "offsetPosition",
-          "parameters": {
-            "position": {"key": "bedPosition"},
-            "offset": {"value": [0, 0.5]}
-          },
-          "output": {
-            "position": "bedPosition"
-          }
-        }
-      ]
+  // Replace the faulty base game `findLoungable` function with the
+  // improved version provided by this mod.
+  [
+    { "op" : "test",
+      "path" : "/root/child/children/0/child/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/0/child/name",
+      "value" : "findLoungable"
+    },
+    { "op" : "replace",
+      "path" : "/root/child/children/0/child/name",
+      "value" : "rl_bettercrew_findLoungable"
     }
-  },
-  { "op" : "replace",
-    "path" : "/root/child/children/4/children/2/children/1",
-    "value" : {
-      "title": "parallel",
-      "type": "composite",
-      "name": "parallel",
-      "parameters": {
-        "fail": {"value": 1},
-        "success": {"value": 1}
-      },
-      "children": [
-        {
-          "title": "moveToPosition",
-          "type": "action",
-          "name": "moveToPosition",
-          "parameters": {
-            "avoidLiquid": {"value": true},
-            "groundPosition": {"value": true},
-            "maxGround": {"value": 5},
-            "minGround": {"value": -5},
-            "pathOptions": {"value": {"returnBest": true}},
-            "position": {"key": "bedPosition"},
-            "run": {"value": false}
+  ],
+
+  // If the position to which to move is on the floor of a one tile-
+  // width solid floor, then the core engine may sometimes erroneously
+  // move an NPC through the solid floor to get to the position. Adjust
+  // the position up by 1/2 tile to prevent this.
+  [
+    { "op" : "test",
+      "path" : "/root/child/children/3/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/3/name",
+      "value" : "entityPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/3/parameters/entity/key",
+      "value" : "bed"
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/3/output/position",
+      "value" : "bedPosition"
+    },
+    { "op" : "replace",
+      "path" : "/root/child/children/3",
+      "value" : {
+        "title": null,
+        "type": "composite",
+        "name": "sequence",
+        "parameters": {},
+        "children": [
+          {
+            "title": "entityPosition",
+            "type": "action",
+            "name": "entityPosition",
+            "parameters": {
+              "entity": {"key": "bed"}
+            },
+            "output": {
+              "position": "bedPosition"
+            }
           },
-          "output": {
-            "pathfinding": "isPathfinding"
+          {
+            "title": "",
+            "type": "action",
+            "name": "offsetPosition",
+            "parameters": {
+              "position": {"key": "bedPosition"},
+              "offset": {"value": [0, 0.5]}
+            },
+            "output": {
+              "position": "bedPosition"
+            }
           }
-        },
-        {
-          "title": "failer",
-          "type": "decorator",
-          "name": "failer",
-          "parameters": {},
-          "child": {
-            "title": "dynamic",
-            "type": "composite",
-            "name": "dynamic",
+        ]
+      }
+    }
+  ],
+
+  // Wrap the `moveToPosition` function in a pathfinding time limit to
+  // prevent NPCs from freezing if the core engine cannot find a path to
+  // the position.
+  [
+    { "op" : "test",
+      "path" : "/root/child/children/4/children/2/children/1/type",
+      "value" : "composite"
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/4/children/2/children/1/name",
+      "value" : "parallel"
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/4/children/2/children/1/parameters/fail/value",
+      "value" : -1
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/4/children/2/children/1/parameters/success/value",
+      "value" : -1
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/4/children/2/children/1/children/0/type",
+      "value" : "action"
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/4/children/2/children/1/children/0/name",
+      "value" : "moveToPosition"
+    },
+    { "op" : "test",
+      "path" : "/root/child/children/4/children/2/children/1/children/0/output/pathfinding",
+      "value" : "isPathfinding"
+    },
+    { "op" : "replace",
+      "path" : "/root/child/children/4/children/2/children/1/parameters/fail/value",
+      "value" : 1
+    },
+    { "op" : "replace",
+      "path" : "/root/child/children/4/children/2/children/1/children/0/name",
+      "value" : "rl_bettercrew_moveToPosition"
+    },
+    { "op" : "add",
+      "path" : "/root/child/children/4/children/2/children/1/children/-",
+      "value" : {
+        "title": "dynamic",
+        "type": "composite",
+        "name": "dynamic",
+        "parameters": {},
+        "children": [
+          {
+            "title": "inverter",
+            "type": "decorator",
+            "name": "inverter",
             "parameters": {},
-            "children": [
-              {
-                "title": "parallel",
-                "type": "composite",
-                "name": "parallel",
-                "parameters": {
-                  "fail": {"value": 1},
-                  "success": {"value": -1}
-                },
-                "children": [
-                  {
-                    "title": "hasFlag",
-                    "type": "action",
-                    "name": "hasFlag",
-                    "parameters": {
-                      "name": {"key": "isPathfinding"}
-                    }
-                  },
-                  {
-                    "title": "timer",
-                    "type": "action",
-                    "name": "timer",
-                    "parameters": {
-                      "time": {"value": "<pathingTimeLimit>"}
-                    }
-                  }
-                ]
-              },
-              {
-                "title": "runner",
-                "type": "action",
-                "name": "runner",
-                "parameters": {}
+            "child": {
+              "title": "hasFlag",
+              "type": "action",
+              "name": "hasFlag",
+              "parameters": {
+                "name": {"key": "isPathfinding"}
               }
-            ]
+            }
+          },
+          {
+            "title": "failer",
+            "type": "decorator",
+            "name": "failer",
+            "parameters": {},
+            "child": {
+              "title": "timer",
+              "type": "action",
+              "name": "timer",
+              "parameters": {
+                "time": {"value": "<pathingTimeLimit>"}
+              }
+            }
           }
-        }
-      ]
+        ]
+      }
     }
-  }
+  ],
+
+  [
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_move.lua"
+    },
+    { "op" : "add",
+      "path" : "/scripts/-",
+      "value" : "/scripts/actions/rl_bettercrew_query.lua"
+    },
+    { "op" : "add",
+      "path" : "/parameters/pathingTimeLimit",
+      "value" : 10
+    }
+  ]
 ]

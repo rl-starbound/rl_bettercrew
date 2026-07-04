@@ -1,0 +1,22 @@
+[
+  { "op" : "add",
+    "path" : "/cantReachRanged",
+    "value" : {
+      "default" : {
+        "default" : [
+          "Target out of range!"
+        ]
+      },
+      "glitch" : {
+        "default" : [
+          "Irritated. The perp is beyond my range!"
+        ]
+      },
+      "floran" : {
+        "default" : [
+          "Floran can't hit target!"
+        ]
+      }
+    }
+  }
+]
