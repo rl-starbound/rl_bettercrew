@@ -1,6 +1,6 @@
 # Starbound mod: Better Crew Uninstalled
 
-[Better Crew & NPC Behavior](README.md) adds scripts to your ship world, and naively removing it will cause your ship world to crash and reset. If you no longer want to use that mod, you must remove it and replace it with *Better Crew Uninstalled*, which provides a minimal set of empty script files that allow the safe removal of *Better Crew & NPC Behavior*.
+The [Better Crew & NPC Behavior](README.md) mod adds scripts to your ship world, and naively removing it will cause your ship world to crash and reset. If you no longer want to use that mod, you must remove it and replace it with *Better Crew Uninstalled*, which provides a minimal set of empty script files that allow the safe removal of *Better Crew & NPC Behavior*.
 
 Upon replacing *Better Crew & NPC Behavior* with this mod, you should notice your NPCs behaving as they did in the base game.
 
