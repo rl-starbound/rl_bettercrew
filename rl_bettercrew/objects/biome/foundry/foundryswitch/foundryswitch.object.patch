@@ -1,0 +1,6 @@
+[
+  { "op" : "add",
+    "path" : "/npcToy/useFootPosition",
+    "value" : false
+  }
+]

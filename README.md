@@ -6,23 +6,25 @@ You recruit twelve NPCs to become your ship's crew, and what happens? They swarm
 
 ## Compatibility
 
-**You are strongly advised to backup your storage folder before installing and testing this mod.** A quick test involves visiting your ship and the Outpost and observing whether every NPC dies instantly. If that happens, you have a mod conflict to resolve. If it doesn't, carefully test visiting a few villages on planets before deciding whether this mod is safe to keep.
+**You are strongly advised to backup your storage folder before installing and testing this mod.** A quick test involves visiting your ship and the Outpost and observing whether NPCs die instantly. If that happens, you have a mod conflict. If everything appears normal, test visiting a village on a planet. If everything appears normal, your mod list is probably safe. (Note that backups and testing do not end with the successful installation of *Better Crew*. Adding more mods later may trigger a mod conflict, so you should always make up-to-date backups of your storage folder and test the game whenever you add mods.)
 
-This mod should be generally compatible. However, it patches behavior files and replaces faulty Lua functions, and there is no 100% safe way to do that. If it is combined with other mods that alter the same behavior files or Lua functions, conflicts may happen. If conflicts happen, one possible reaction is that all NPCs will die instantly, and if the affected NPCs are not crew or tenants, they will be gone forever. Please see the documentation for detailed [compatibility notes](user-guide.md#compatibility-notes) on the behavior files and Lua scripts altered by this mod.
+This mod should be generally compatible. However, it patches behavior files and replaces faulty Lua functions, and there is no 100% safe way to do that. If it is combined with other mods that alter the same behavior files or Lua functions, conflicts may happen. If conflicts happen, one possible reaction is that NPCs will die instantly, and if the affected NPCs are not crew or tenants, they will be gone forever. Please see the documentation for detailed [compatibility notes](user-guide.md#compatibility-notes) on the behavior files and Lua scripts altered by this mod.
 
 Compatible:
-* *BYOS*
+* *BYOS*\*
 * *Crew Customization+*
 * *NpcSpawner+*
 * *RPG Growth*
 
-Compatible (some *Better Crew* functionality is overridden):
+Compatible (some *Better Crew & NPC Behavior* functionality is overridden):
 * *Corbent's Interactive Crew*
 * *Earth's Finest*
-* *Frackin Universe*
+* *Frackin' Universe*
 
-Incompatible (must not be installed alongside Better Crew):
+Incompatible (must not be installed alongside *Better Crew & NPC Behavior*):
+* [Better Crew (Diet Version)](https://steamcommunity.com/sharedfiles/filedetails/?id=2892655130)
 * [Better Crew (Frackin Patch)](https://steamcommunity.com/sharedfiles/filedetails/?id=3022434849)
+* [Better Crew (Vix's Fork)](https://steamcommunity.com/sharedfiles/filedetails/?id=3031599475)
 * *NPCs Aren't Stupid*
 * *Smart Crew*
 * *Supper's Combat Overhaul*
@@ -31,7 +33,7 @@ Incompatible (must not be installed alongside Better Crew):
 
 ### Crew Anchor Objects
 
-While onboard their ship, crew will be attracted to certain objects. These objects will pull the crew away from their spawn location, the teleporter. If you have done a good job designing your ship, this should result in your crew spreading throughout the ship and moving around in a way that looks natural. In general, crew are attracted to objects that are related to their occupations, and this mod patches almost 130 base game [objects](user-guide.md#crew-anchor-objects) with crew anchor tags.
+While onboard their ship, crew will be attracted to certain objects. These objects will pull the crew away from their spawn location, the teleporter. If you have done a good job designing your ship, this should result in your crew spreading throughout the ship and moving around in a way that looks natural. In general, crew are attracted to objects that are related to their occupations, and this mod patches more than 140 base game [objects](user-guide.md#crew-anchor-objects) with crew anchor tags.
 
 This mod patches only base game objects and crew types, and I do not intend to add patches for modded content into it. Mod authors are encouraged to refer to the documentation for [adding compatibility](modding-guide.md#adapting-modded-objects-with-crew-anchor-tags) for custom objects and crew types.
 
@@ -54,18 +56,19 @@ This mod contains too many improvements to list on this page. See the [documenta
 * Fixed cases where NPCs froze in place or spun back and forth indefinitely.
 * Prevented NPCs from closing a door if a player is in the doorway.
 * Fixed the close-door logic so that NPCs also close hatches after passing through them.
+* Improved NPC positioning for numerous reaction animations.
 * Improved NPC reactions to use their personality types.
 * Replaced faulty NPC item-swap functions that could lose an item set during a swap, possibly disarming the NPC.
 * Extended the elemental resistance and status immunity of the base game elemental EPP augments to crew, when such augments are equipped by the player.
 * Increased the search radius for beds and chairs to 300 blocks for crew members onboard their ship.
 * Made crew hold their positions when off ship and the player orders them not to follow.
 * Made medics wait for the player to take damage before applying healing effects.
-* Made village guards respond to friendly fire.
+* Made village guards respond to friendly indiscriminate fire.
 * Changed the stealing mechanic to ignore players who currently have admin privileges.
 
 ## Uninstallation
 
-**Uninstalling this mod may cause your worlds to crash.** If you no longer want to use this mod, you must replace it with the [Better Crew Uninstalled](README_uninstalled.md) mod, which defines a minimal set of resources that allow safe removal of this mod.
+**Naively uninstalling this mod will cause your ship world to crash and reset.** If you no longer want to use this mod, you must remove it and replace it with [Better Crew Uninstalled](README_uninstalled.md), which provides a minimal set of empty script files that allow the safe removal of this mod.
 
 ## Collaboration
 

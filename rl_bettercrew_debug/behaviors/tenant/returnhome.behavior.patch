@@ -151,7 +151,7 @@
         "name": "rl_bettercrew_logPosition",
         "parameters": {
           "context": {"value": "returnhome moveToPosition (player or crew anchor) timed out pathfinding to"},
-          "position": {"key": "homePosition"}
+          "position": {"key": "home"}
         }
       }
     }

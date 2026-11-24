@@ -90,7 +90,12 @@ function rl_bettercrew_moveToPosition(args, board, node)
     if result == false or result == true then
       return result, {pathfinding = false, direction = mcontroller.facingDirection()}
     end
+
+    -- Note that `pathOptions` were passed into `controlPathMove` in the
+    -- original invocation, but not invocations inside the loop. This is
+    -- okay because the function reuses prior values of nil parameters.
     result = mcontroller.controlPathMove(targetPosition, args.run)
+
     if not self.setFacingDirection then 
       if not mcontroller.groundMovement() then
         controlFace(mcontroller.velocity()[1])

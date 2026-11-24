@@ -143,7 +143,6 @@
               "groundPosition": {"value": true},
               "maxGround": {"value": 5},
               "minGround": {"value": -5},
-              "pathOptions": {"value": {"returnBest": true}},
               "position": {"key": "spawn"},
               "run": {"value": false}
             },
@@ -239,7 +238,7 @@
                       "entity": {"key": "player"}
                     },
                     "output": {
-                      "position": "homePosition"
+                      "position": "home"
                     }
                   }
                 ]
@@ -266,7 +265,7 @@
                       "defaultPosition": {"key": "spawn"}
                     },
                     "output": {
-                      "position": "homePosition"
+                      "position": "home"
                     }
                   }
                 ]
@@ -290,12 +289,12 @@
             "type": "action",
             "name": "offsetPosition",
             "parameters": {
-              "position": {"key": "homePosition"},
+              "position": {"key": "home"},
               "x": {"key": "offsetX"},
               "y": {"value": 0}
             },
             "output": {
-              "position": "homePosition"
+              "position": "nearHome"
             }
           },
           {
@@ -312,12 +311,8 @@
                 "type": "action",
                 "name": "rl_bettercrew_moveToPosition",
                 "parameters": {
-                  "avoidLiquid": {"value": true},
-                  "groundPosition": {"value": true},
-                  "maxGround": {"value": 5},
-                  "minGround": {"value": -5},
                   "pathOptions": {"value": {"maxDistance": 400, "returnBest": true}},
-                  "position": {"key": "homePosition"},
+                  "position": {"key": "nearHome"},
                   "run": {"value": false}
                 },
                 "output": {

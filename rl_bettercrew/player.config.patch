@@ -43,6 +43,10 @@
       "value" : "/scripts/companions/rl_bettercrew_player.lua"
     },
     { "op" : "add",
+      "path" : "/deploymentConfig/scripts/-",
+      "value" : "/scripts/deployment/rl_bettercrew_crewanchormanager.lua"
+    },
+    { "op" : "add",
       "path" : "/companionsConfig/recruitExtraPersistentEffects",
       "value" : {
         "allowedUniqueEffects" : {

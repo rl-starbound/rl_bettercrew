@@ -16,6 +16,12 @@ end
 
 -- param first
 -- param second
+function rl_bettercrew_equals(args)
+  return args.first == args.second
+end
+
+-- param first
+-- param second
 -- output number
 function rl_bettercrew_max(args)
   if args.first == nil or args.second == nil then return false end

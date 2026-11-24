@@ -15,13 +15,15 @@
       "value" : "/scripts/rl_crewanchorobject.lua"
     },
     { "op" : "add",
+      "path" : "/crewAnchorOptions",
+      "value" : {
+        "offsetLeft" : [0, 0],
+        "offsetRight" : [0.75, 0]
+      }
+    },
+    { "op" : "add",
       "path" : "/crewAnchorTags",
-      "value" : [
-        "crewmemberchemistblue",
-        "crewmemberchemistgreen",
-        "crewmemberchemistorange",
-        "crewmemberchemistyellow"
-      ]
+      "value" : [ "crewmembermechanic" ]
     }
   ]
 ]

@@ -1,3 +1,5 @@
+require '/scripts/vec2.lua'
+
 local previous_init = init
 local previous_uninit = uninit
 local previous_update = update
@@ -24,9 +26,16 @@ function init()
   if previous_init then previous_init() end
 
   self.crewAnchorObjectId = tostring(entity.id())
+  self.crewAnchorOptions = config.getParameter('crewAnchorOptions', {})
+  if self.crewAnchorOptions.useFootPosition == nil then
+    self.crewAnchorOptions.useFootPosition = true
+  end
   self.crewAnchorTags = config.getParameter('crewAnchorTags', {})
 
-  local originalScriptDelta = config.getParameter('scriptDelta', 1)
+  -- For objects, the default scriptDelta is 5 ticks, if not specified
+  -- in the object configuration.
+  local originalScriptDelta = config.getParameter('scriptDelta', 5)
+
   if originalScriptDelta ~= 1 then
     -- Object registration requires the update function to be called,
     -- the sooner the better. If the object definition sets scriptDelta
@@ -40,7 +49,7 @@ end
 function uninit()
   if self.successfullyRegisteredCrewAnchors then
     world.sendEntityMessage(
-      'techstation', 'deregisterCrewAnchorObject',
+      'rl_crewanchormanager', 'deregisterCrewAnchorObject',
       self.crewAnchorObjectId, self.crewAnchorTags
     ):result()
   end
@@ -49,17 +58,18 @@ function uninit()
 end
 
 function update(dt)
-  -- In the base game, the `techstation` can exist only on player ship
-  -- worlds, and is guaranteed to exist on each player ship world. If
-  -- another mod breaks either of these invariants, then a compatibility
-  -- patch will be required.
   if not self.finishedRegisteringCrewAnchors then
-    if world.loadUniqueEntity('techstation') == 0 then
+    if world.loadUniqueEntity('rl_crewanchormanager') == 0 then
       finishRegistration()
     else
+      local offset = self.crewAnchorOptions[
+        object.direction() > 0 and 'offsetRight' or 'offsetLeft'
+      ] or self.crewAnchorOptions.offset or {0, 0}
       if world.sendEntityMessage(
-        'techstation', 'registerCrewAnchorObject',
-        self.crewAnchorObjectId, self.crewAnchorTags, entity.position()
+        'rl_crewanchormanager', 'registerCrewAnchorObject',
+        self.crewAnchorObjectId, self.crewAnchorTags,
+        vec2.add(entity.position(), offset),
+        {useFootPosition = not not self.crewAnchorOptions.useFootPosition}
       ):result() then
         finishRegistration(true)
       end

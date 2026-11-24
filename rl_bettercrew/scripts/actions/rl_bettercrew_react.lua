@@ -5,6 +5,32 @@
 -- length of this file name and made no other changes, the function was
 -- invoked.
 
+-- param position
+-- param target
+-- output position
+-- output x
+-- output y
+function rl_bettercrew_npcToyGetFootPosition(args, board)
+  -- Returns a position adjusted so that the NPC's feet will be at the
+  -- input position, if the object requires foot positioning. The
+  -- default for objects is to require foot positioning unless the
+  -- `npcToy.useFootPosition` parameter is set to false. (In general,
+  -- this should be set to false only for objects not intended to be
+  -- placed on the ground, e.g., desktop or wall-mounted objects.)
+
+  if args.position == nil then return false end
+  local x = args.position[1]
+  local y = args.position[2]
+
+  if world.callScriptedEntity(args.target, "config.getParameter",
+    "npcToy.useFootPosition", true
+  ) then
+    y = y - mcontroller.boundBox()[2]
+  end
+
+  return true, {position = {x, y}, x = x, y = y}
+end
+
 function playBehaviorReaction(args, board, nodeId, dt)
   if not self.rl_bettercrew_playBehaviorReactionWarned then
     sb.logWarn("behavior action 'playBehaviorReaction' invoked; should call 'rl_bettercrew_playBehaviorReaction' instead")

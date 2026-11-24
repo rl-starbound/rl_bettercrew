@@ -1,0 +1,10 @@
+[
+  { "op" : "replace",
+    "path" : "/npcToy/preciseStandPositionLeft/1",
+    "value" : 0
+  },
+  { "op" : "replace",
+    "path" : "/npcToy/preciseStandPositionRight/1",
+    "value" : 0
+  }
+]

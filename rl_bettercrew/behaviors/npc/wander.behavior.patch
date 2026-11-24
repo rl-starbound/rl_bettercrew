@@ -138,31 +138,6 @@
                 ]
               }
             ]
-          },
-          {
-            "title": "random",
-            "type": "action",
-            "name": "random",
-            "parameters": {
-              "max": {"value": 2},
-              "min": {"value": -2}
-            },
-            "output": {
-              "number": "offsetX"
-            }
-          },
-          {
-            "title": "offsetPosition",
-            "type": "action",
-            "name": "offsetPosition",
-            "parameters": {
-              "position": {"key": "home"},
-              "x": {"key": "offsetX"},
-              "y": {"value": 0}
-            },
-            "output": {
-              "position": "home"
-            }
           }
         ]
       }
@@ -196,60 +171,93 @@
     { "op" : "replace",
       "path" : "/root/children/0/children/0/children/2/children/0/children/0",
       "value" : {
-        "title": "parallel",
+        "title": "sequence",
         "type": "composite",
-        "name": "parallel",
-        "parameters": {
-          "fail": {"value": 1},
-          "success": {"value": -1}
-        },
+        "name": "sequence",
+        "parameters": {},
         "children": [
           {
-            "title": "",
+            "title": "random",
             "type": "action",
-            "name": "rl_bettercrew_moveToPosition",
+            "name": "random",
             "parameters": {
-              "pathOptions": {"value": {"maxDistance": 400, "returnBest": true}},
-              "position": {"key": "home"},
-              "run": {"key": "<alwaysRun>"}
+              "max": {"value": 2},
+              "min": {"value": -2}
             },
             "output": {
-              "pathfinding": "isPathfinding"
+              "number": "offsetX"
             }
           },
           {
-            "title": "dynamic",
+            "title": "offsetPosition",
+            "type": "action",
+            "name": "offsetPosition",
+            "parameters": {
+              "position": {"key": "home"},
+              "x": {"key": "offsetX"},
+              "y": {"value": 0}
+            },
+            "output": {
+              "position": "nearHome"
+            }
+          },
+          {
+            "title": "parallel",
             "type": "composite",
-            "name": "dynamic",
-            "parameters": {},
+            "name": "parallel",
+            "parameters": {
+              "fail": {"value": 1},
+              "success": {"value": -1}
+            },
             "children": [
               {
-                "title": "inverter",
-                "type": "decorator",
-                "name": "inverter",
-                "parameters": {},
-                "child": {
-                  "title": "hasFlag",
-                  "type": "action",
-                  "name": "hasFlag",
-                  "parameters": {
-                    "name": {"key": "isPathfinding"}
-                  }
+                "title": "",
+                "type": "action",
+                "name": "rl_bettercrew_moveToPosition",
+                "parameters": {
+                  "pathOptions": {"value": {"maxDistance": 400, "returnBest": true}},
+                  "position": {"key": "nearHome"},
+                  "run": {"key": "<alwaysRun>"}
+                },
+                "output": {
+                  "pathfinding": "isPathfinding"
                 }
               },
               {
-                "title": "failer",
-                "type": "decorator",
-                "name": "failer",
+                "title": "dynamic",
+                "type": "composite",
+                "name": "dynamic",
                 "parameters": {},
-                "child": {
-                  "title": "timer",
-                  "type": "action",
-                  "name": "timer",
-                  "parameters": {
-                    "time": {"value": "<pathingTimeLimit>"}
+                "children": [
+                  {
+                    "title": "inverter",
+                    "type": "decorator",
+                    "name": "inverter",
+                    "parameters": {},
+                    "child": {
+                      "title": "hasFlag",
+                      "type": "action",
+                      "name": "hasFlag",
+                      "parameters": {
+                        "name": {"key": "isPathfinding"}
+                      }
+                    }
+                  },
+                  {
+                    "title": "failer",
+                    "type": "decorator",
+                    "name": "failer",
+                    "parameters": {},
+                    "child": {
+                      "title": "timer",
+                      "type": "action",
+                      "name": "timer",
+                      "parameters": {
+                        "time": {"value": "<pathingTimeLimit>"}
+                      }
+                    }
                   }
-                }
+                ]
               }
             ]
           }

@@ -6,39 +6,47 @@
 
 While onboard their ship, crew will be attracted to certain objects. These objects will pull the crew away from their spawn location, the teleporter. If you have done a good job designing your ship, this should result in your crew spreading throughout the ship and moving around in a way that looks natural.
 
-A full list of which objects attract which crew types can be found by reading the [object patches](https://github.com/rl-starbound/rl_bettercrew/tree/master/rl_bettercrew/objects) and looking for the key `crewAnchorTags`. In general, crew are attracted to objects that are related to their occupations, and this mod patches almost 130 base game objects with crew anchor tags.
+A full list of which objects attract which crew types can be found by reading the [object patches](https://github.com/rl-starbound/rl_bettercrew/tree/master/rl_bettercrew/objects) and looking for the `crewAnchorTags`. In general, crew are attracted to objects that are related to their occupations, and this mod patches more than 140 base game objects with crew anchor tags.
+
+### First Time On Your Ship
+
+After installing this mod, the first time you go onboard each of your pre-existing player characters' ships, your crew will ignore crew anchor objects and behave as in the base game. To see the effects of this mod on crew behavior, each pre-existing player character must exit and return to their ship once after installing this mod.
 
 ### Crew Anchor Objects and BYOS
 
-This mod is compatible with *BYOS* and the *Frackin Universe* BYOS, but crew anchor objects will only affect crew behavior when a recognized SAIL console exists on the ship. If you break your SAIL console, the crew will return to hanging around their spawn point. If you replace the SAIL console, you may need to leave and return to the ship, or restart the game, to force all objects to re-register their crew anchor tags.
+This mod is compatible with *BYOS* and the *Frackin' Universe* BYOS. However, any time you change ship types (e.g., swap from a racial ship to a BYOS), this will count as the first time you have boarded the new ship, so your player character will have to exit and return to the ship once before observing the effects of this mod on crew behavior.
+
+### Crew Anchor Objects and Third-Party Assets
+
+Non-base game objects will not have crew anchor tags, and therefore will not affect the crew's shipboard behavior. If you play with non-base game objects, you will want to check for mod extensions that add *Better Crew* support to those objects. Likewise, no objects will have crew anchor tags attractive to non-base game crew types. If you play with non-base game crew types, you will want to check for mod extensions that add *Better Crew* support for those crew types.
 
 ### Extensions
 
-This mod patches only base game objects and crew types, and I do not intend to add patches for modded content into it. Mod authors are encouraged to refer to the documentation for [adding compatibility](modding-guide.md#adapting-modded-objects-with-crew-anchor-tags) for custom objects and crew types.
+*Better Crew* patches only base game objects and crew types, and I do not intend to add patches for non-base game content into it directly. Mod authors are encouraged to refer to the documentation for [adding compatibility](modding-guide.md#adapting-modded-objects-with-crew-anchor-tags) for custom objects and crew types.
 
-Vix has written a couple of extensions that add support for large numbers of third party [objects](https://steamcommunity.com/sharedfiles/filedetails/?id=3095344193) and [races](https://steamcommunity.com/sharedfiles/filedetails/?id=3092932735).
+Vix has written an extension that adds crew anchor tags for large numbers of third party [objects](https://steamcommunity.com/sharedfiles/filedetails/?id=3095344193). (Note that Vix's other extension, for [races](https://steamcommunity.com/sharedfiles/filedetails/?id=3092932735), is obsoleted by v2.0.0 or later of *Better Crew*. While it won't break anything, it no longer does anything useful, because v2.0.0 or later automatically supports all racial and BYOS ships.)
 
 InkWarrior101 has written an extension for [compatibility](https://steamcommunity.com/sharedfiles/filedetails/?id=3677854700) with the Remnants of the Protectorate mod.
 
 ## NPC Combat Improvements
 
-NPC combat in Starbound is simplistic. Each NPC can make behavioral decisions every 1/6th of a second. If an NPC has a ranged weapon, they will attempt to move to a position within range and line of sight of the target, and fire until they have exhausted their energy. In an NPC has a melee weapon, they will attempt to move adjacent to the target, at which point they will raise the melee weapon for a windup interval, swing the weapon, and then wait for a cooldown interval before attempting another strike. If the NPC is more than 10 blocks from the target while using a melee weapon, they may choose to attempt a melee leap instead of a simple swing. If the NPC has both a ranged and melee weapon, they will prefer the ranged weapon, will swap to the melee weapon only when out of energy, and will swap back to the ranged weapon after 8 seconds.
+NPC combat in Starbound is simplistic. Each NPC can make a behavioral decision every 1/6th of a second. If an NPC has a ranged weapon, they will attempt to move to a position within range and line of sight of the target, and fire until they have exhausted their energy. If an NPC has a melee weapon, they will attempt to move adjacent to the target, at which point they will raise the melee weapon for a windup interval, swing the weapon, and then wait for a cooldown interval before attempting another strike. If the NPC is more than 10 blocks from the target while using a melee weapon, they may choose to attempt a melee leap instead of a simple swing. If the NPC has both a ranged and melee weapon, they will prefer the ranged weapon, will swap to the melee weapon only when out of energy, and will swap back to the ranged weapon after 8 seconds.
 
 That's the entire battle strategy of NPCs. But, because of the implementation, the specifics are incredibly complicated and difficult to comprehend. Implementing more complex strategies or tactics would likely incur significant performance penalties. It would also require massive changes to the behavior files and Lua scripts, as well as improvements to the core engine. These are not likely to happen any time soon.
 
 However, there are many flaws in the existing combat behaviors, which can be improved relatively safely, with virtually no performance impact. This mod makes the following improvements:
 
-* Crew members' combat power was set to 25% of their calculated combat power (based on the player's currently-equipped armor's combat power). All other combat-capable NPCs' combat power is 50% to to 100% of their world level multiplier. I don't know why Chucklefish nerfed crew members like this, but I bumped it up to 75% for soldiers, outlaws, and penguin mercenaries, and 65% for other crew types. Crew are now useful in combat.
-* Penguin mercenaries were equipped with two different pistols, but one of them was never used because there is no code to swap from one ranged weapon to another ranged weapon. Instead, I've set penguin crew members to use a dagger in addition to their pistol. As a bonus, it's a lot of fun to watch a penguin shank something to death.
-* NPC melee weapons had far more windup time and cooldown time than player weapons of the same type. As a result, NPCs spend far more time holding up their weapons without striking, or standing around after striking, doing nothing but taking damage. I've adjusted NPC melee windup and cooldown to be roughly equivalent to player weapons. NPCs should deliver approximately the same average damage per second as they did in the base game, but they'll now strike much more frequently.
-* Melee leap had a flaw where the 0.75 second windup phase (really, 0.83 second, when accounting for script delta) could get repeated multiple times, so the NPC would stand around holding up their weapon for several seconds. This has been corrected, in addition to some other flaws with the melee leap.
+* Crew members' actual combat power was set to 25% of their calculated combat power (based on the player's currently-equipped armor's combat power). All other combat-capable NPCs' combat power is 50% to to 100% of their world level multiplier. I don't know why Chucklefish nerfed crew members like this, but I bumped it up to 75% for soldiers, outlaws, and penguin mercenaries, and 60% for other crew types. Crew are now useful in combat.
+* Penguin mercenaries were equipped with two different pistols, but one of them was never used because there is no code to swap from one ranged weapon to another ranged weapon. Instead, I've set penguin crew members to use a dagger in addition to their pistol. As a bonus, it's a lot of fun to watch a penguin shank something.
+* NPC melee weapons had far more windup time and cooldown time than player weapons of the same type. As a result, NPCs spent far more time holding up their weapons without striking, or standing around after striking, doing nothing but taking damage. I've adjusted NPC melee windup and cooldown to be roughly equivalent to player weapons. NPCs should deliver approximately the same average damage per second as they did in the base game, but they'll now strike much more frequently.
+* Melee leap had a flaw where the 0.75 second windup phase (really, 0.83 second, when accounting for script delay) could get repeated multiple times, so the NPC would stand around holding up their weapon for several seconds. This has been corrected, in addition to some other flaws with the melee leap.
 * NPCs didn't always reorient themselves if they crossed positions with their target. This resulted in NPCs swinging their weapons in the wrong direction, hitting nothing. NPCs are now much better at reorienting themselves to face the target before swinging their weapon.
-* NPCs aimed bows continuously during windup, but aimed guns only briefly before beginning to shoot, and did not re-aim as the target moved. Now, NPCs continuously re-aim guns as they fire. (Note, this is not predictive aiming; that would require core engine updates or a significant performance penalty. But, it's better than what we had before.)
+* NPCs aimed bows continuously during windup, but aimed guns only briefly before beginning to shoot, and did not re-aim as the target moved. Now, NPCs continuously re-aim guns as they fire. (Note, this is not predictive aiming or leading the target; that would require core engine updates or a significant performance penalty. But, it's better than what we had before.)
 * NPCs using bows aimed slightly below their targets. This was usually noticeable only for long shots against stationary targets. This has been corrected, and NPCs are now better shots with a bow and arrow.
 * NPCs did not recognize crouching behavior, and aimed too high when their target was a humanoid who was crouching. This has been corrected.
 * Ranged weapon minimum ranges were ignored, which meant that NPCs with long guns would often fire their weapon when their target's hit box was between the muzzle and themselves, which meant the shot missed its target entirely. Now, weapon minimum ranges are respected during the aiming phase, and NPCs will attempt to move away from a target that is crowding them.
-* Path-finding to a position from which to fire a ranged weapon could become stuck in an indefinite `moveToPosition` loop. Now, NPCs can switch back to a melee weapon, or say "cantReachRanged" dialog if this happens.
 * NPCs could get crowded by a target within their minimum firing range, resulting in the NPC being unable to fire their ranged weapon. Now, NPCs can switch back to a melee weapon if this happens.
+* Path-finding to a position from which to fire a ranged weapon could become stuck in an indefinite `moveToPosition` loop. Now, NPCs can switch back to a melee weapon, or say "cantReachRanged" dialog if this happens.
 * If a target is out of range of melee and ranged weapons, and the NPC can't path-find to a position in range, they'll just stand there indefinitely until something changes. You notice this most often on worlds with stationary floating monsters such as [pyromantles](https://starbounder.org/Pyromantle). While I can't prevent this particular freezing, I can at least make NPCs say "cantReach" or "cantReachRanged" dialog periodically, so the player gets a hint as to why they're standing still.
 * Melee and ranged weapons have different minimum and maximum ranges. When an NPC swapped between melee and ranged weapons, the NPC's state and the combat coordinator's state went out of sync for a few ticks, which often resulted in the NPC swinging their melee weapon far out of range of the target. This has been fixed.
 * Bows weren't defined correctly in the combat coordinator, so it was possible for the coordinator to direct an NPC to a position from which they could not fire their bow, resulting in indefinite freezing.
@@ -49,9 +57,9 @@ However, there are many flaws in the existing combat behaviors, which can be imp
 
 When the player brought a crew member off ship and then ordered them to stop following, to make them begin following again, the player had to find and interact with them. This could be annoying if the player traveled far from them.
 
-I have added new functionality to allow the player to rally all non-following crew who are on the same (non-ship) world as the player. When summoned, they will begin following the player, and this will result in them running or teleporting to the player's current position. If no surviving crew are present on the same world as the player, SAIL will give you a warning.
+I have added new functionality to allow the player to rally all non-following crew who are on the same (non-ship) world as the player. When summoned, they will begin following the player, and this will result in them running or teleporting to the player's current position. If no surviving crew are present on the same world as the player, SAIL will warn you.
 
-Crew rallying requires an additional mod. If either of the [Stardust Core Lite](https://steamcommunity.com/sharedfiles/filedetails/?id=2512589532) or [Stardust Core](https://steamcommunity.com/sharedfiles/filedetails/?id=764887546) mods is installed, crew can be summoned by opening the `Quickbar` and selecting `Crew Communications`. If [Better Crew: No Quickbar](README_noquickbar.md) is installed, they can be summoned by equipping and using the `Crew Communicator` tool, which can be obtained for free during the ship repair quest. (If lost, or if the mod is installed after completing that quest, it can be purchased from Penguin Pete at the Outpost.)
+Crew rallying requires an additional mod. If either of the [Stardust Core Lite](https://steamcommunity.com/sharedfiles/filedetails/?id=2512589532) or [Stardust Core](https://steamcommunity.com/sharedfiles/filedetails/?id=764887546) mods is installed, crew can be summoned by opening the `Quickbar` and selecting `Crew Communications`. If [Better Crew - No Quickbar](README_noquickbar.md) is installed, they can be summoned by equipping and using the `Crew Communicator` tool, which can be obtained for free during the ship repair quest. (If lost, or if the mod is installed after completing that quest, it can be purchased from Penguin Pete at the Outpost.)
 
 ## Additional Fixes and Improvements
 
@@ -119,7 +127,7 @@ It also extends the Peacekeeper augments' defense bonus to crew members, when th
 
 ### Crew Sitting and Sleeping
 
-NPCs would only sleep in beds within 50 blocks of their spawn location, and would only sit in chairs within 80 blocks of their spawn location.
+NPCs would sleep only in beds within 50 blocks of their spawn location, and would sit only in chairs within 80 blocks of their spawn location.
 
 For crew members onboard their ship, the search radius for beds and chairs is now 300 blocks.
 
@@ -162,21 +170,23 @@ With this mod, admins will not be accused of stealing. I feel that this strikes 
 ## Compatibility
 
 Compatible:
-* *BYOS*
+* *BYOS*\*
 * *Crew Customization+*
 * *NpcSpawner+*
 * *RPG Growth*
 
-Compatible (some *Better Crew* functionality is overridden):
+Compatible (some *Better Crew & NPC Behavior* functionality is overridden):
 * *Corbent's Interactive Crew*
 * *Earth's Finest*
-* *Frackin Universe*
+* *Frackin' Universe*
 
-Incompatible (must not be installed alongside Better Crew):
-* [Better Crew (Frackin Patch)](https://steamcommunity.com/sharedfiles/filedetails/?id=3022434849): This mod is written incorrectly and will break Better Crew.
-* *NPCs Aren't Stupid*: Better Crew can replace this mod's functionality.
-* *Smart Crew*: Better Crew can replace this mod's functionality.
-* *Supper's Combat Overhaul*: This mod completely rewrites most behaviors. In principle, I could write a separate version of Better Crew that is compatible with it. But no, I'm not going to do that. Better Crew v2.0.0 or newer provides some similar (if much less ambitious) combat improvements.
+Incompatible (must not be installed alongside *Better Crew & NPC Behavior*):
+* [Better Crew (Diet Version)](https://steamcommunity.com/sharedfiles/filedetails/?id=2892655130): This is an old version of Better Crew.
+* [Better Crew (Frackin Patch)](https://steamcommunity.com/sharedfiles/filedetails/?id=3022434849): This is an altered copy of an old version of Better Crew.
+* [Better Crew (Vix's Fork)](https://steamcommunity.com/sharedfiles/filedetails/?id=3031599475): This is an old version of Better Crew.
+* *NPCs Aren't Stupid*: Better Crew replaces this mod's functionality.
+* *Smart Crew*: Better Crew replaces this mod's functionality.
+* *Supper's Combat Overhaul*: This mod completely rewrites most behaviors. In principle, I could write a separate version of Better Crew from scratch that is compatible with it. But no, I'm not going to do that. Better Crew v2.0.0 or newer provides some similar (albeit much less ambitious) combat improvements.
 
 ### Compatibility Notes
 
@@ -234,7 +244,7 @@ In each case, the faulty function has been replaced using a secondary script app
 
 ## Unfixable Issues
 
-Some NPCs behavior issues cannot be fixed easily, or at all. These issues are not caused by this mod, but may be more noticeable because this mod fixes many more obvious bad behaviors.
+Some NPC behavior issues cannot be fixed easily, or at all. These issues are not caused by this mod, but may become more noticeable because this mod fixes many more obvious bad behaviors.
 
 ### NPCs Cannot Route Across a Closed Hatch
 
@@ -242,10 +252,18 @@ NPCs are able to perform unplanned movements (e.g., flee, patrol, wander) across
 
 Fortunately thanks to the movement timeouts introduced by this mod, as well as the many higher priority behaviors, this generally isn't too much of an issue, but you should be aware of it when placing hatches in your designs. Unfortunately, this seems to be a problem with the core engine's path-finding, so there appears to be nothing that a mod such as *Better Crew* can do to fix it.
 
-### NPCs Will Not Route Through a Closed Door Wired to a Proximity Scanner
+### NPCs Cannot Route Through a Closed Door Wired to a Proximity Scanner
 
 Path-finding is handled in the core engine, and the core engine will not attempt to route an NPC through a closed locked door. The core engine considers a door with anything wired to its input node as a locked door. This cannot be fixed by a mod.
 
+### NPCs Cannot Use Trams or Vehicles
+
+Using trams or vehicles is a special case of movement, movement is governed by path-finding, and as discussed in the previous issues, path-finding is handled in the core engine. The core engine was not programmed with the concept of NPCs using trams or vehicles, so modders can't fix this without causing an enormous number of correctness and performance problems.
+
+But what about Dreadwing? Or Asra Nox? Don't they pilot vehicles in their boss battles? Internally, those are not NPCs piloting vehicles. Each of those bosses (the "vehicle" plus the "NPC") is actually a monster with its own custom programming, designed to look like an NPC piloting a vehicle.
+
+What about the *NPC Mechs* mod? That mod uses a clever hack to make it seem like NPCs are piloting mechs, but really the NPCs are just idle passengers in specially-programmed mechs. Those mechs are programmed to follow the player and shoot at hostiles, and nothing more. Most importantly, that mod implements no NPC behaviors, so the NPCs deployed in the mechs aren't capable of exiting their mechs or doing anything else while in the mechs. It's a neat illusion, but it's not a general solution.
+
 ### NPCs Will Stand in Lava Until Dead
 
-Base game NPC behaviors already instruct NPCs to avoid pools of liquid. However, the core engine defines a pool of liquid as being two or more blocks high. As such, the core engine will allow an NPC to stand in a one block high pool of lava until they die. This cannot be fixed by a mod.
+Most base game NPC behaviors already instruct NPCs to avoid pools of liquid. However, the core engine defines a pool of liquid as being two or more blocks high. As such, the core engine will allow an NPC to stand in a one block high pool of lava until they die. This cannot be fixed by a mod.

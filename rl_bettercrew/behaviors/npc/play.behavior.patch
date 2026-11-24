@@ -37,63 +37,83 @@
   { "op" : "replace",
     "path" : "/root/children/5/children/2",
     "value" : {
-      "title": "parallel",
+      "title": "sequence",
       "type": "composite",
-      "name": "parallel",
-      "parameters": {
-        "fail": {"value": 1},
-        "success": {"value": -1}
-      },
+      "name": "sequence",
+      "parameters": {},
       "children": [
         {
-          "title": "",
+          "title": "rl_bettercrew_npcToyGetFootPosition",
           "type": "action",
-          "name": "rl_bettercrew_moveToPosition",
+          "name": "rl_bettercrew_npcToyGetFootPosition",
           "parameters": {
-            "avoidLiquid": {"value": true},
-            "groundPosition": {"value": true},
-            "maxGround": {"value": 5},
-            "minGround": {"value": -5},
             "position": {"key": "standPosition"},
-            "run": {"key": "<alwaysRun>"}
+            "target": {"key": "playTarget"}
           },
           "output": {
-            "pathfinding": "isPathfinding"
+            "position": "standPosition"
           }
         },
         {
-          "title": "dynamic",
+          "title": "parallel",
           "type": "composite",
-          "name": "dynamic",
-          "parameters": {},
+          "name": "parallel",
+          "parameters": {
+            "fail": {"value": 1},
+            "success": {"value": -1}
+          },
           "children": [
             {
-              "title": "inverter",
-              "type": "decorator",
-              "name": "inverter",
-              "parameters": {},
-              "child": {
-                "title": "hasFlag",
-                "type": "action",
-                "name": "hasFlag",
-                "parameters": {
-                  "name": {"key": "isPathfinding"}
-                }
+              "title": "",
+              "type": "action",
+              "name": "rl_bettercrew_moveToPosition",
+              "parameters": {
+                "avoidLiquid": {"value": true},
+                "groundPosition": {"value": true},
+                "maxGround": {"value": 5},
+                "minGround": {"value": -5},
+                "position": {"key": "standPosition"},
+                "run": {"key": "<alwaysRun>"}
+              },
+              "output": {
+                "pathfinding": "isPathfinding"
               }
             },
             {
-              "title": "failer",
-              "type": "decorator",
-              "name": "failer",
+              "title": "dynamic",
+              "type": "composite",
+              "name": "dynamic",
               "parameters": {},
-              "child": {
-                "title": "timer",
-                "type": "action",
-                "name": "timer",
-                "parameters": {
-                  "time": {"value": "<pathingTimeLimit>"}
+              "children": [
+                {
+                  "title": "inverter",
+                  "type": "decorator",
+                  "name": "inverter",
+                  "parameters": {},
+                  "child": {
+                    "title": "hasFlag",
+                    "type": "action",
+                    "name": "hasFlag",
+                    "parameters": {
+                      "name": {"key": "isPathfinding"}
+                    }
+                  }
+                },
+                {
+                  "title": "failer",
+                  "type": "decorator",
+                  "name": "failer",
+                  "parameters": {},
+                  "child": {
+                    "title": "timer",
+                    "type": "action",
+                    "name": "timer",
+                    "parameters": {
+                      "time": {"value": "<pathingTimeLimit>"}
+                    }
+                  }
                 }
-              }
+              ]
             }
           ]
         }
@@ -107,6 +127,10 @@
   { "op" : "add",
     "path" : "/scripts/-",
     "value" : "/scripts/actions/rl_bettercrew_move.lua"
+  },
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/actions/rl_bettercrew_react.lua"
   },
   { "op" : "add",
     "path" : "/parameters/pathingTimeLimit",

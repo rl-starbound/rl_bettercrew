@@ -4,6 +4,12 @@
     "value" : "/scripts/rl_crewanchorobject.lua"
   },
   { "op" : "add",
+    "path" : "/crewAnchorOptions",
+    "value" : {
+      "offset" : [0.5, 0]
+    }
+  },
+  { "op" : "add",
     "path" : "/crewAnchorTags",
     "value" : [ "crewmemberjanitor" ]
   }

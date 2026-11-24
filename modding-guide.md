@@ -6,9 +6,9 @@ This document provides detailed technical discussion of *Better Crew & NPC Behav
 
 The inspiration behind this mod is *Smart Crew* by metamorphexx. In that mod, each crew type has a hard-coded list of objects that attract that crew type, and on each behavior tick, each crew member on the player's ship performs world searches for each object on their type's list and moves to one random object. This struck me as inefficient, because world searches happen on each behavior tick, for each crew member, for each object in the crew type's list.
 
-In my implementation, which shares no code with *Smart Crew*, the crew types that can be attracted to an object are a property of each object. As each crew anchor object is placed into the ship world, it registers itself and its position with the ship's SAIL. When an object is removed, it de-registers itself. On each behavior tick, for each crew member, the SAIL registry is consulted for a random object for that crew type, and the crew member moves to the registered position, without any computationally expensive world searches. The SAIL console was chosen as the registry object because it is permanently present on all base game ships.
+In my implementation, which shares no code with *Smart Crew*, the crew types that can be attracted to an object are a property of each object. As each crew anchor object is placed into the ship world, it registers itself and its position with a stagehand on the ship. When an object is removed, it de-registers itself. On each behavior tick, for each crew member, the stagehand registry is consulted for a random object for that crew type, and the crew member moves to the registered position, without any computationally expensive world searches.
 
-Crew anchor object registration is not persisted to storage. This means that, every time you start your game on your ship, and every time you beam onto your ship, all objects will re-register themselves with SAIL as they are loaded. While this causes a small performance penalty during the loading of the ship world (so small I don't notice it, but it has to exist), it prevents potential desynchronization issues from accumulating. What I mean by that is, when breaking an object on your ship, if for any reason the de-register code does not run successfully, then SAIL will think that a crew anchor object exists at a position which it does not. If registrations were persisted, these sort of errors would accumulate until the crew were effectively moving randomly around the ship. By not persisting registration, the issue will correct itself as soon as you reload the ship world. (No issues with de-registration are currently known. This is simply a case of defensive coding in practice.)
+Crew anchor object registration is not persisted to storage. This means that, every time you start your game on your ship, and every time you beam onto your ship, all objects will re-register themselves with the stagehand as they are loaded. While this causes a small performance penalty during the loading of the ship world (so small I don't notice it, but it has to exist), it prevents potential desynchronization issues from accumulating. What I mean by that is, when breaking an object on your ship, if for any reason the de-register code does not run successfully, then the stagehand will think that a crew anchor object exists at a position which it does not. If registrations were persisted, these sort of errors would accumulate until the crew were effectively moving randomly around the ship. By not persisting registration, the issue will correct itself as soon as you reload the ship world. (No issues with de-registration are currently known. This is simply a case of defensive coding in practice.)
 
 ### Which Objects Should be Crew Anchor Objects?
 
@@ -19,18 +19,18 @@ When deciding which objects should be enriched with crew anchor tags, I made sev
 Two pieces of metadata must be added to an object to make it a crew anchor object:
 
 1. The script `/scripts/rl_crewanchorobject.lua` must be appended to the object's `scripts` list. If the object is not already scripted, the `scripts` field must be added to the object and its value must be a JSON list containing this script. See examples in this repo of a pattern for adding the `scripts` field to an object while minimizing the risk of a mod conflict, for example, [outpostgenerator](rl_bettercrew/objects/outpost/outpostgenerator/outpostgenerator.object.patch).
-1. A new field called `crewAnchorTags` must be added to the object. It must be a JSON list containing at least one string. Each string must be one of the crew NPC types that will be attracted to this object.
-
-If your mod adds a custom SAIL console, you must adapt it to support crew anchor tags:
-
-1. The script `/scripts/rl_crewanchormanager.lua` must be appended to your SAIL console object's `scripts` list.
-1. The field `keepAlive` must be added to the SAIL console object, and it must be set to true.
+1. A new field named `crewAnchorTags` must be added to the object. It must be a JSON list containing at least one string. Each string must be one of the crew NPC types that will be attracted to this object.
+1. Optionally, a field named `crewAnchorOptions` may be added to the object. If given, it must be a JSON object. The fields `offsetLeft` and `offsetRight` may be given as JSON lists of coordinate pairs to indicate block offsets for the left and right orientations of the object, relative to the object's position, for the NPC to position themselves near the object. If `objectLeft` or `objectRight` is not given, the field `offset` will be used instead. If none of these is given, an offset of `[0, 0]` is the default. Additionally, the `useFootPosition` field indicates whether to adjust the target position to account for the NPC standing on the ground: `true` (the default, if not given) indicates the position should be adjusted, and `false` indicates the position should not be adjusted. In general, foot positioning should be used if the object is typically placed on the ground, and should not be used for objects that are placed on desks or tables, or mounted on the wall.
 
 If your mod adds custom crew NPC types, you should add appropriate crew anchor tags for those crew types to your mod's custom objects. You should also consider patching base game objects, when appropriate, with additional tags for your custom crew types.
 
-Once your mod contains at least one crew anchor object or SAIL console, you must add *rl\_bettercrew* to the `requires` field in your mod's `_metadata` file. Failure to do so will cause your mod's objects to crash worlds when they are loaded, if users have not also added this mod.
+Once your mod contains at least one crew anchor object, you must add *rl\_bettercrew* to the `requires` field in your mod's `_metadata` file. Failure to do so will cause your mod's objects to crash worlds when they are loaded, if users have not also installed this mod.
 
 Due to the risk of mod incompatibility when adding mods to the `requires` field, it is generally preferable to offer compatibility as an additional mod on top of your mod. That is, if your mod's metadata name is *my\_mod*, and you want to add crew anchor tags to its objects, the best practice is to create a new mod, let's give it the metadata name *my\_mod\_\_compat\_\_rl\_bettercrew*, make patches to your objects in that mod, and have that mod require both *my\_mod* and *rl\_bettercrew* in its `requires` field.
+
+### Custom SAIL? No Changes Needed!
+
+Earlier versions of *Better Crew* required modders to add code to every custom SAIL console. *As of v2.0.0*, this is no longer needed. Crew anchor objects should work automatically on any race's ship or BYOS ship without additional compatibility code.
 
 ## Expendable Item Replacements
 
@@ -112,7 +112,7 @@ I have also created a new behavior action `rl_bettercrew_swapItemSlots`, and hav
 
 ### Aiming Arrows With Precision
 
-Determining a firing solution for a projectile that follows a parabolic trajectory (e.g., arrows) involves invoking the `projectileAimVector` action with the projectile speed and the desired destination position. The action returns an aim angle, expressed as a vector. However, the action normalized the vector. While unnormalized and normalized vectors produce the same angle in pure mathematics, when floating point arithmetic is involved, normalizing produces a loss of precision. For small projectiles, only a single pixel wide, this could be the difference between hitting a target and missing it.
+Determining a firing solution for a projectile that follows a parabolic trajectory (e.g., arrows) involves invoking the `projectileAimVector` action with the projectile speed and the desired destination position. The action returns an aim angle, expressed as a vector. However, in the base game, the action normalized the vector. While unnormalized and normalized vectors produce the same angle in pure mathematics, when floating point arithmetic is involved, normalizing produces a loss of precision. For small projectiles, only a single pixel wide, this could be the difference between hitting a target and missing it.
 
 In the dynamics of the game, this discrepancy was not usually noticeable. However, in certain circumstances, for example, when an NPC was firing an arrow in a long shot toward a stationary target, it could be quite noticeable.
 
@@ -164,7 +164,7 @@ The `rl_bettercrew_incrementCounter` action increments the integer counter ident
 
 The `rl_bettercrew_resetCounter` action resets the counter identified by `name` to 0. If `name` does not exist when the action is invoked, it is created and set to 0.
 
-### Min and Max
+### Max and Min
 
 The `rl_bettercrew_max` and `rl_bettercrew_min` expose the Lua `math.max` and `math.min` functions to behavior trees.
 

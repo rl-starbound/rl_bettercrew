@@ -1,0 +1,20 @@
+[
+  { "op" : "add",
+    "path" : "/scripts/-",
+    "value" : "/scripts/rl_crewanchorobject.lua"
+  },
+  { "op" : "add",
+    "path" : "/crewAnchorOptions",
+    "value" : {
+      "offsetLeft" : [-2, 0],
+      "offsetRight" : [2, 0]
+    }
+  },
+  { "op" : "add",
+    "path" : "/crewAnchorTags",
+    "value" : [
+      "crewmember",
+      "crewmemberengineer"
+    ]
+  }
+]

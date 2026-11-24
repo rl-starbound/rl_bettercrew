@@ -4,10 +4,19 @@
     "value" : "/scripts/rl_crewanchorobject.lua"
   },
   { "op" : "add",
+    "path" : "/npcToy/useFootPosition",
+    "value" : false
+  },
+  { "op" : "add",
+    "path" : "/crewAnchorOptions",
+    "value" : {
+      "offsetLeft" : [0.25, 0],
+      "offsetRight" : [0.75, 0],
+      "useFootPosition" : false
+    }
+  },
+  { "op" : "add",
     "path" : "/crewAnchorTags",
-    "value" : [
-      "crewmemberengineer",
-      "crewmembermechanic"
-    ]
+    "value" : [ "crewmemberengineer" ]
   }
 ]

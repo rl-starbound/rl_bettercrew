@@ -39,6 +39,18 @@
       "y": {"type": "number", "key": null}
     }
   },
+  "rl_bettercrew_equals": {
+    "type": "action",
+    "name": "rl_bettercrew_equals",
+    "title": "rl_bettercrew_equals",
+    "properties": {
+      "first": {"type": "number", "key": null},
+      "second": {"type": "number", "key": null}
+    },
+    "category": "math",
+    "script": "/scripts/actions/rl_bettercrew_math.lua",
+    "output": {}
+  },
   "rl_bettercrew_findLoungable": {
     "type": "action",
     "name": "rl_bettercrew_findLoungable",
@@ -180,6 +192,22 @@
     "category": "movement",
     "script": "/scripts/actions/rl_bettercrew_move.lua",
     "output": {}
+  },
+  "rl_bettercrew_npcToyGetFootPosition": {
+    "type": "action",
+    "name": "rl_bettercrew_npcToyGetFootPosition",
+    "title": "rl_bettercrew_npcToyGetFootPosition",
+    "properties": {
+      "position": {"type": "position", "key": null},
+      "target": {"type": "entity", "key": null}
+    },
+    "category": "tenant",
+    "script": "/scripts/actions/rl_bettercrew_react.lua",
+    "output": {
+      "position": {"type": "position", "key": null},
+      "x": {"type": "number", "key": null},
+      "y": {"type": "number", "key": null}
+    }
   },
   "rl_bettercrew_openDoors": {
     "type": "action",

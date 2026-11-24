@@ -15,6 +15,13 @@
       "value" : "/scripts/rl_crewanchorobject.lua"
     },
     { "op" : "add",
+      "path" : "/crewAnchorOptions",
+      "value" : {
+        "offsetLeft" : [0, 0],
+        "offsetRight" : [1, 0]
+      }
+    },
+    { "op" : "add",
       "path" : "/crewAnchorTags",
       "value" : [ "crewmembertailor" ]
     }

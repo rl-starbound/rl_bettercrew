@@ -1,0 +1,12 @@
+{
+  "type" : "rl_crewanchormanager",
+
+  "broadcastArea" : [-1, -1, 1, 1],
+
+  "scripts" : [
+    "/stagehands/rl_crewanchormanager.lua"
+  ],
+  "scriptDelta" : 0,
+
+  "keepAlive" : true
+}

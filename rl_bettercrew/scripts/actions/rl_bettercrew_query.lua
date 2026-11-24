@@ -1,27 +1,46 @@
+-- param cooldown
 -- param defaultPosition
+-- param defaultProbability
 -- output position
-function rl_bettercrew_crewAnchorObject(args, board)
+function rl_bettercrew_crewAnchorObject(args, board, nodeId)
   -- Crew member NPCs can use this function, while on their captain's
   -- ship, to find crew anchor objects around which to congregate. This
   -- avoids the degenerate behavior of the crew mobbing the teleporter
   -- and ignoring the rest of the ship. If invoked when not on a player
-  -- ship, not on a player ship with a supported techstation, or if the
-  -- NPC type is not supported, the behavior is equivalent to the base
+  -- ship or if the NPC type is not supported, the behavior is the base
   -- game (i.e., the NPC will hang around their spawn position).
 
-  if math.random() < 0.1 then
-    return true, {position = args.defaultPosition}
+  local cooldownKey = "rl_bettercrew_crewAnchorObject__cooldown-"..nodeId
+  local posKey = "rl_bettercrew_crewAnchorObject__position-"..nodeId
+
+  local cooldown = board:getNumber(cooldownKey)
+  if cooldown and world.time() < cooldown then
+    return true, {position = board:getPosition(posKey) or args.defaultPosition}
   end
-  local techStation = world.loadUniqueEntity('techstation')
-  if techStation == 0 then
-    return true, {position = args.defaultPosition}
+
+  local result = args.defaultPosition
+  if math.random() > (args.defaultProbability or 0.083333) then
+    local crewAnchorManager = world.loadUniqueEntity('rl_crewanchormanager')
+    if crewAnchorManager ~= 0 then
+      local response = world.sendEntityMessage(
+        crewAnchorManager, 'getCrewAnchorObject', npc.npcType()
+      ):result()
+      if response then
+        if response.options.useFootPosition then
+          -- The returned position is expected to be where the NPC's
+          -- feet should be. Subtracting the lower Y coordinate of the
+          -- NPC's bounding box (which is non-positive) from the Y
+          -- coordinate of the object position provides the position the
+          -- NPC should aim for so that their foot position is correct.
+          response.position[2] = response.position[2] - mcontroller.boundBox()[2]
+        end
+        result = response.position
+      end
+    end
   end
-  local result = world.sendEntityMessage(
-    techStation, 'getCrewAnchorObject', npc.npcType()
-  ):result()
-  if not result then
-    return true, {position = args.defaultPosition}
-  end
+
+  board:setNumber(cooldownKey, world.time() + (args.cooldown or 30))
+  board:setPosition(posKey, result)
   return true, {position = result}
 end
 

@@ -42,7 +42,7 @@
   [
     { "op" : "add",
       "path" : "/statusControllerSettings/stats/powerMultiplier/baseValue",
-      "value" : 0.65
+      "value" : 0.6
     }
   ]
 ]
